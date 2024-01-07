@@ -12,4 +12,4 @@ AImagic社区的主旨是找到更多志同道合的伙伴，在各个成员都�
 
 群里有很多人工智能行业的大牛，欢迎大家加入～（请添加小助手微信Jarvis8866，备注**姓名+城市+从事方向+公司**）
 
-![1701611392168]([https://github.com/WeThinkIn/Interview-for-Algorithm-Engineer/blob/main/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/Images/WechatIMG145.jpg])
+![AIGCmagic社区知识星球海报]([imgs/WechatIMG145.jpg])
