@@ -16,7 +16,7 @@
 - [15.Python中的主要数据结构都有哪些？](#15.python中的主要数据结构都有哪些？)
 - [16.Python中的可变对象和不可变对象？](#16.python中的可变对象和不可变对象？)
 - [17.Python中的None代表什么？](#17.python中的none代表什么？)
-- [18.Python中$*args$和$**kwargs$的区别？](#18.python中args和kwargs的区别？)
+- [18.Python中 $*args$ 和 $**kwargs$ 的区别？](#18.python中args和kwargs的区别？)
 - [19.Python中Numpy的broadcasting机制？](#19.python中numpy的broadcasting机制？)
 - [20.Python中的实例方法、静态方法和类方法三者区别？](#20.python中的实例方法、静态方法和类方法三者区别？)
 - [21.Python中常见的切片操作](#21.python中常见的切片操作)
