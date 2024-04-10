@@ -1,30 +1,29 @@
-- [【一】Python中迭代器的概念？](#【一】python中迭代器的概念？)
-- [【二】Python中生成器的相关知识](#【二】python中生成器的相关知识)
-- [【三】Python中装饰器的相关知识](#【三】python中装饰器的相关知识)
-- [【四】Python的深拷贝与浅拷贝？](#【四】python的深拷贝与浅拷贝？)
-- [【五】Python是解释语言还是编译语言？](#【五】python是解释语言还是编译语言？)
-- [【六】Python的垃圾回收机制](#【六】python的垃圾回收机制)
-- [【七】Python里有多线程吗？](#【七】python里有多线程吗？)
-- [【八】Python中range和xrange的区别？](#【八】python中range和xrange的区别？)
-- [【九】Python中列表和元组的区别？](#【九】python中列表和元组的区别？)
-- [【十】Python中dict（字典）的底层结构？](#【十】python中dict（字典）的底层结构？)
-- [【十一】常用的深度学习框架有哪些，都是哪家公司开发的？](#【十一】常用的深度学习框架有哪些，都是哪家公司开发的？)
-- [【十二】PyTorch动态图和TensorFlow静态图的区别？](#【十二】pytorch动态图和tensorflow静态图的区别？)
-- [【十三】Python中assert的作用？](#【十三】python中assert的作用？)
-- [【十四】Python中互换变量有不用创建临时变量的方法吗？](#【十四】python中互换变量有不用创建临时变量的方法吗？)
-- [【十五】Python中的主要数据结构都有哪些？](#【十五】python中的主要数据结构都有哪些？)
-- [【十六】Python中的可变对象和不可变对象？](#【十六】python中的可变对象和不可变对象？)
-- [【十七】Python中的None代表什么？](#【十七】python中的none代表什么？)
-- [【十八】Python中$*args$和$**kwargs$的区别？](#【十八】python中args和kwargs的区别？)
-  - [$*args$](#args)
-  - [$**kwargs$](#kwargs)
-- [【十九】Python中Numpy的broadcasting机制？](#【十九】python中numpy的broadcasting机制？)
-- [【二十】Python中的实例方法、静态方法和类方法三者区别？](#【二十】python中的实例方法、静态方法和类方法三者区别？)
-- [【二十一】Python中常见的切片操作](#【二十一】python中常见的切片操作)
-- [【二十二】Python中如何进行异常处理？](#【二十二】python中如何进行异常处理？)
-- [【二十三】Python中remove，del以及pop之间的区别？](#【二十三】python中remove，del以及pop之间的区别？)
+# 目录
+- [1.Python中迭代器的概念？](#1.python中迭代器的概念？)
+- [2.Python中生成器的相关知识](#2.python中生成器的相关知识)
+- [3.Python中装饰器的相关知识](#3.python中装饰器的相关知识)
+- [4.Python的深拷贝与浅拷贝？](#4.python的深拷贝与浅拷贝？)
+- [5.Python是解释语言还是编译语言？](#5.python是解释语言还是编译语言？)
+- [6.Python的垃圾回收机制](#6.python的垃圾回收机制)
+- [7.Python里有多线程吗？](#7.python里有多线程吗？)
+- [8.Python中range和xrange的区别？](#8.python中range和xrange的区别？)
+- [9.Python中列表和元组的区别？](#9.python中列表和元组的区别？)
+- [10.Python中dict（字典）的底层结构？](#10.python中dict（字典）的底层结构？)
+- [11.常用的深度学习框架有哪些，都是哪家公司开发的？](#11.常用的深度学习框架有哪些，都是哪家公司开发的？)
+- [12.PyTorch动态图和TensorFlow静态图的区别？](#12.pytorch动态图和tensorflow静态图的区别？)
+- [13.Python中assert的作用？](#13.python中assert的作用？)
+- [14.Python中互换变量有不用创建临时变量的方法吗？](#14.python中互换变量有不用创建临时变量的方法吗？)
+- [15.Python中的主要数据结构都有哪些？](#15.python中的主要数据结构都有哪些？)
+- [16.Python中的可变对象和不可变对象？](#16.python中的可变对象和不可变对象？)
+- [17.Python中的None代表什么？](#17.python中的none代表什么？)
+- [18.Python中$*args$和$**kwargs$的区别？](#18.python中args和kwargs的区别？)
+- [19.Python中Numpy的broadcasting机制？](#19.python中numpy的broadcasting机制？)
+- [20.Python中的实例方法、静态方法和类方法三者区别？](#20.python中的实例方法、静态方法和类方法三者区别？)
+- [21.Python中常见的切片操作](#21.python中常见的切片操作)
+- [22.Python中如何进行异常处理？](#22.python中如何进行异常处理？)
+- [23.Python中remove，del以及pop之间的区别？](#23.python中remove，del以及pop之间的区别？)
 
-## 【一】Python中迭代器的概念？
+<h2 id="1.python中迭代器的概念？">1.Python中迭代器的概念？</h2>
 
 <font color=DeepSkyBlue>可迭代对象是迭代器、生成器和装饰器的基础。</font>简单来说，可以使用for来循环遍历的对象就是可迭代对象。比如常见的list、set和dict。
 
@@ -103,7 +102,7 @@ itertools 库提供了很多常见迭代器的使用。
 ```
 
 
-## 【二】Python中生成器的相关知识
+<h2 id="2.python中生成器的相关知识">2.Python中生成器的相关知识</h2>
   
 我们创建列表的时候，受到内存限制，容量肯定是有限的，而且不可能全部给他一次枚举出来。Python常用的列表生成式有一个致命的缺点就是定义即生成，非常的浪费空间和效率。
 
@@ -145,7 +144,7 @@ generator还有 send() 和 close() 方法，都是只能在next()调用之后，
 
 python是支持协程的，也就是微线程，就是通过generator来实现的。配合generator我们可以自定义函数的调用层次关系从而自己来调度线程。
 
-## 【三】Python中装饰器的相关知识
+<h2 id="3.python中装饰器的相关知识">3.Python中装饰器的相关知识</h2>
   
 装饰器允许通过将现有函数传递给装饰器，从而<font color=DeepSkyBlue>向现有函数添加一些额外的功能</font>，该装饰器将执行现有函数的功能和添加的额外功能。
 
@@ -249,7 +248,7 @@ I am haha
 这样子看起来就非常简洁，而且代码很容易复用。可以看成是一种智能的高级封装。
 
 
-## 【四】Python的深拷贝与浅拷贝？
+<h2 id="4.python的深拷贝与浅拷贝？">4.Python的深拷贝与浅拷贝？</h2>
   
 在Python中，用一个变量给另一个变量赋值，其实就是给当前内存中的对象增加一个“标签”而已。
 
@@ -315,7 +314,7 @@ True（可以看出，其实a和b指向内存中同一个对象。）
 4493779024 4493684896
 ```
 
-## 【五】Python是解释语言还是编译语言？
+<h2 id="5.python是解释语言还是编译语言？">5.Python是解释语言还是编译语言？</h2>
   
 Python是解释语言。
 
@@ -326,11 +325,11 @@ Python是解释语言。
 ![解释语言和编译语言的区别](https://files.mdnice.com/user/33499/aa37f783-c7da-45b8-9639-d97e1b74d017.png)
 
 
-## 【六】Python的垃圾回收机制
+<h2 id="6.python的垃圾回收机制">6.Python的垃圾回收机制</h2>
   
 在Python中，使用<font color=DeepSkyBlue>引用计数</font>进行垃圾回收；同时通过<font color=DeepSkyBlue>标记-清除算法</font>解决容器对象可能产生的循环引用问题；最后通过<font color=DeepSkyBlue>分代回收算法</font>提高垃圾回收效率。
 
-## 【七】Python里有多线程吗？
+<h2 id="7.python里有多线程吗？">7.Python里有多线程吗？</h2>
   
 <font color=DeepSkyBlue>Python里的多线程是假的多线程</font>。
 
@@ -344,7 +343,7 @@ Python解释器由于设计时有GIL全局锁，导致了多线程无法利用�
 
 缓解GIL锁的方法：多进程和协程（协程也只是单CPU，但是能减小切换代价提升性能）
 
-## 【八】Python中range和xrange的区别？
+<h2 id="8.python中range和xrange的区别？">8.Python中range和xrange的区别？</h2>
   
 首先，xrange函数和range函数的用法完全相同，不同的地方是xrange函数生成的不是一个list对象，而是一个生成器。
 
@@ -388,7 +387,7 @@ xrange函数和range函数一般都用在循环的时候。具体例子如下所
 ```
 在Python3中，xrange函数被移除了，只保留了range函数的实现，但是此时range函数的功能结合了xrange和range。并且range函数的类型也发生了变化，在Python2中是list类型，但是在Python3中是range序列的对象。
 
-## 【九】Python中列表和元组的区别？
+<h2 id="9.python中列表和元组的区别？">9.Python中列表和元组的区别？</h2>
 
 1. <font color=DeepSkyBlue>列表是可变的</font>，在创建之后可以对其进行任意的修改。
 
@@ -398,11 +397,11 @@ xrange函数和range函数一般都用在循环的时候。具体例子如下所
 
 4. Python将低开销的较大的块分配给元组，因为它们是不可变的。对于列表则分配小内存块。与列表相比，元组的内存更小。当你拥有大量元素时，元组比列表快。
 
-## 【十】Python中dict（字典）的底层结构？
+<h2 id="10.python中dict（字典）的底层结构？">10.Python中dict（字典）的底层结构？</h2>
   
 Python的dict（字典）为了支持快速查找使用了哈希表作为底层结构，哈希表平均查找时间复杂度为O(1)。CPython 解释器使用二次探查解决哈希冲突问题。
 
-## 【十一】常用的深度学习框架有哪些，都是哪家公司开发的？
+<h2 id="11.常用的深度学习框架有哪些，都是哪家公司开发的？">11.常用的深度学习框架有哪些，都是哪家公司开发的？</h2>
   
 1. PyTorch：Facebook
 
@@ -416,7 +415,7 @@ Python的dict（字典）为了支持快速查找使用了哈希表作为底层�
 
 6. PaddlePaddle：百度
 
-## 【十二】PyTorch动态图和TensorFlow静态图的区别？
+<h2 id="12.pytorch动态图和tensorflow静态图的区别？">12.PyTorch动态图和TensorFlow静态图的区别？</h2>
   
 PyTorch动态图：计算图的运算与搭建同时进行；其较灵活，易调节。
   
@@ -424,7 +423,7 @@ TensorFlow静态图：计算图先搭建图，后运算；其较高效，不灵�
 
 ![](https://files.mdnice.com/user/33499/877c601c-9522-4caa-9b67-2f3591bee071.png)
 
-## 【十三】Python中assert的作用？
+<h2 id="13.python中assert的作用？">13.Python中assert的作用？</h2>
 
 Python中assert（断言）用于判断一个表达式，在表达式条件为$false$的时候触发异常。
 
@@ -446,7 +445,7 @@ AssertionError
 >>> assert 1 != 2
 ```
   
-## 【十四】Python中互换变量有不用创建临时变量的方法吗？
+<h2 id="14.python中互换变量有不用创建临时变量的方法吗？">14.Python中互换变量有不用创建临时变量的方法吗？</h2>
 
 在Python中，当我们想要互换两个变量的值或将列表中的两个值交换时，我们可以使用如下的格式进行，不需要创建临时变量：
 
@@ -462,14 +461,14 @@ x, y = y, x
 
 先计算右值$y , x$(这里是简单的原值，但可能会有表达式或者函数调用的计算过程)， 在内存中创建元组(tuple)，存储$y, x$分别对应的值；计算左边的标识符，元组被分别分配给左值，通过解包(unpacking)，元组中第一个标示符对应的值$(y)$，分配给左边第一个标示符$(x)$，元组中第二个标示符对应的值$(x)$，分配给左边第二个标示符$(y)$，完成了$x$和$y$的值交换。
 
-## 【十五】Python中的主要数据结构都有哪些？
+<h2 id="15.python中的主要数据结构都有哪些？">15.Python中的主要数据结构都有哪些？</h2>
 
 1. 列表（list）
 2. 元组（tuple）
 3. 字典（dict）
 4. 集合（set）
   
-## 【十六】Python中的可变对象和不可变对象？
+<h2 id="16.python中的可变对象和不可变对象？">16.Python中的可变对象和不可变对象？</h2>
 
 可变对象与不可变对象的区别在于对象本身是否可变。
 
@@ -477,7 +476,7 @@ x, y = y, x
 
 不可变对象：tuple（元组） string（字符串） int（整型） float（浮点型） bool（布尔型）
 
-## 【十七】Python中的None代表什么？
+<h2 id="17.python中的none代表什么？">17.Python中的None代表什么？</h2>
 
 None是一个特殊的常量，表示空值，其和False，0以及空字符串不同，它是一个特殊Python对象, None的类型是NoneType。
 
@@ -496,12 +495,12 @@ False
 
 我们可以将None复制给任何变量，也可以给None赋值。
   
-## 【十八】Python中$*args$和$**kwargs$的区别？
+<h2 id="18.python中args和kwargs的区别？">18.Python中$*args$和$**kwargs$的区别？</h2>
 
 $*args$和$**kwargs$主要用于函数定义。我们可以将不定数量的参数传递给一个函数。
 
 <font color=DeepSkyBlue>这里的不定的意思是</font>：预先并不知道函数使用者会传递多少个参数, 所以在这个场景下使用这两个关键字。
-### $*args$
+<h3 id="args">$*args$</h3>
 
 $*args$是用来发送<font color=DeepSkyBlue>一个非键值对的可变数量的参数列表</font>给一个函数。
 
@@ -522,7 +521,7 @@ another arg through *argv: ddd
 another arg through *argv: test
 ```
 
-### $**kwargs$
+<h3 id="kwargs">$**kwargs$</h3>
 
 $**kwargs$允许我们<font color=DeepSkyBlue>将不定长度的键值对, 作为参数传递给一个函数</font>。如果我们想要在一个函数里处理带名字的参数, 我们可以使用$**kwargs$。
 
@@ -539,7 +538,7 @@ greet_me(name="yasoob")
 name == yasoob
 ```
 
-## 【十九】Python中Numpy的broadcasting机制？
+<h2 id="19.python中numpy的broadcasting机制？">19.Python中Numpy的broadcasting机制？</h2>
 
 Python的Numpy库是一个非常实用的数学计算库，其broadcasting机制给我们的矩阵运算带来了极大地方便。
 
@@ -647,7 +646,7 @@ Traceback (most recent call last):
 ValueError: operands could not be broadcast together with shapes (3,) (3,2)
 ```
   
-## 【二十】Python中的实例方法、静态方法和类方法三者区别？
+<h2 id="20.python中的实例方法、静态方法和类方法三者区别？">20.Python中的实例方法、静态方法和类方法三者区别？</h2>
 
 <font color=DeepSkyBlue>不用@classmethod和@staticmethod修饰的方法为实例方法</font>。在类中定义的方法默认都是实例方法。实例方法最大的特点是它至少要包含一个self参数，用于绑定调用此方法的实例对象，实例方法通常可以用类对象直接调用。
 
@@ -655,7 +654,7 @@ ValueError: operands could not be broadcast together with shapes (3,) (3,2)
 
 <font color=DeepSkyBlue>采用@staticmethod修饰的方法为静态方法</font>。静态方法没有类似self、cls这样的特殊参数，因此Python的解释器不会对它包含的参数做任何类或对象的绑定。也正因为如此，类的静态方法中无法调用任何类属性和类方法。
 
-## 【二十一】Python中常见的切片操作
+<h2 id="21.python中常见的切片操作">21.Python中常见的切片操作</h2>
 
 [:n]代表列表中的第一项到第n项。我们看一个例子：
 
@@ -734,7 +733,7 @@ print(example[4::-1])
 [5, 4, 3, 2, 1]
 ```
 
-## 【二十二】Python中如何进行异常处理？
+<h2 id="22.python中如何进行异常处理？">22.Python中如何进行异常处理？</h2>
 
 一般情况下，在Python无法正常处理程序时就会发生一个异常。<font color=DeepSkyBlue>异常在Python中是一个对象，表示一个错误</font>。当Python脚本发生异常时我们需要捕获处理它，否则程序会终止执行。
 
@@ -755,7 +754,7 @@ finally:
     print "最后总是要执行我"
 ```
 
-## 【二十三】Python中remove，del以及pop之间的区别？
+<h2 id="23.python中remove，del以及pop之间的区别？">23.Python中remove，del以及pop之间的区别？</h2>
 
 remove，del以及pop都可以用于删除列表、字符串等里面的元素，但是具体用法并不相同。
 
