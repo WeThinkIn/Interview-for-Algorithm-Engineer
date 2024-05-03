@@ -16,7 +16,7 @@
 6. Playground v2.5
 7. Imagen系列（1、2）
 
-<h2 id="1.为什么stable diffusion训练时需要设置timesteps=1000，在推理时却只用几十步就可以生成图片？">1.为什么stable diffusion训练时需要设置timesteps=1000，在推理时却只用几十步就可以生成图片？</h2>
+<h2 id="2.为什么stable diffusion训练时需要设置timesteps=1000，在推理时却只用几十步就可以生成图片？">2.为什么stable diffusion训练时需要设置timesteps=1000，在推理时却只用几十步就可以生成图片？</h2>
 为什么stable diffusion训练时需要设置timesteps=1000，在推理时却只用几十步就可以生成图片？
 
 目前扩散模型训练一般使用DDPM（Denoising Diffusion Probabilistic Models）采样方法，但推理时可以使用DDIM（Denoising Diffusion Implicit Models）采样方法，DDIM通过去马尔可夫化，大大减少了扩散模型在推理时的步数。
