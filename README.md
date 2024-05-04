@@ -2,7 +2,7 @@
 
 ## 【三年面试五年模拟】内容大纲
 
-<center>![【三年面试五年模拟】内容大纲](imgs/框架.png)</center>
+![【三年面试五年模拟】内容大纲](imgs/框架.png)
 
 ## 作者介绍
 
@@ -21,4 +21,4 @@ AIGCmagic社区交流群里有很多人工智能行业的大牛，欢迎大家�
 
 **Rocky也和AIGC的专家们一起建立了AIGCmagic社区知识星球**。AIGCmagic社区知识星球是国内首个以AIGC全栈技术与应用为主线的学习交流平台，涉及AI绘画、AI视频、ChatGPT等大模型、AI多模态、数字人、全行业AIGC赋能等50+应用方向，内部包含海量学习资源、专业问答、前沿资讯、内推招聘、AIGC模型、AIGC数据集和源码。欢迎大家加入，一起学习交流，共同推动AIGC行业的发展与普惠！
 
-<center>![AIGCmagic社区知识星球海报](imgs/星球优惠卷.png)</center>
+![AIGCmagic社区知识星球海报](imgs/星球优惠卷.png)
