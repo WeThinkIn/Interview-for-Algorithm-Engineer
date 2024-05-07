@@ -40,12 +40,15 @@ Classifier Guidance 使用显式的分类器引导条件生成有几个问题：
 
 ### 假想方案
 容易想到的一个方案是 unet 输出 3 个噪声，分别对应无prompt，positive prompt 和 negative prompt 三种情况，那么最终的噪声就是
- $$ \varepsilon_0 +\lambda_p(\varepsilon_p-\varepsilon_0)- \lambda_n(\varepsilon_n-\varepsilon_0)$$
-，理由也很直接，因为 negative prompt 要反方向起作用，所以加个负的系数.
+
+![](./imgs/negative_prompt_2.png)
+
+理由也很直接，因为 negative prompt 要反方向起作用，所以加个负的系数.
 
 ### 真正实现方法
 
  stable diffusion webui 文档中看到了 negative prompt 真正的[实现方法](https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Negative-prompt)。一句话概况：将无 prompt 的情形替换为 negative prompt，公式则是
-$$ \varepsilon_n +\lambda(\varepsilon_p-\varepsilon_n) $$
+ 
+ ![](./imgs/negative_prompt_1.png)
 
 就是这么简单，其实也很说得通，虽说设计上预期是无 prompt 的，但是没有人拦着你加上 prompt（反向的），公式上可以看出在正向强化positive prompt的同时也反方向强化——也就是弱化了 negative prompt。同时这个方法相对于我想的那个方法还有一个优势就是只需预测 2 个而不是 3 个噪声。
