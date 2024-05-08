@@ -1,8 +1,8 @@
 # 目录
 
 - [1.BLIP的原理？](#1.BLIP的原理？)
-- [2.CLIP的原理？](#2.BLIP的原理？)
-- [3.为什么Stable-Diffusion使用CLIP而不使用BLIP? ](#3.为什么Stable-Diffusion使用CLIP而不使用BLIP?)
+- [2.CLIP的原理？](#2.CLIP的原理？)
+- [3.为什么StableDiffusion使用CLIP而不使用BLIP?](#3.为什么StableDiffusion使用CLIP而不使用BLIP?)
 
 <h2 id="1.BLIP的原理？">1.BLIP的原理？</h2>
 
@@ -24,9 +24,10 @@ Image Encoder：用于提取图像的特征，可以采用CNN或基于Transforme
 ![](./imgs/CLIP.png)
 CLIP的训练过程涉及将文本特征和图像特征进行对比学习，使得模型能够学习到文本和图像之间的匹配关系。CLIP能够实现zero-shot分类，即在没有特定任务的训练数据的情况下，通过对图像进行分类预测其对应的文本描述。
 
-<h2 id="为什么Stable-Diffusion使用CLIP而不使用BLIP?">3.为什么Stable-Diffusion使用CLIP而不使用BLIP? </h2>
+<h2 id="3.为什么StableDiffusion使用CLIP而不使用BLIP?">3.为什么StableDiffusion使用CLIP而不使用BLIP? </h2>
 
 CLIP是通过对比学习的方式训练图像和文本的编码器，使得图像和文本之间的语义空间能够对齐。CLIP的架构和训练方式可能更适合Stable Diffusion模型的目标，即生成与文本描述相匹配的高质量图像。
 
 BLIP由于其图像特征受到了图文匹配（ITM）和图像条件语言建模(LM)的影响，可以理解为其图像特征和文本特征在语义空间不算对齐的。
 
+最大区别：损失函数，CLIP和BLIP针对任务不同，不同任务不同损失函数。
