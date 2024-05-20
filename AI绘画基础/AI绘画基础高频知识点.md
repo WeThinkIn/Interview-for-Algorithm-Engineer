@@ -133,7 +133,7 @@ ControlNet：InstantID还使用了ControlNet来增强面部特征提取，进一
 
 3.Photomaker是先将文本特征和图像特征通过MLPs融合，再做CrossAttention加入U-net.InstantID是图像特征和文本特征分开做CrossAttention,再融合。（可以认为是区别，不要一定是效果好的原因）
 
-<h2 id="11.大模型常见模型格式简介">11.大模型常见模型格式简介 </h2>
+<h2 id="11.大模型常见模型文件格式简介">11.大模型常见模型文件格式简介 </h2>
 
 ### 1、safetensors模型
 1) 这是由 Hugging Face 推出的一种新型安全模型存储格式，特别关注模型安全性、隐私保护和快速加载。
@@ -162,7 +162,7 @@ GGUF是一种二进制格式文件的规范，原始的大模型预训练结果�
 6) 数据压缩：GGUF格式可能采用了有效的数据压缩技术，减少了文件大小，从而加速了读取过程。
 7) 优化的索引和访问机制：文件中数据的索引和访问机制可能经过优化，使得查找和加载所需的特定数据片段更加迅速。
 
-<h2 id="12.safetensors模型的使用">12.safetensors模型的使用 </h2>
+<h2 id="12.safetensors模型文件的使用">12.safetensors模型文件的使用 </h2>
 
 Safetensors 是一种新的格式，用于安全地存储 Tensor（相比于 pickle），而且速度很快（零拷贝）。
 
