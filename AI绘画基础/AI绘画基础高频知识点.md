@@ -278,6 +278,7 @@ GGUF支持小端和大端格式，确保了其在不同计算平台上的可用�
 diffusion模型：使用webui加载的safetensors模型，
 路径：stable-diffusion-webui/models/Stable-diffusion
 diffusers模型：使用stable diffuser pipeline加载的模型，目录结构如图：
+
 ![alt text](image.png)  
 
 [diffusers](https://github.com/huggingface/diffusers)
