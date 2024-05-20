@@ -24,6 +24,7 @@
 - [23.Python中remove，del以及pop之间的区别？](#23.python中remove，del以及pop之间的区别？)
 - [24.Python中PIL和OpenCV处理图像的区别？](#24.Python中PIL和OpenCV处理图像的区别？)
 - [25.Python中全局变量与局部变量之间的区别？](#25.Python中全局变量与局部变量之间的区别？)
+- [26.Python中`if "__name__" == __main__'`的作用?](#26.Python中name==main?)
 
 <h2 id="1.python中迭代器的概念？">1.Python中迭代器的概念？</h2>
 
@@ -796,7 +797,7 @@ Python中的Pillow/PIL（Python Imaging Library）和OpenCV（Open Source Comput
 
 Pillow适合于需要处理图像文件、执行基本图像处理任务的应用，而OpenCV适合于需要实施复杂的图像分析、计算机视觉处理或实时视频处理的项目。选择哪个库取决于你的具体需求、项目复杂度以及性能要求。
 
-<h2 id="25.Python中全局变量与局部变量之间的区别？？">25.Python中全局变量与局部变量之间的区别？？</h2>
+<h2 id="25.Python中全局变量与局部变量之间的区别？">25.Python中全局变量与局部变量之间的区别？</h2>
 
 在Python中，**全局变量和局部变量的区别主要体现在变量的作用域、声明位置以及在程序中的可访问性上**。理解这些差异有助于我们更好地管理数据的流向和变量的生命周期，防止不必要的编程错误。
 
@@ -843,3 +844,31 @@ print_x()  # 输出: 20
 ```
 
 如果不使用`global`全局关键字，对全局变量的修改实际上会创建一个同名的新的局部变量，而不会改变全局变量的值。
+
+
+<h2 id="26.Python中name==main?">26.Python中`if '__name__ == '__main__'`的作用?</h2>
+
+在Python中，`if __name__ == '__main__'`用于确定当前Python脚本是需要被直接运行还是被另一个Python脚本导入。
+
+每个Python脚本中都有`__name__`这个内置变量，它在脚本被直接运行时被设置为`'__main__'`。而当其被另一个脚本导入时，`__name__` 被设置为脚本的名字。
+
+
+例如，假设有一个模块 `example.py`：
+
+```python
+def my_function():
+    print("This function is defined in the module.")
+
+if __name__ == '__main__':
+    my_function()
+```
+
+当你直接运行 `example.py` 时，`__name__` 会是 `'__main__'`，所以 `my_function()` 会被执行。但如果你从另一个模块导入 `example.py`：
+
+```python
+import example
+
+example.my_function()  # 调用函数
+```
+
+在这种情况下，`__name__` 会是 `'example'`，所以 `if __name__ == '__main__'` 块下的代码不会被执行，你只会得到 `my_function()` 的定义和功能。
