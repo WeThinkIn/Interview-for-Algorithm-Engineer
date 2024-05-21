@@ -10,6 +10,10 @@
 - [8.人物一致性模型PhotoMaker原理](#8.人物一致性模型PhotoMaker原理)
 - [9.人物一致性模型InstantID原理](#9.人物一致性模型InstantID原理)
 - [10.单ID图像为什么InstantID人物一致性比Photomaker效果好](#10.单ID图像为什么InstantID人物一致性比Photomaker效果好)
+- [11.大模型常见模型文件格式简介](#11.大模型常见模型文件格式简介)
+- [12.safetensors模型文件的使用](#12.safetensors模型文件的使用)
+- [13.GGUF模型文件的组成](#13.GGUF模型文件的组成)
+- [14.diffusion和diffusers模型的相互转换](#14.diffusion和diffusers模型的相互转换)
 <h2 id="1.目前主流的AI绘画大模型有哪些？">1.目前主流的AI绘画大模型有哪些？</h2>
 
 目前，几个主流的文生图大模型包括：
@@ -52,7 +56,7 @@ Classifier Guidance 使用显式的分类器引导条件生成有几个问题：
 ### 真正实现方法
 
  stable diffusion webui 文档中看到了 negative prompt 真正的[实现方法](https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Negative-prompt)。一句话概况：将无 prompt 的情形替换为 negative prompt，公式则是
- 
+
  ![](./imgs/negative_prompt_1.png)
 
 就是这么简单，其实也很说得通，虽说设计上预期是无 prompt 的，但是没有人拦着你加上 prompt（反向的），公式上可以看出在正向强化positive prompt的同时也反方向强化——也就是弱化了 negative prompt。同时这个方法相对于我想的那个方法还有一个优势就是只需预测 2 个而不是 3 个噪声。
@@ -128,3 +132,163 @@ ControlNet：InstantID还使用了ControlNet来增强面部特征提取，进一
 2.InstantID还使用ControlNet来增强面部特征提取，进一步提高图像生成的质量和准确性。
 
 3.Photomaker是先将文本特征和图像特征通过MLPs融合，再做CrossAttention加入U-net.InstantID是图像特征和文本特征分开做CrossAttention,再融合。（可以认为是区别，不要一定是效果好的原因）
+
+<h2 id="11.大模型常见模型文件格式简介">11.大模型常见模型文件格式简介 </h2>
+
+### 1、safetensors模型
+1) 这是由 Hugging Face 推出的一种新型安全模型存储格式，特别关注模型安全性、隐私保护和快速加载。
+2) 它仅包含模型的权重参数，而不包括执行代码，这样可以减少模型文件大小，提高加载速度。
+3) 加载方式：使用 Hugging Face 提供的相关API来加载 .safetensors 文件，例如 safetensors.torch.load_file() 函数。
+
+### 2、ckpt模型
+全称checkpoint，通过Dreambooth训练的模型，包含了模型参数，还包括优化器状态以及可能的训练元数据信息，使得用户可以无缝地恢复训练或执行推理
+### 3、bin模型
+1) 通常是一种通用的二进制格式文件，它可以用来存储任意类型的数据。
+2) 在机器学习领域，.bin 文件有时用于存储模型权重或其他二进制数据，但并不特指PyTorch的官方标准格式。
+3) 对于PyTorch而言，如果用户自己选择将模型权重以二进制格式保存，可能会使用 .bin 扩展名，加载时需要自定义逻辑读取和应用这些权重到模型结构中。
+### 4、pth模型
+1) 是 PyTorch 中用于保存模型状态的标准格式。
+2) 主要用于保存模型的 state_dict，包含了模型的所有可学习参数，或者整个模型（包括结构和参数）。
+3) 加载方式：使用 PyTorch 的 torch.load() 函数直接加载 .pth 文件，并通过调用 model.load_state_dict() 将加载的字典应用于模型实例。
+### 5、gguf模型
+GGUF文件全称是GPT-Generated Unified Format，是由Georgi Gerganov定义发布的一种大模型文件格式。Georgi Gerganov是著名开源项目[llama.cpp](https://github.com/ggerganov/llama.cpp)的创始人。  
+GGUF是一种二进制格式文件的规范，原始的大模型预训练结果经过转换后变成GGUF格式可以更快地被载入使用，也会消耗更低的资源。原因在于GGUF采用了多种技术来保存大模型预训练结果，包括采用紧凑的二进制编码格式、优化的数据结构、内存映射等。  
+#### 特性  
+1) 二进制格式：GGUF作为一种二进制格式，相较于文本格式的文件，可以更快地被读取和解析。二进制文件通常更紧凑，减少了读取和解析时所需的I/O操作和处理时间。
+2) 优化的数据结构：GGUF可能采用了特别优化的数据结构，这些结构为快速访问和加载模型数据提供了支持。例如，数据可能按照内存加载的需要进行组织，以减少加载时的处理。
+3) 内存映射（mmap）兼容性：如果GGUF支持内存映射（mmap），这允许直接从磁盘映射数据到内存地址空间，从而加快了数据的加载速度。这样，数据可以在不实际加载整个文件的情况下被访问，特别是对于大型模型非常有效。
+4) 高效的序列化和反序列化：GGUF可能使用高效的序列化和反序列化方法，这意味着模型数据可以快速转换为可用的格式。
+5) 少量的依赖和外部引用：如果GGUF格式设计为自包含，即所有需要的信息都存储在单个文件中，这将减少解析和加载模型时所需的外部文件查找和读取操作。
+6) 数据压缩：GGUF格式可能采用了有效的数据压缩技术，减少了文件大小，从而加速了读取过程。
+7) 优化的索引和访问机制：文件中数据的索引和访问机制可能经过优化，使得查找和加载所需的特定数据片段更加迅速。
+
+<h2 id="12.safetensors模型文件的使用">12.safetensors模型文件的使用 </h2>
+
+Safetensors 是一种新的格式，用于安全地存储 Tensor（相比于 pickle），而且速度很快（零拷贝）。
+
+安装
+```
+pip install safetensors
+```
+保存
+```
+import torch
+from safetensors.torch import save_file
+
+tensors = {
+    "embedding": torch.zeros((1, 2)),
+    "attention": torch.zeros((3, 4))
+}
+save_file(tensors, "model.safetensors")
+```
+加载
+```
+from safetensors import safe_open
+
+tensors = {}
+with safe_open("model.safetensors", framework="pt", device=0) as f:
+    for k in f.keys():
+        tensors[k] = f.get_tensor(k)
+```
+
+与ckpt的相互转换
+```
+import torch
+import safetensors
+from safetensors.torch import load_file, save_file
+ 
+def ckpt2safetensors():
+    loaded = torch.load('xxx.ckpt')
+    if "state_dict" in loaded:
+        loaded = loaded["state_dict"]
+    safetensors.torch.save_file(loaded, 'xxx.safetensors')
+ 
+def safetensors2ckpt():
+    data = safetensors.torch.load_file('xxx.safetensors.bk')
+    data["state_dict"] = data
+    torch.save(data, os.path.splitext('xxx.safetensors')[0] + '.ckpt')
+```
+<h2 id="13.GGUF模型文件的组成">13.GGUF模型文件的组成 </h2>
+
+#### 元数据和数据类型
+GGUF支持多种数据类型，如整数、浮点数和字符串等。这些数据类型用于定义模型的不同方面，如结构、大小和参数。
+#### 文件组成
+一个GGUF文件包括文件头、元数据键值对和张量信息等。这些组成部分共同定义了模型的结构和行为。
+#### 端序支持
+GGUF支持小端和大端格式，确保了其在不同计算平台上的可用性。端序（Endianness）是指数据在计算机内存中的字节顺序排列方式，主要有两种类型：大端（Big-Endian）和小端（Little-Endian）。不同的计算平台可能采用不同的端序。例如，Intel的x86架构是小端的，而某些旧的IBM和网络协议通常是大端的。因此，文件格式如果能支持这两种端序，就可以确保数据在不同架构的计算机上正确读取和解释。
+
+1. 文件头 (Header)
+
+   - 作用：包含用于识别文件类型和版本的基本信息。
+   - 内容：
+     - `Magic Number`：一个特定的数字或字符序列，用于标识文件格式。
+     - `Version`：文件格式的版本号，指明了文件遵循的具体规范或标准。
+
+2. 元数据键值对 (Metadata Key-Value Pairs)
+
+   - 作用：存储关于模型的额外信息，如作者、训练信息、模型描述等。
+   - 内容：
+     - `Key`：一个字符串，标识元数据的名称。
+     - `Value Type`：数据类型，指明值的格式（如整数、浮点数、字符串等）。
+     - `Value`：具体的元数据内容。
+
+3. 张量计数 (Tensor Count)
+
+   - 作用：标识文件中包含的张量（Tensor）数量。
+   - 内容：
+     - `Count`：一个整数，表示文件中张量的总数。
+
+4. 张量信息 (Tensor Info)
+
+   - 作用：描述每个张量的具体信息，包括形状、类型和数据位置。
+   - 内容：
+     - `Name`：张量的名称。
+     - `Dimensions`：张量的维度信息。
+     - `Type`：张量数据的类型（如浮点数、整数等）。
+     - `Offset`：指明张量数据在文件中的位置。
+
+5. 对齐填充 (Alignment Padding)
+
+   - 作用：确保数据块在内存中正确对齐，有助于提高访问效率。
+   - 内容：
+     - 通常是一些填充字节，用于保证后续数据的内存对齐。
+
+6. 张量数据 (Tensor Data)
+
+   - 作用：存储模型的实际权重和参数。
+   - 内容：
+     - `Binary Data`：模型的权重和参数的二进制表示。
+
+7. 端序标识 (Endianness)
+
+   - 作用：指示文件中数值数据的字节顺序（大端或小端）。
+   - 内容：
+     - 通常是一个标记，表明文件遵循的端序。
+
+8. 扩展信息 (Extension Information)
+
+   - 作用：允许文件格式未来扩展，以包含新的数据类型或结构。
+   - 内容：
+     - 可以是新加入的任何额外信息，为将来的格式升级预留空间。
+
+整体来看，GGUF文件格式通过这些结构化的组件提供了一种高效、灵活且可扩展的方式来存储和处理机器学习模型。这种设计不仅有助于快速加载和处理模型，而且还支持未来技术的发展和新功能的添加。
+
+<h2 id="14.diffusion和diffusers模型的相互转换">14.diffusion和diffusers模型的相互转换 </h2>
+
+diffusion模型：使用webui加载的safetensors模型，
+路径：stable-diffusion-webui/models/Stable-diffusion
+diffusers模型：使用stablediffuser pipeline加载的模型，目录结构如图：
+![alt text](image.png)<br>
+[diffusers](https://github.com/huggingface/diffusers)
+转换脚本路径：diffusers/scripts  
+diffusers-->diffusion:
+```
+python convert_diffusers_to_original_stable_diffusion.py --model_path model_dir --checkpoint_path path_to_ckpt.ckpt
+```
+其他参数：
+  --half：使用fp16数据格式
+  --use_safetensors：使用safetensors保存
+diffusion-->diffusers:
+```
+python convert_original_stable_diffusion_to_diffusers.py --checkpoint_path path_to_ckpt.ckpt --dump_path model_dir --image_size 512 --prediction_type epsilon
+```
