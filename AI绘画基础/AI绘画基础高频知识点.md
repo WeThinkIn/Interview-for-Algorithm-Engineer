@@ -280,9 +280,11 @@ GGUF支持小端和大端格式，确保了其在不同计算平台上的可用�
 <h2 id="14.diffusion和diffusers模型的相互转换">14.diffusion和diffusers模型的相互转换 </h2>
 
 diffusion模型：使用webui加载的safetensors模型，
-路径：stable-diffusion-webui/models/Stable-diffusion
-diffusers模型：使用stablediffuser pipeline加载的模型，目录结构如图：
-![alt text](image.png)<br>
+路径：stable-diffusion-webui/models/Stable-diffusion<br>
+diffusers模型：使用stable diffuser pipeline加载的模型，目录结构如图：
+
+![alt text](image.png)  
+
 [diffusers](https://github.com/huggingface/diffusers)
 转换脚本路径：diffusers/scripts  
 diffusers-->diffusion:
@@ -290,8 +292,8 @@ diffusers-->diffusion:
 python convert_diffusers_to_original_stable_diffusion.py --model_path model_dir --checkpoint_path path_to_ckpt.ckpt
 ```
 其他参数：
-  --half：使用fp16数据格式
-  --use_safetensors：使用safetensors保存
+  --half：使用fp16数据格式<br>
+  --use_safetensors：使用safetensors保存<br>
 diffusion-->diffusers:
 ```
 python convert_original_stable_diffusion_to_diffusers.py --checkpoint_path path_to_ckpt.ckpt --dump_path model_dir --image_size 512 --prediction_type epsilon
