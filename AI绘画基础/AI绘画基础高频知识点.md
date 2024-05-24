@@ -399,7 +399,7 @@ DiT（Diffusion Transformers）是Meta提出的一种完全基于Transformer架�
 
 ![DiT模型架构](./imgs/DiT模型架构.jpg)
 
-### 
+
 
 <h2 id="18.AI生成图像的常用评价指标">18.AI生成图像的常用评价指标 </h2>
 
