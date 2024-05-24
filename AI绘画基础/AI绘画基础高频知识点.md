@@ -16,7 +16,7 @@
 - [14.diffusion和diffusers模型的相互转换](#14.diffusion和diffusers模型的相互转换)
 - [15.什么是DreamBooth技术？](#15.什么是DreamBooth技术？)
 - [16.正则化技术在AI绘画模型中的作用？](#16.正则化技术在AI绘画模型中的作用？)
-- [17.DiT模型(Diffusion Transformers)](#17.DiT模型(Diffusion Transformers))
+- [17.DiT模型](#17.DiT模型)
 - [18.AI生成图像的常用评价指标](#18.AI生成图像的常用评价指标)
 
 
@@ -369,7 +369,7 @@ DreamBooth技术的应用非常广泛，包括但不限于：
 
 
 
-<h2 id="17.DiT模型(Diffusion Transformers)">17.DiT模型(Diffusion Transformers) </h2>
+<h2 id="17.DiT模型">17.DiT模型 </h2>
 
 论文链接：https://arxiv.org/pdf/2212.09748.pdf
 
