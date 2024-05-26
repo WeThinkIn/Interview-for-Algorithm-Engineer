@@ -28,7 +28,7 @@
 - [27.Python中assert的作用?](#27.Python中assert的作用?)
 - [28.python中如何无损打开图像，并无损保存图像?](#28.python中如何无损打开图像，并无损保存图像?)
 - [29.PyTorch中张量操作Clone与Detach的区别?（腾讯实习二面）](#29.PyTorch中张量操作Clone与Detach的区别?（腾讯实习二面）)
-
+- [30.Python多进程中的fork和spawn模式有什么区别？](#30.Python多进程中的fork和spawn模式有什么区别？)
 
 
 
@@ -879,6 +879,7 @@ example.my_function()  # 调用函数
 
 在这种情况下，`__name__` 会是 `'example'`，所以 `if __name__ == '__main__'` 块下的代码不会被执行，你只会得到 `my_function()` 的定义和功能。
 
+
 <h2 id="27.Python中assert的作用?">27.Python中assert的作用?</h2>
 
 在Python中，`assert` 语句用于断言某个条件是真的。如果条件为真，程序会继续运行；如果条件为假，则会触发一个 `AssertionError` 异常。这种方式主要用于调试阶段，确保代码在特定条件下正确运行，或用来作为程序内部的自检手段。
@@ -982,3 +983,11 @@ detach方法:
 梯度：clone得到的副本可以有与原始张量相同的requires_grad属性，而detach得到的张量总是没有梯度的。
 
 数据一致性：clone创建的是数据的一致副本，对副本的修改不会反映到原始张量上。detach操作的张量与原始张量数据上是一致的，对副本修改会反映原始张量，但不参与梯度计算。
+
+
+
+<h2 id="30.Python多进程中的fork和spawn模式有什么区别？">30.Python多进程中的fork和spawn模式有什么区别？</h2>
+
+1. windows和MacOS中默认为spawn模式，unix系统默认为fork模式，其中windows只支持spawn，unix同时支持两者；
+2. spawn模式不会继承父进程的资源，而是从头创建一个全新的进程，启动较慢；
+3. fork模式会继承父进程的资源，即通过复制父进程资源来快速创建子进程，启动较快；
