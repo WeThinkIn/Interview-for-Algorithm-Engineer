@@ -25,7 +25,12 @@
 - [24.Python中PIL和OpenCV处理图像的区别？](#24.Python中PIL和OpenCV处理图像的区别？)
 - [25.Python中全局变量与局部变量之间的区别？](#25.Python中全局变量与局部变量之间的区别？)
 - [26.Python中`if "__name__" == __main__'`的作用?](#26.Python中name==main?)
-- [27.Python多进程中的fork和spawn模式有什么区别？](#27.Python多进程中的fork和spawn模式有什么区别？)
+- [27.Python中assert的作用?](#27.Python中assert的作用?)
+- [28.python中如何无损打开图像，并无损保存图像?](#28.python中如何无损打开图像，并无损保存图像?)
+- [29.PyTorch中张量操作Clone与Detach的区别?（腾讯实习二面）](#29.PyTorch中张量操作Clone与Detach的区别?（腾讯实习二面）)
+- [30.Python多进程中的fork和spawn模式有什么区别？](#30.Python多进程中的fork和spawn模式有什么区别？)
+
+
 
 <h2 id="1.python中迭代器的概念？">1.Python中迭代器的概念？</h2>
 
@@ -798,7 +803,7 @@ Python中的Pillow/PIL（Python Imaging Library）和OpenCV（Open Source Comput
 
 Pillow适合于需要处理图像文件、执行基本图像处理任务的应用，而OpenCV适合于需要实施复杂的图像分析、计算机视觉处理或实时视频处理的项目。选择哪个库取决于你的具体需求、项目复杂度以及性能要求。
 
-<h2 id="25.Python中全局变量与局部变量之间的区别？？">25.Python中全局变量与局部变量之间的区别？？</h2>
+<h2 id="25.Python中全局变量与局部变量之间的区别？">25.Python中全局变量与局部变量之间的区别？</h2>
 
 在Python中，**全局变量和局部变量的区别主要体现在变量的作用域、声明位置以及在程序中的可访问性上**。理解这些差异有助于我们更好地管理数据的流向和变量的生命周期，防止不必要的编程错误。
 
@@ -875,9 +880,114 @@ example.my_function()  # 调用函数
 在这种情况下，`__name__` 会是 `'example'`，所以 `if __name__ == '__main__'` 块下的代码不会被执行，你只会得到 `my_function()` 的定义和功能。
 
 
-<h2 id="Python多进程中的fork和spawn模式有什么区别？">Python多进程中的fork和spawn模式有什么区别？</h2>
+<h2 id="27.Python中assert的作用?">27.Python中assert的作用?</h2>
+
+在Python中，`assert` 语句用于断言某个条件是真的。如果条件为真，程序会继续运行；如果条件为假，则会触发一个 `AssertionError` 异常。这种方式主要用于调试阶段，确保代码在特定条件下正确运行，或用来作为程序内部的自检手段。
+
+`assert` 语句的基本语法如下：
+```python
+assert condition, error_message
+```
+- `condition`：这是需要检查的表达式，结果应为布尔值。
+- `error_message`：这是可选的，如果提供，当条件不满足（即为`False`）时，将显示此错误消息。
+
+### 使用示例
+
+假设你正在开发一个函数，该函数必须接受正整数作为输入。你可以使用 `assert` 语句来确保输入是正整数：
+
+```python
+def print_inverse(number):
+    assert number > 0, "The number must be positive"
+    print(1 / number)
+
+print_inverse(5)  # 正常运行
+print_inverse(-1)  # 抛出 AssertionError: The number must be positive
+```
+
+### 注意事项
+- `assert` 语句可以被全局解释器选项 `-O` （优化模式）和其他方法禁用。当Python解释器以优化模式运行时，所有的`assert`语句都会被忽略。因此，通常不建议在生产代码中使用`assert`来做输入验证或处理程序的核心逻辑。
+- 适合使用`assert`的场景包括：测试代码的健壮性、检查函数的输入参数是否符合预期。
+
+总之，`assert`是一个有用的调试工具，可以帮助开发者在开发过程中快速定位问题。
+
+<h2 id="28.python中如何无损打开图像，并无损保存图像?">28.python中如何无损打开图像，并无损保存图像?</h2>
+
+在Python中，如果我们想无损地打开和保存图像，关键是选择支持无损保存的图像格式，如PNG、TIFF或BMP。使用Python的Pillow库可以方便地处理这种任务。下面Rocky将详细说明如何使用Pillow无损地打开和保存图像。
+
+### 使用Pillow无损打开和保存图像
+
+1. **打开图像**：使用`Image.open()`函数打开图像文件。这个函数不会修改图像数据，因此打开图像本身是无损的。
+
+2. **保存图像**：使用`Image.save()`函数，并确保选择无损格式，如PNG。
+
+以下是一个具体的示例：
+
+```python
+from PIL import Image
+
+# 打开图像文件
+img = Image.open('example.jpg')  # 假设原始文件是JPEG格式
+
+# 执行一些图像处理操作（可选）
+# 注意，确保这些操作是无损的，如大小调整、裁剪等
+
+# 保存图像为PNG格式，这是无损压缩
+img.save('output.png', 'PNG')
+
+# 或者用这种方式进行无损保存
+img.save('path_to_save_image.png', format='PNG', optimize=True)
+```
+
+### 注意事项
+- PNG使用的是无损压缩算法，这意味着图像的所有信息在压缩和解压过程中都被完整保留，不会有任何质量损失。
+- 当从有损压缩格式（如JPEG）转换为无损格式（如PNG）时，虽然保存过程是无损的，但原始从JPEG格式读取的图像可能已经丢失了一些信息。因此，最佳实践是始终从无损格式源文件开始操作，以保持最高质量。
+- 如果我们的图像已经在一个无损格式（如PNG），你只需重新保存它，同样选择无损格式，即可保持图像质量不变。
+- 无损保存与 `optimize=True` 选项：`optimize=True`选项会尝试找到更为压缩的存储方式来保存文件，但不会影响图像的质量。具体来说，它在保存文件时会尝试优化图像数据的存储方式，比如重新排列文件中的色块和使用更有效的编码方法，但仍然保持图像数据的完整性和质量。因此，即使使用了 `optimize=True` 选项，保存的PNG文件也是无损的，不会有质量损失。这使得PNG格式非常适合需要无损压缩的应用，如需要频繁编辑和保存的图像处理任务。
+
+### 处理其他图像格式
+对于其他格式如TIFF或BMP，Pillow同样支持无损操作，保存方法类似，只需改变保存格式即可：
+
+```python
+# 保存为TIFF格式
+img.save('output.tiff', 'TIFF')
+
+# 保存为BMP格式
+img.save('output.bmp', 'BMP')
+```
+
+使用Pillow库，我们可以轻松地在Python中进行无损图像处理。它提供了广泛的功能，能够处理几乎所有常见的图像格式，并支持复杂的图像处理任务。
+
+<h2 id="29.PyTorch中张量操作Clone与Detach的区别?（腾讯实习二面）">29.PyTorch中张量操作Clone与Detach的区别？</h2>
+
+clone方法:
+
+创建了张量的一个新的副本，这个副本具有与原始张量相同的数据和形状，但它们是存储在内存中的两个独立实体。对克隆张量的修改不会影响到原始张量。clone通常用于需要保留原始数据不变时创建张量的独立副本。
+
+    import torch
+    x = torch.tensor([1, 2, 3])
+    y = x.clone()  # y 是x的一个副本，对y的修改不会影响到x
+
+detach方法:
+
+从当前的计算图中分离出一个张量，使其成为一个不需要梯度的张量。这意味着，经过detach操作的张量将不会参与梯度传播，不会在反向传播中更新。detach通常用于阻止梯度传播，或者在进行推断时将张量从模型的参数中分离出来。
+
+    import torch
+    x = torch.tensor([1, 2, 3], requires_grad=True)
+    y = x.detach()  # y 不需要梯度，对y的操作不会引起梯度计算
+主要区别
+
+目的：clone的目的是创建数据的副本，而detach的目的是分离张量以停止梯度计算。
+
+内存使用：clone会创建数据的一个完整副本，因此会使用更多的内存。detach则不会复制数据，只是创建了一个新的视图，通常不会增加额外的内存使用。
+
+梯度：clone得到的副本可以有与原始张量相同的requires_grad属性，而detach得到的张量总是没有梯度的。
+
+数据一致性：clone创建的是数据的一致副本，对副本的修改不会反映到原始张量上。detach操作的张量与原始张量数据上是一致的，对副本修改会反映原始张量，但不参与梯度计算。
+
+
+
+<h2 id="30.Python多进程中的fork和spawn模式有什么区别？">30.Python多进程中的fork和spawn模式有什么区别？</h2>
 
 1. windows和MacOS中默认为spawn模式，unix系统默认为fork模式，其中windows只支持spawn，unix同时支持两者；
 2. spawn模式不会继承父进程的资源，而是从头创建一个全新的进程，启动较慢；
 3. fork模式会继承父进程的资源，即通过复制父进程资源来快速创建子进程，启动较快；
-
