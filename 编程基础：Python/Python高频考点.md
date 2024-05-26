@@ -25,6 +25,7 @@
 - [24.Python中PIL和OpenCV处理图像的区别？](#24.Python中PIL和OpenCV处理图像的区别？)
 - [25.Python中全局变量与局部变量之间的区别？](#25.Python中全局变量与局部变量之间的区别？)
 - [26.Python中`if "__name__" == __main__'`的作用?](#26.Python中name==main?)
+- [27.Python多进程中的fork和spawn模式有什么区别？](#27.Python多进程中的fork和spawn模式有什么区别？)
 
 <h2 id="1.python中迭代器的概念？">1.Python中迭代器的概念？</h2>
 
@@ -872,3 +873,11 @@ example.my_function()  # 调用函数
 ```
 
 在这种情况下，`__name__` 会是 `'example'`，所以 `if __name__ == '__main__'` 块下的代码不会被执行，你只会得到 `my_function()` 的定义和功能。
+
+
+<h2 id="Python多进程中的fork和spawn模式有什么区别？">Python多进程中的fork和spawn模式有什么区别？</h2>
+
+1. windows和MacOS中默认为spawn模式，unix系统默认为fork模式，其中windows只支持spawn，unix同时支持两者；
+2. spawn模式不会继承父进程的资源，而是从头创建一个全新的进程，启动较慢；
+3. fork模式会继承父进程的资源，即通过复制父进程资源来快速创建子进程，启动较快；
+
