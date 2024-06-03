@@ -29,7 +29,8 @@
 - [28.python中如何无损打开图像，并无损保存图像?](#28.python中如何无损打开图像，并无损保存图像?)
 - [29.PyTorch中张量操作Clone与Detach的区别?（腾讯实习二面）](#29.PyTorch中张量操作Clone与Detach的区别?（腾讯实习二面）)
 - [30.Python多进程中的fork和spawn模式有什么区别？](#30.Python多进程中的fork和spawn模式有什么区别？)
-
+- [31.什么是Python中的推导式？Python的推导式一共有多少种？](#31.什么是Python中的推导式？Python的推导式一共有多少种？)
+- [32.python中一共都有哪些数据结构？](#32.python中一共都有哪些数据结构？)
 
 
 <h2 id="1.python中迭代器的概念？">1.Python中迭代器的概念？</h2>
@@ -985,9 +986,164 @@ detach方法:
 数据一致性：clone创建的是数据的一致副本，对副本的修改不会反映到原始张量上。detach操作的张量与原始张量数据上是一致的，对副本修改会反映原始张量，但不参与梯度计算。
 
 
-
 <h2 id="30.Python多进程中的fork和spawn模式有什么区别？">30.Python多进程中的fork和spawn模式有什么区别？</h2>
 
 1. windows和MacOS中默认为spawn模式，unix系统默认为fork模式，其中windows只支持spawn，unix同时支持两者；
 2. spawn模式不会继承父进程的资源，而是从头创建一个全新的进程，启动较慢；
 3. fork模式会继承父进程的资源，即通过复制父进程资源来快速创建子进程，启动较快；
+
+
+<h2 id="31.什么是Python中的推导式？Python的推导式一共有多少种？">31.什么是Python中的推导式？Python的推导式一共有多少种？</h2>
+
+Python中的推导式（comprehensions）是一种简洁、灵活且高效的构建Python数据结构的方法，包括列表、字典、集合和生成器。推导式允许以表达式的形式快速生成新的数据结构，同时在创建过程中可以直接应用条件筛选或操作。下面详细介绍Python中四种主要的推导式：
+
+### 1. 列表推导式（List Comprehensions）
+
+**功能**：用于创建列表，可以通过应用表达式自动处理并生成新列表。
+
+**基本语法**：
+```python
+[expression for item in iterable if condition]
+```
+
+- `expression` 是对 `item` 的操作或者应用表达式。
+- `item` 是从 `iterable` 中逐个取出的元素。
+- `condition` 是一个可选的条件语句，用于过滤。
+
+**示例**：
+```python
+# 生成0-9每个数字的平方的列表
+squares = [x**2 for x in range(10)]
+
+# 结果
+{0, 1, 64, 4, 36, 9, 16, 49, 81, 25}
+```
+
+### 2. 字典推导式（Dictionary Comprehensions）
+
+**功能**：用于创建字典，允许通过迭代可迭代对象来生成键值对。
+
+**基本语法**：
+```python
+{key_expression : value_expression for item in iterable if condition}
+```
+
+- `key_expression` 表示字典的键的表达式。
+- `value_expression` 表示字典的值的表达式。
+- `item` 是从 `iterable` 中逐个取出的元素。
+- `condition` 是一个可选的条件语句，用于过滤。
+
+**示例**：
+```python
+# 使用数字作为键，其平方作为值
+squares_dict = {x: x**2 for x in range(5)}
+
+# 结果
+{0: 0, 1: 1, 2: 4, 3: 9, 4: 16}
+```
+
+### 3. 集合推导式（Set Comprehensions）
+
+**功能**：用于创建集合，类似于列表推导式，但结果是一个集合，自动去重。
+
+**基本语法**：
+```python
+{expression for item in iterable if condition}
+```
+
+- `expression` 是对 `item` 的操作或者应用表达式。
+- `item` 是从 `iterable` 中逐个取出的元素。
+- `condition` 是一个可选的条件语句，用于过滤。
+
+**示例**：
+```python
+# 创建一个包含0-9每个数字平方的集合
+square_set = {x**2 for x in range(10)}
+
+# 结果
+{0, 1, 64, 4, 36, 9, 16, 49, 81, 25}
+```
+
+### 4. 生成器推导式（Generator Expressions）
+
+**功能**：生成器推导式是一种类似于列表推导式的结构，用于创建生成器（一种迭代器），不会一次性生成所有元素，而是按需产生，节约内存。
+
+**基本语法**：
+```python
+(expression for item in iterable if condition)
+```
+
+- `expression` 是对 `item` 的操作或者应用表达式。
+- `item` 是从 `iterable` 中逐个取出的元素。
+- `condition` 是一个可选的条件语句，用于过滤。
+
+**示例**：
+```python
+# 创建一个生成器，包含0-9每个数字的平方
+square_gen = (x**2 for x in range(10))
+
+# 结果
+<generator object <genexpr> at 0x7f0827a98660>
+```
+
+推导式提供了一种高效和直观的方式来创建数据结构，使代码更加简洁易读。在合适的情况下，使用推导式可以有效提升编程效率和执行性能。
+
+
+<h2 id="32.python中一共都有哪些数据结构？">32.python中一共都有哪些数据结构？</h2>
+
+Python提供了一系列内置的数据结构，这些数据结构非常强大和灵活，可以用来处理各种不同类型的数据。这些数据结构包括列表、元组、字典、集合，以及通过标准库可用的更多高级数据结构如队列和堆。下面是这些主要数据结构的详细介绍：
+
+### 1. 列表（List）
+列表是Python中最常用的数据结构之一，它是一个有序的集合，可以包含任何类型的对象：数字、字符串、甚至其他列表。列表是可变的，这意味着它们可以被修改。
+
+**基本操作**：
+- 创建列表：`my_list = [1, 2, 3]`
+- 添加元素：`my_list.append(4)`
+- 删除元素：`del my_list[0]`
+- 切片操作：`my_list[1:3]`
+
+### 2. 元组（Tuple）
+元组与列表类似，但它们是不可变的。这意味着一旦创建了元组，就不能修改其内容。元组通常用于保护数据不被更改，并且可以作为字典键使用，而列表则不能。
+
+**基本操作**：
+- 创建元组：`my_tuple = (1, 2, 3)`
+- 访问元素：`my_tuple[1]`
+- 切片操作：`my_tuple[1:2]`
+
+### 3. 字典（Dictionary）
+字典是一种关联数组或哈希表，它由键值对组成。字典中的键必须是唯一的，并且必须是不可变类型，如字符串或元组。字典在查找、添加和删除操作上非常高效。
+
+**基本操作**：
+- 创建字典：`my_dict = {'key': 'value'}`
+- 访问元素：`my_dict['key']`
+- 添加或修改元素：`my_dict['new_key'] = 'new_value'`
+- 删除元素：`del my_dict['key']`
+
+### 4. 集合（Set）
+集合是一个无序的元素集，提供了强大的成员测试和删除重复元素的功能。集合中的元素必须是不可变类型，并且集合本身是可变的。
+
+**基本操作**：
+- 创建集合：`my_set = {1, 2, 3}`
+- 添加元素：`my_set.add(4)`
+- 删除元素：`my_set.remove(2)`
+- 成员测试：`1 in my_set`
+
+### 高级数据结构
+Python的标准库还提供了一些高级数据结构，这些结构在`collections`模块和其他模块中定义。
+
+#### 队列（Queue）
+队列是一种先进先出的数据结构，标准库中的`queue.Queue`用于多线程编程中的线程安全的队列操作。
+
+#### 双端队列（Deque）
+`collections.deque`提供了一个双端队列，支持从任一端添加或删除元素的高效操作。
+
+#### 计数器（Counter）
+`collections.Counter`是一个简单的计数器，用于计数可哈希对象。
+
+#### 有序字典（OrderedDict）
+`collections.OrderedDict`是一个保持元素插入顺序的字典。
+
+#### 堆（Heap）
+模块`heapq`提供了堆队列算法，特别是优先级队列的实现。
+
+这些数据结构使Python在处理各种数据时变得非常灵活和强大。选择正确的数据结构可以显著提高程序的效率和性能。
