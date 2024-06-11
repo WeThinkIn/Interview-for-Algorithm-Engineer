@@ -32,7 +32,7 @@
 - [31.什么是Python中的推导式？Python的推导式一共有多少种？](#31.什么是Python中的推导式？Python的推导式一共有多少种？)
 - [32.python中一共都有哪些数据结构？](#32.python中一共都有哪些数据结构？)
 - [33.python中index使用注意事项](#33.python中index使用注意事项)
-
+- [34.python中@staticmethod和@classmethod使用注意事项](#34.python中@staticmethod和@classmethod使用注意事项)
 <h2 id="1.python中迭代器的概念？">1.Python中迭代器的概念？</h2>
 
 <font color=DeepSkyBlue>可迭代对象是迭代器、生成器和装饰器的基础。</font>简单来说，可以使用for来循环遍历的对象就是可迭代对象。比如常见的list、set和dict。
@@ -1164,3 +1164,61 @@ end:可选整型参数，查找的结束位置。<br>
 注意事项：
 当查询参数在列表中存在多个，index方法只会返回靠近表头的索引，即第一次查到的参数，并不会将所有匹配值的索引全部返回。
 在无法确定列表中元素是否重复的情况下，不建议使用此方法查询索引，建议使用range(len(list))的方法。
+
+<h2 id="34.python中@staticmethod和@classmethod使用注意事项">34.python中@staticmethod和@classmethod使用注意事项</h2>
+
+### @staticmethod
+
+1) 静态方法：staticmethod将一个普通函数嵌入到类中，使其成为类的静态方法。静态方法不需要一个类实例即可被调用，同时它也不需要访问类实例的状态。
+2) 参数：静态方法可以接受任何参数，但通常不使用self或cls作为第一个参数。
+3) 访问：由于静态方法不依赖于类实例的状态，因此它们不能修改类或实例的状态。
+4) 用途：当函数与类相关，但其操作不依赖于类状态时，适合使用静态方法。
+### @classmethod
+1) 类方法：classmethod将一个方法绑定到类而非类的实例。类方法通常用于操作类级别的属性。
+2) 参数：类方法至少有一个参数，通常命名为cls，它指向类本身。
+3) 访问：类方法可以修改类的状态，但不能修改实例的状态。
+4) 用途：当方法需要访问或修改类属性，或者需要通过类来创建实例时，适合使用类方法。
+
+### 使用场景
+- 当方法不需要访问任何属性时，使用staticmethod。
+- 当方法操作的是类属性而不是实例属性时，使用classmethod。
+
+### 代码示例
+```python
+class MyClass:
+    class_variable = "I'm a class variable."
+
+    def __init__(self, value):
+        self.instance_variable = value
+
+    @staticmethod
+    def static_method():
+        return "Static method called."
+
+    @classmethod
+    def class_method(cls):
+        return f"Class method called. Class variable: {cls.class_variable}"
+
+# 调用静态方法
+MyClass.static_method()
+
+# 调用类方法
+MyClass.class_method()
+
+```
+### 问题
+在使用falsk-restful这个框架进行模型部署调用时，发现模型推理时间很快，但是完整的一次请求过程非常耗时。在debug的过程中发现，每次请求调用api接口时，模型的推理类都会被实例化，推理类在构造的时候，会在初始化中加载模型，加载模型的过程是耗时较长的。
+### fixbug
+```python
+classs Infer(object):
+    def __init__(self, cfg: dict)->None:
+        self.cfg = cfg
+        self.load_model(self.cfg)
+
+    @classmethod
+    def load_model(cls, cfg: dict):
+        cls.cfg = cfg
+        if not hasattr(cls, "model"):
+            cls.model = torch.load("xxx.pt")
+```
+通过@classmethod方法初始化模型的加载，相当于创建了一个全局变量，在后续的请求调用中，不会一直重复加载
