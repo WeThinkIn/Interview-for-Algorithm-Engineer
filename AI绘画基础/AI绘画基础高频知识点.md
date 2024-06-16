@@ -27,6 +27,7 @@
 - [25.用于图像生成的多lora组合](#25.用于图像生成的多lora组合)
 - [26.cfg参数的介绍](#26.cfg参数的介绍)
 - [27.目前主流的AI绘画框架有哪些？](#27.目前主流的AI绘画框架有哪些？)
+- [28.FaceChain的训练和推理流程是什么样的？](#28.FaceChain的训练和推理流程是什么样的？)
 
 <h2 id="1.目前主流的AI绘画大模型有哪些？">1.目前主流的AI绘画大模型有哪些？</h2>
 
@@ -294,7 +295,7 @@ diffusion模型：使用webui加载的safetensors模型，
 路径：stable-diffusion-webui/models/Stable-diffusion<br>
 diffusers模型：使用stable diffuser pipeline加载的模型，目录结构如图：
 
-![alt text](image.png)  
+![alt text](SD模型-diffusers结构.png)  
 
 [diffusers](https://github.com/huggingface/diffusers)
 转换脚本路径：diffusers/scripts  
@@ -574,3 +575,28 @@ Rocky从AIGC时代的工业界、应用界、竞赛界以及学术界出发，�
 ![SDNext](./imgs/SDNext图标.jpeg)
 5. Fooocus：`Fooocus` 也是基于 `Gradio` 框架的GUI界面，Fooocus借鉴了Stable Diffusion WebUI和Midjourney的优势，具有离线、开源、免费、无需手动调整、用户只需关注提示和图像等特点。
 ![Fooocus](./imgs/Fooocus图标.png)
+
+
+<h2 id="28.FaceChain的训练和推理流程是什么样的？">28.FaceChain的训练和推理流程是什么样的？</h2>
+
+FaceChain是一个功能上近似“秒鸭相机”的技术，我们只需要输入几张人脸图像，FaceChain技术会帮我们合成各种服装、各种场景下的AI数字分身照片。下面Rocky就给大家梳理一下FaceChain的训练和推理流程：
+
+## 训练阶段
+
+1. 输入包含清晰人脸区域的图像。
+2. 使用基于朝向判断的图像旋转模型+基于人脸检测和关键点模型的人脸精细化旋转方法来处理人脸图像，获取包含正向人脸的图像。
+3. 使用人体解析模型+人像美肤模型，获得高质量的人脸训练图像。
+4. 使用人脸属性模型和文本标注模型，再使用标签后处理方法，生成训练图像的精细化标签。
+5. 使用上述图像和标签数据微调Stable Diffusion模型得到人脸LoRA模型。
+7. 输出人脸LoRA模型。
+
+## 推理阶段
+
+1. 输入训练阶段的训练图像。
+2. 设置用于生成个人写真的Prompt提示词。
+3. 将人脸LoRA模型和风格LoRA模型的权重融合到Stable Diffusion模型中。
+4. 使用Stable Diffusion模型的文生图功能，基于设置的输入提示词初步生成AI个人写真图像。
+5. 使用人脸融合模型进一步改善上述写真图像的人脸细节，其中用于融合的模板人脸通过人脸质量评估模型在训练图像中挑选。
+6. 使用人脸识别模型计算生成的写真图像与模板人脸的相似度，以此对写真图像进行排序，并输出排名靠前的个人写真图像作为最终输出结果。
+  
+![FaceChain训练和推理流程图](./imgs/FaceChain训练和推理流程图.jpeg)
