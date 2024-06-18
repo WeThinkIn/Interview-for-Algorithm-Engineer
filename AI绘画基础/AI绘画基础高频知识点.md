@@ -26,10 +26,10 @@
 - [24.使用lora微调Stable_Diffusion模型](#24.使用lora微调Stable_Diffusion模型)
 - [25.用于图像生成的多lora组合](#25.用于图像生成的多lora组合)
 - [26.cfg参数的介绍](#26.cfg参数的介绍)
-- [27.什么是diffusers?](#27.什么是diffusers?)
-- [28.文生图和图生图的区别是什么?](#28.文生图和图生图的区别是什么?)
-- [29.stable diffusion的常用绘画工具有哪些?](#29.stable diffusion的常用绘画工具有哪些?)
-
+- [27.目前主流的AI绘画框架有哪些？](#27.目前主流的AI绘画框架有哪些？)
+- [28.FaceChain的训练和推理流程是什么样的？](#28.FaceChain的训练和推理流程是什么样的？)
+- [29.什么是diffusers?](#29.什么是diffusers?)
+- [30.文生图和图生图的区别是什么?](#30.文生图和图生图的区别是什么?)
 
 <h2 id="1.目前主流的AI绘画大模型有哪些？">1.目前主流的AI绘画大模型有哪些？</h2>
 
@@ -297,7 +297,7 @@ diffusion模型：使用webui加载的safetensors模型，
 路径：stable-diffusion-webui/models/Stable-diffusion<br>
 diffusers模型：使用stable diffuser pipeline加载的模型，目录结构如图：
 
-![alt text](image.png)  
+![alt text](SD模型-diffusers结构.png)  
 
 [diffusers](https://github.com/huggingface/diffusers)
 转换脚本路径：diffusers/scripts  
@@ -564,7 +564,48 @@ Classifier-Free Guidance方案，可以规避上述问题，而且可以通过�
 
 简单说：通过cfg参数控制图像生成内容和文本之间的关联性
 
-<h2 id="27.什么是diffusers?">27.什么是diffusers?</h2>
+
+<h2 id="27.目前主流的AI绘画框架有哪些？">27.目前主流的AI绘画框架有哪些？</h2>
+
+Rocky从AIGC时代的工业界、应用界、竞赛界以及学术界出发，总结了目前主流的AI绘画框架：
+
+1. Diffusers：`diffusers` 库提供了一整套用于训练、推理和评估扩散模型的工具。它的设计目标是简化扩散模型的使用和实验，并提供与 `Hugging Face` 生态系统的无缝集成，包括其 `Transformers` 库和 `Datasets` 库。在AIGC时代中，每次里程碑式的模型发布后，Diffusers几乎都在第一时间进行了原生支持。
+![diffusers](./imgs/diffusers图标.png)
+2. Stable Diffusion WebUI：`Stable Diffusion Webui` 是一个基于 `Gradio` 框架的GUI界面，可以方便的使用Stable Diffusion系列模型，使用户能够轻松的进行AI绘画。
+![Stable Diffusion WebUI](./imgs/WebUI图标.png)
+3. ComfyUI：`ComfyUI` 也是一个基于 `Gradio` 框架的GUI界面，与Stable Diffusion WebUI不同的是，ComfyUI框架中侧重构建AI绘画节点和工作流，用户可以通过连接不同的节点来设计和执行AI绘画功能。
+![ComfyUI](./imgs/comfyui图标.png)
+4. SD.Next：`SD.Next` 基于Stable Diffusion WebUI开发，构建提供了更多高级的功能。在支持Stable Diffusion的基础上，还支持Kandinsky、DeepFloyd IF、Lightning、Segmind、Kandinsky、Pixart-α、Pixart-Σ、Stable Cascade、Würstchen、aMUSEd、UniDiffusion、Hyper-SD、HunyuanDiT等AI绘画模型的使用。
+![SDNext](./imgs/SDNext图标.jpeg)
+5. Fooocus：`Fooocus` 也是基于 `Gradio` 框架的GUI界面，Fooocus借鉴了Stable Diffusion WebUI和Midjourney的优势，具有离线、开源、免费、无需手动调整、用户只需关注提示和图像等特点。
+![Fooocus](./imgs/Fooocus图标.png)
+
+
+<h2 id="28.FaceChain的训练和推理流程是什么样的？">28.FaceChain的训练和推理流程是什么样的？</h2>
+
+FaceChain是一个功能上近似“秒鸭相机”的技术，我们只需要输入几张人脸图像，FaceChain技术会帮我们合成各种服装、各种场景下的AI数字分身照片。下面Rocky就给大家梳理一下FaceChain的训练和推理流程：
+
+## 训练阶段
+
+1. 输入包含清晰人脸区域的图像。
+2. 使用基于朝向判断的图像旋转模型+基于人脸检测和关键点模型的人脸精细化旋转方法来处理人脸图像，获取包含正向人脸的图像。
+3. 使用人体解析模型+人像美肤模型，获得高质量的人脸训练图像。
+4. 使用人脸属性模型和文本标注模型，再使用标签后处理方法，生成训练图像的精细化标签。
+5. 使用上述图像和标签数据微调Stable Diffusion模型得到人脸LoRA模型。
+7. 输出人脸LoRA模型。
+
+## 推理阶段
+
+1. 输入训练阶段的训练图像。
+2. 设置用于生成个人写真的Prompt提示词。
+3. 将人脸LoRA模型和风格LoRA模型的权重融合到Stable Diffusion模型中。
+4. 使用Stable Diffusion模型的文生图功能，基于设置的输入提示词初步生成AI个人写真图像。
+5. 使用人脸融合模型进一步改善上述写真图像的人脸细节，其中用于融合的模板人脸通过人脸质量评估模型在训练图像中挑选。
+6. 使用人脸识别模型计算生成的写真图像与模板人脸的相似度，以此对写真图像进行排序，并输出排名靠前的个人写真图像作为最终输出结果。
+  
+![FaceChain训练和推理流程图](./imgs/FaceChain训练和推理流程图.jpeg)
+
+<h2 id="29.什么是diffusers?">29.什么是diffusers?</h2>
 
 Diffusers是一个功能强大的工具箱，旨在帮助用户更加方便地操作扩散模型。通过使用Diffusers，用户可以轻松地生成图像、音频等多种类型的数据，同时可以使用各种噪声调度器来调整模型推理的速度和质量。
 
@@ -590,7 +631,7 @@ Diffusers不仅兼容一种类型的模型，还支持多种类型的模型。�
 
 [🧨 Diffusers (huggingface.co)](https://huggingface.co/docs/diffusers/zh/index)
 
-<h2 id="28.文生图和图生图的区别是什么?">28.文生图和图生图的区别是什么?</h2>
+<h2 id="30.文生图和图生图的区别是什么?">30.文生图和图生图的区别是什么?</h2>
 
 ### 文生图（Text2Image）
 
@@ -607,26 +648,3 @@ Diffusers不仅兼容一种类型的模型，还支持多种类型的模型。�
 图生图生成的初始潜在表示不是随机噪声,而是将初始图像通过自动编码器编码后的潜在表示,再加入高斯噪声。该加噪过程实际是扩散过程,使潜在表示包含随机性,为后续图像转换提供更多可能性。
 
 它们在技术使用上有所重叠,但应用场景有别。文生图更注重多样性和创造力,而图生图则侧重于对现有图像的编辑和转换。
-
-<h2 id="29.stable diffusion的常用绘画工具有哪些?">29.stable diffusion的常用绘画工具有哪些?</h2>
-
-Stable Diffusion WebUI 和 ComfyUI 都是基于 Stable Diffusion 模型的 AI 绘画工具，它们各自具有不同的特点和优势，能够满足不同用户的需求，并适应未来 AI 模式的发展方向。![text-to-image-1](./imgs/text-to-image-1.webp)
-
-**Stable Diffusion WebUI:**
-
-- **用户友好性:** 该工具以其简单直观的用户界面而受到欢迎，适合初学者以及那些希望快速生成图像的用户。
-- **丰富的插件生态:** 提供了大量插件，用户可以根据需要扩展功能，使其具有高度的可定制性。
-- **操作简单:** 用户可以通过输入提示词来生成图像，整个过程简单直接。
-- **社区支持:** 有大量的社区支持和教程资源，用户可以轻松找到所需的帮助和指导。
-- **易于上手:** 由于其简单的操作和友好的界面，新用户能够快速上手并开始使用。
-
-![comfyui_screenshot](./imgs/comfyui_screenshot.png)
-
-**ComfyUI:**
-
-- **基于节点的工作流程界面:** 允许用户通过拖拽和配置不同的模块来定制生成图像的过程，提供了更大的灵活性。
-- **适合专业用户:** 为那些希望对生成过程有更多控制的用户提供了专业级别的工具和功能。
-- **强大的内存管理:** 内存管理功能更强，能够更高效地使用资源，适合需要处理大规模数据的用户。
-- **工作流复制:** 支持复制他人的工作流，方便用户学习和借鉴，提高工作效率并促进创意共享。
-
-总体来说，Stable Diffusion WebUI 适合那些重视用户体验和易用性的用户，而 ComfyUI 则更适合那些需要高度自定义和专业控制的用户。这两个工具各有优势，可以根据用户的具体需求选择合适的工具。
