@@ -29,7 +29,12 @@
 - [28.python中如何无损打开图像，并无损保存图像?](#28.python中如何无损打开图像，并无损保存图像?)
 - [29.PyTorch中张量操作Clone与Detach的区别?（腾讯实习二面）](#29.PyTorch中张量操作Clone与Detach的区别?（腾讯实习二面）)
 - [30.Python多进程中的fork和spawn模式有什么区别？](#30.Python多进程中的fork和spawn模式有什么区别？)
-
+- [31.什么是Python中的推导式？Python的推导式一共有多少种？](#31.什么是Python中的推导式？Python的推导式一共有多少种？)
+- [32.python中一共都有哪些数据结构？](#32.python中一共都有哪些数据结构？)
+- [33.python中index使用注意事项](#33.python中index使用注意事项)
+- [34.python中@staticmethod和@classmethod使用注意事项](#34.python中@staticmethod和@classmethod使用注意事项)
+- [35.Python中函数传参时会改变参数本身吗？](#35.Python中函数传参时会改变参数本身吗？)
+- [36.什么是python的全局解释器锁GIL？](#36.什么是python的全局解释器锁GIL？)
 
 
 <h2 id="1.python中迭代器的概念？">1.Python中迭代器的概念？</h2>
@@ -985,9 +990,310 @@ detach方法:
 数据一致性：clone创建的是数据的一致副本，对副本的修改不会反映到原始张量上。detach操作的张量与原始张量数据上是一致的，对副本修改会反映原始张量，但不参与梯度计算。
 
 
-
 <h2 id="30.Python多进程中的fork和spawn模式有什么区别？">30.Python多进程中的fork和spawn模式有什么区别？</h2>
 
 1. windows和MacOS中默认为spawn模式，unix系统默认为fork模式，其中windows只支持spawn，unix同时支持两者；
 2. spawn模式不会继承父进程的资源，而是从头创建一个全新的进程，启动较慢；
 3. fork模式会继承父进程的资源，即通过复制父进程资源来快速创建子进程，启动较快；
+
+
+<h2 id="31.什么是Python中的推导式？Python的推导式一共有多少种？">31.什么是Python中的推导式？Python的推导式一共有多少种？</h2>
+
+Python中的推导式（comprehensions）是一种简洁、灵活且高效的构建Python数据结构的方法，包括列表、字典、集合和生成器。推导式允许以表达式的形式快速生成新的数据结构，同时在创建过程中可以直接应用条件筛选或操作。下面详细介绍Python中四种主要的推导式：
+
+### 1. 列表推导式（List Comprehensions）
+
+**功能**：用于创建列表，可以通过应用表达式自动处理并生成新列表。
+
+**基本语法**：
+```python
+[expression for item in iterable if condition]
+```
+
+- `expression` 是对 `item` 的操作或者应用表达式。
+- `item` 是从 `iterable` 中逐个取出的元素。
+- `condition` 是一个可选的条件语句，用于过滤。
+
+**示例**：
+```python
+# 生成0-9每个数字的平方的列表
+squares = [x**2 for x in range(10)]
+
+# 结果
+{0, 1, 64, 4, 36, 9, 16, 49, 81, 25}
+```
+
+### 2. 字典推导式（Dictionary Comprehensions）
+
+**功能**：用于创建字典，允许通过迭代可迭代对象来生成键值对。
+
+**基本语法**：
+```python
+{key_expression : value_expression for item in iterable if condition}
+```
+
+- `key_expression` 表示字典的键的表达式。
+- `value_expression` 表示字典的值的表达式。
+- `item` 是从 `iterable` 中逐个取出的元素。
+- `condition` 是一个可选的条件语句，用于过滤。
+
+**示例**：
+```python
+# 使用数字作为键，其平方作为值
+squares_dict = {x: x**2 for x in range(5)}
+
+# 结果
+{0: 0, 1: 1, 2: 4, 3: 9, 4: 16}
+```
+
+### 3. 集合推导式（Set Comprehensions）
+
+**功能**：用于创建集合，类似于列表推导式，但结果是一个集合，自动去重。
+
+**基本语法**：
+```python
+{expression for item in iterable if condition}
+```
+
+- `expression` 是对 `item` 的操作或者应用表达式。
+- `item` 是从 `iterable` 中逐个取出的元素。
+- `condition` 是一个可选的条件语句，用于过滤。
+
+**示例**：
+```python
+# 创建一个包含0-9每个数字平方的集合
+square_set = {x**2 for x in range(10)}
+
+# 结果
+{0, 1, 64, 4, 36, 9, 16, 49, 81, 25}
+```
+
+### 4. 生成器推导式（Generator Expressions）
+
+**功能**：生成器推导式是一种类似于列表推导式的结构，用于创建生成器（一种迭代器），不会一次性生成所有元素，而是按需产生，节约内存。
+
+**基本语法**：
+```python
+(expression for item in iterable if condition)
+```
+
+- `expression` 是对 `item` 的操作或者应用表达式。
+- `item` 是从 `iterable` 中逐个取出的元素。
+- `condition` 是一个可选的条件语句，用于过滤。
+
+**示例**：
+```python
+# 创建一个生成器，包含0-9每个数字的平方
+square_gen = (x**2 for x in range(10))
+
+# 结果
+<generator object <genexpr> at 0x7f0827a98660>
+```
+
+推导式提供了一种高效和直观的方式来创建数据结构，使代码更加简洁易读。在合适的情况下，使用推导式可以有效提升编程效率和执行性能。
+
+
+<h2 id="32.python中一共都有哪些数据结构？">32.python中一共都有哪些数据结构？</h2>
+
+Python提供了一系列内置的数据结构，这些数据结构非常强大和灵活，可以用来处理各种不同类型的数据。这些数据结构包括列表、元组、字典、集合，以及通过标准库可用的更多高级数据结构如队列和堆。下面是这些主要数据结构的详细介绍：
+
+### 1. 列表（List）
+列表是Python中最常用的数据结构之一，它是一个有序的集合，可以包含任何类型的对象：数字、字符串、甚至其他列表。列表是可变的，这意味着它们可以被修改。
+
+**基本操作**：
+- 创建列表：`my_list = [1, 2, 3]`
+- 添加元素：`my_list.append(4)`
+- 删除元素：`del my_list[0]`
+- 切片操作：`my_list[1:3]`
+
+### 2. 元组（Tuple）
+元组与列表类似，但它们是不可变的。这意味着一旦创建了元组，就不能修改其内容。元组通常用于保护数据不被更改，并且可以作为字典键使用，而列表则不能。
+
+**基本操作**：
+- 创建元组：`my_tuple = (1, 2, 3)`
+- 访问元素：`my_tuple[1]`
+- 切片操作：`my_tuple[1:2]`
+
+### 3. 字典（Dictionary）
+字典是一种关联数组或哈希表，它由键值对组成。字典中的键必须是唯一的，并且必须是不可变类型，如字符串或元组。字典在查找、添加和删除操作上非常高效。
+
+**基本操作**：
+- 创建字典：`my_dict = {'key': 'value'}`
+- 访问元素：`my_dict['key']`
+- 添加或修改元素：`my_dict['new_key'] = 'new_value'`
+- 删除元素：`del my_dict['key']`
+
+### 4. 集合（Set）
+集合是一个无序的元素集，提供了强大的成员测试和删除重复元素的功能。集合中的元素必须是不可变类型，并且集合本身是可变的。
+
+**基本操作**：
+- 创建集合：`my_set = {1, 2, 3}`
+- 添加元素：`my_set.add(4)`
+- 删除元素：`my_set.remove(2)`
+- 成员测试：`1 in my_set`
+
+### 高级数据结构
+Python的标准库还提供了一些高级数据结构，这些结构在`collections`模块和其他模块中定义。
+
+#### 队列（Queue）
+队列是一种先进先出的数据结构，标准库中的`queue.Queue`用于多线程编程中的线程安全的队列操作。
+
+#### 双端队列（Deque）
+`collections.deque`提供了一个双端队列，支持从任一端添加或删除元素的高效操作。
+
+#### 计数器（Counter）
+`collections.Counter`是一个简单的计数器，用于计数可哈希对象。
+
+#### 有序字典（OrderedDict）
+`collections.OrderedDict`是一个保持元素插入顺序的字典。
+
+#### 堆（Heap）
+模块`heapq`提供了堆队列算法，特别是优先级队列的实现。
+
+这些数据结构使Python在处理各种数据时变得非常灵活和强大。选择正确的数据结构可以显著提高程序的效率和性能。
+
+<h2 id="33.python中index使用注意事项">33.python中index使用注意事项</h2>
+
+### 作用
+Python list.index方法返回某一个值的元素位于列表中的索引。
+### 语法和参数
+```
+list.index(element, start, end)
+```
+element:要查询的元素值，不可省略的参数，可以是任意类型的对象实例<br>
+start:可选整型参数，查找的起始位置。<br>
+end:可选整型参数，查找的结束位置。<br>
+返回值：int类型，参数在list中的索引（*靠近表头的索引）
+
+注意事项：
+当查询参数在列表中存在多个，index方法只会返回靠近表头的索引，即第一次查到的参数，并不会将所有匹配值的索引全部返回。
+在无法确定列表中元素是否重复的情况下，不建议使用此方法查询索引，建议使用range(len(list))的方法。
+
+<h2 id="34.python中@staticmethod和@classmethod使用注意事项">34.python中@staticmethod和@classmethod使用注意事项</h2>
+
+### @staticmethod
+
+1) 静态方法：staticmethod将一个普通函数嵌入到类中，使其成为类的静态方法。静态方法不需要一个类实例即可被调用，同时它也不需要访问类实例的状态。
+2) 参数：静态方法可以接受任何参数，但通常不使用self或cls作为第一个参数。
+3) 访问：由于静态方法不依赖于类实例的状态，因此它们不能修改类或实例的状态。
+4) 用途：当函数与类相关，但其操作不依赖于类状态时，适合使用静态方法。
+### @classmethod
+1) 类方法：classmethod将一个方法绑定到类而非类的实例。类方法通常用于操作类级别的属性。
+2) 参数：类方法至少有一个参数，通常命名为cls，它指向类本身。
+3) 访问：类方法可以修改类的状态，但不能修改实例的状态。
+4) 用途：当方法需要访问或修改类属性，或者需要通过类来创建实例时，适合使用类方法。
+
+### 使用场景
+- 当方法不需要访问任何属性时，使用staticmethod。
+- 当方法操作的是类属性而不是实例属性时，使用classmethod。
+
+### 代码示例
+```python
+class MyClass:
+    class_variable = "I'm a class variable."
+
+    def __init__(self, value):
+        self.instance_variable = value
+
+    @staticmethod
+    def static_method():
+        return "Static method called."
+
+    @classmethod
+    def class_method(cls):
+        return f"Class method called. Class variable: {cls.class_variable}"
+
+# 调用静态方法
+MyClass.static_method()
+
+# 调用类方法
+MyClass.class_method()
+
+```
+### 问题
+在使用falsk-restful这个框架进行模型部署调用时，发现模型推理时间很快，但是完整的一次请求过程非常耗时。在debug的过程中发现，每次请求调用api接口时，模型的推理类都会被实例化，推理类在构造的时候，会在初始化中加载模型，加载模型的过程是耗时较长的。
+### fixbug
+```python
+classs Infer(object):
+    def __init__(self, cfg: dict)->None:
+        self.cfg = cfg
+        self.load_model(self.cfg)
+
+    @classmethod
+    def load_model(cls, cfg: dict):
+        cls.cfg = cfg
+        if not hasattr(cls, "model"):
+            cls.model = torch.load("xxx.pt")
+```
+通过@classmethod方法初始化模型的加载，相当于创建了一个全局变量，在后续的请求调用中，不会一直重复加载
+
+
+<h2 id="35.Python中函数传参时会改变参数本身吗？">35.Python中函数传参时会改变参数本身吗？</h2>
+
+**在Python中，函数传参是否会改变参数本身取决于参数的数据类型和传递方式**。这涉及到Python的参数传递机制，通常被称为“传引用的值”（pass-by-reference value）或者“传对象引用”（pass-by-object-reference）。这里的一些基本规则和示例将帮助大家理解这一概念：
+
+### 可变与不可变对象
+1. **不可变对象**：包括整数、浮点数、字符串、元组等。这些类型的数据不允许被修改。
+   - 当我们传递一个不可变对象给函数时，虽然函数内部可以使用这个对象的值，但任何试图改变该对象的操作都将在本地创建一个新对象。外部原始对象不会被改变。
+
+   ```python
+   def modify(x):
+       x = 10
+       return x
+   
+   a = 5
+   modify(a)
+   print(a)  # 输出 5，原始值未改变
+   ```
+
+2. **可变对象**：包括列表、字典、集合等。这些类型的数据可以被修改。
+   - 当你传递一个可变对象给函数时，函数内部对这个对象的任何修改都会反映到原始对象上。
+
+   ```python
+   def modify(lst):
+       lst.append(3)
+   
+   my_list = [1, 2]
+   modify(my_list)
+   print(my_list)  # 输出 [1, 2, 3]，原始列表被修改
+   ```
+
+### 函数参数的工作方式
+- 在Python中，所有的函数参数都是按“引用传递”的。但实际上，这意味着当对象传递给函数时，传递的是对象的引用（内存地址），而不是对象的实际拷贝。对于不可变对象，由于不能被改变，所以任何修改都会导致创建一个新的本地对象；而对于可变对象，则可以在原地址上进行修改。
+- 对于列表和字典这样的可变对象，如果你不希望函数中的操作影响到原始数据，你可以传递一个拷贝给函数，而不是原始对象本身。
+
+```python
+import copy
+
+def modify(lst):
+    lst.append(3)
+
+original_list = [1, 2]
+new_list = copy.deepcopy(original_list)
+modify(new_list)
+print(original_list)  # 输出 [1, 2]
+print(new_list)       # 输出 [1, 2, 3]
+```
+
+### 总结
+在Python中，函数的行为取决于传入参数的类型。不可变对象（如整数、字符串和元组）不会在函数调用中被修改，而可变对象（如列表和字典）可以被修改。了解这些差异有助于我们更好地管理函数中数据的状态和行为。
+
+
+<h2 id="36.什么是python的全局解释器锁GIL？">36.什么是python的全局解释器锁GIL？</h2>
+
+在Python中，全局解释器锁（Global Interpreter Lock，简称GIL）是一个重要的概念，特别是在涉及多线程执行时。GIL 是一个互斥锁，保证同一时间内只有一个线程可以执行Python字节码。简而言之，尽管在多核处理器上运行，Python 的标准实现 CPython 在执行多线程应用时，并不能有效地利用多核处理器的优势。
+
+### GIL 的目的
+1. **简化内存管理**：CPython 使用引用计数来管理内存，这种方法在多线程环境中容易产生问题。GIL 通过确保一次只有一个线程运行，避免了常见的并发访问问题，如竞态条件。
+2. **保护CPython的内部数据结构**：没有GIL，程序员必须采用其他并发控制技术，如细粒度锁，这可能会使CPython的实现更复杂。
+
+### GIL 的影响
+尽管GIL简化了内存管理和内部数据结构的保护，但它也限制了Python程序在多核处理器上的并行执行能力：
+- **多线程局限性**：在CPU密集型程序中，GIL成为性能瓶颈，因为线程不能在多个CPU核心上同时执行计算任务。
+- **I/O密集型应用的表现更好**：I/O操作不需要大量CPU计算，线程可能会在等待I/O操作完成时释放GIL，从而让其他线程有机会执行。
+
+### 绕过GIL
+虽然GIL在多线程编程中存在局限性，但Python社区提供了多种方法来绕过这些限制：
+1. **使用多进程**：通过`multiprocessing`模块，可以创建多个进程，每个进程拥有自己的Python解释器和内存空间，从而不受GIL的限制。
+2. **使用其他实现**：如Jython和IronPython，这些Python实现没有GIL，可以更好地利用多核处理器。
+3. **使用特定库**：一些库设计可以在底层进行多线程或多进程操作，从而绕过GIL的限制，例如NumPy和其他与C语言库交互的扩展。
