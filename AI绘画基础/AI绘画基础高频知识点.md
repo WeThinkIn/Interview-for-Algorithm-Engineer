@@ -36,6 +36,7 @@
 - [34.Gan的收敛性分析](#34.Gan的收敛性分析)
 - [35.Gan的缺陷](#35.Gan的缺陷)
 - [36.Stable-Diffusion-3有哪些改进点？](#36.Stable-Diffusion-3有哪些改进点？)
+- [37.Playground-V2模型有哪些特点？](#37.Playground-V2模型有哪些特点？)
 
 <h2 id="1.目前主流的AI绘画大模型有哪些？">1.目前主流的AI绘画大模型有哪些？</h2>
 
@@ -823,3 +824,14 @@ Rocky认为Stable Diffusion 3的价值和传统深度学习时代的“YOLOv4”
 7. timestep schedule进行shift：对高分辨率的图像，如果采用和低分辨率图像的一样的noise schedule，会出现对图像的破坏不够的情况，所以SD 3中对noise schedule进行了偏移。
 8. 强大的模型Scaling能力：SD 3中因为核心使用了transformer架构，所以有很强的scaling能力，当模型变大后，性能稳步提升。
 9. 训练细节：数据预处理（去除离群点数据、去除低质量数据、去除NSFW数据）、图像Caption精细化、预计算图像和文本特征、Classifier-Free Guidance技术、DPO（Direct Preference Optimization）技术
+
+
+<h2 id="37.Playground-V2模型有哪些特点？">37.Playground-V2模型有哪些特点？</h2>
+
+Playground系列AI绘画大模型到目前已经发展到第三个版本，也就是Playground V2.5，其特点主要有：
+1. 与SDXL相同模型架构。
+2. 与SDXL相比，增强了色彩和对比度（EDM框架），改善了跨多种长宽比的生成（均衡分桶策略），以及改善了中心人物的细节（SFT策略）。
+3. 其中EDM框架能在扩散模型的扩散过程最终“时间步长”上表现出接近零的信噪比。这消除了对偏移噪声的需求，让Playground V2.5能够生成背景是纯黑色或纯白色的图像。
+4. 其中SFT策略主要使用一个高质量的小数据集对预训练的扩散模型进行微调训练。而这个数据集通过用户评级自动策划。
+5. 从头开始训练（trained from scratch）。
+6. 设计MJHQ-30K测试集用于评估AI绘画大模型，主要是在高质量数据集上计算FID来衡量美学质量。MJHQ-30K是从Midjourney上收集的30000个高质量数据集，共包含10个常见的类别，每个类别包含3000个样本。
