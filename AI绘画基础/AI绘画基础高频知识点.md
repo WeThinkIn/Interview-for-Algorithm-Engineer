@@ -37,6 +37,8 @@
 - [35.Gan的缺陷](#35.Gan的缺陷)
 - [36.Stable-Diffusion-3有哪些改进点？](#36.Stable-Diffusion-3有哪些改进点？)
 - [37.Playground-V2模型有哪些特点？](#37.Playground-V2模型有哪些特点？)
+- [38.Cross-Attention介绍](#38.Cross-Attention介绍)
+
 
 <h2 id="1.目前主流的AI绘画大模型有哪些？">1.目前主流的AI绘画大模型有哪些？</h2>
 
@@ -836,3 +838,11 @@ Playground系列AI绘画大模型到目前已经发展到第三个版本，也�
 5. 从头开始训练（trained from scratch）。
 6. 设计MJHQ-30K测试集用于评估AI绘画大模型，主要是在高质量数据集上计算FID来衡量美学质量。MJHQ-30K是从Midjourney上收集的30000个高质量数据集，共包含10个常见的类别，每个类别包含3000个样本。
 ![Playground系列模型的发展历程](./imgs/Playground系列模型的发展历程.png)
+
+<h2 id="38.Cross-Attention介绍">38.Cross-Attention介绍</h2>
+
+### 简介
+属于Transformer常见Attention机制，用于合并两个不同的sequence embedding。两个sequence是：Query、Key/Value。
+![](./imgs/cross-attention-detail-perceiver-io.png)Cross-Attention和Self-Attention的计算过程一致，区别在于输入的差别，通过上图可以看出，两个embedding的sequence length 和embedding_dim都不一样，故具备更好的扩展性，能够融合两个不同的维度向量，进行信息的计算交互。而Self-Attention的输入仅为一个。
+### 作用
+Cross-Attention可以用于将图像与文本之间的关联建立，在stable-diffusion中的Unet部分使用Cross-Attention将文本prompt和图像信息融合交互，控制U-Net把噪声矩阵的某一块与文本里的特定信息相对应。
