@@ -35,6 +35,7 @@
 - [34.python中@staticmethod和@classmethod使用注意事项](#34.python中@staticmethod和@classmethod使用注意事项)
 - [35.Python中函数传参时会改变参数本身吗？](#35.Python中函数传参时会改变参数本身吗？)
 - [36.什么是python的全局解释器锁GIL？](#36.什么是python的全局解释器锁GIL？)
+- [37.什么是python的字符串格式化技术？](#37.什么是python的字符串格式化技术？)
 
 
 <h2 id="1.python中迭代器的概念？">1.Python中迭代器的概念？</h2>
@@ -1297,3 +1298,87 @@ print(new_list)       # 输出 [1, 2, 3]
 1. **使用多进程**：通过`multiprocessing`模块，可以创建多个进程，每个进程拥有自己的Python解释器和内存空间，从而不受GIL的限制。
 2. **使用其他实现**：如Jython和IronPython，这些Python实现没有GIL，可以更好地利用多核处理器。
 3. **使用特定库**：一些库设计可以在底层进行多线程或多进程操作，从而绕过GIL的限制，例如NumPy和其他与C语言库交互的扩展。
+
+
+<h2 id="37.什么是python的字符串格式化技术？">37.什么是python的字符串格式化技术？</h2>
+
+在Python中，字符串格式化是一项重要的技能，能帮助我们高效地生成和处理字符串。Python提供了多种字符串格式化的方法，包括旧式的百分号（`%`）格式化、新式的`str.format()`方法以及最新的f-string（格式化字符串字面量）。下面Rocky将详细讲解这些方法，让大家更好地理解。
+
+### 1. 百分号（%）格式化
+
+这是Python中最古老的字符串格式化方法，使用`%`符号进行占位符替换。
+
+#### 基本用法：
+```python
+name = "Alice"
+age = 30
+formatted_string = "Name: %s, Age: %d" % (name, age)
+print(formatted_string)  # 输出: Name: Alice, Age: 30
+```
+- `%s` 用于字符串
+- `%d` 用于整数
+- `%f` 用于浮点数
+
+#### 控制浮点数精度：
+```python
+pi = 3.14159
+formatted_string = "Pi: %.2f" % pi
+print(formatted_string)  # 输出: Pi: 3.14
+```
+
+### 2. `str.format()` 方法
+
+`str.format()`方法更加灵活和强大，允许指定占位符的位置和格式。
+
+#### 基本用法：
+```python
+name = "Alice"
+age = 30
+formatted_string = "Name: {}, Age: {}".format(name, age)
+print(formatted_string)  # 输出: Name: Alice, Age: 30
+```
+
+#### 使用索引指定占位符的位置：
+```python
+formatted_string = "Name: {0}, Age: {1}".format(name, age)
+print(formatted_string)  # 输出: Name: Alice, Age: 30
+```
+
+#### 使用命名参数：
+```python
+formatted_string = "Name: {name}, Age: {age}".format(name=name, age=age)
+print(formatted_string)  # 输出: Name: Alice, Age: 30
+```
+
+#### 控制浮点数精度：
+```python
+pi = 3.14159
+formatted_string = "Pi: {:.2f}".format(pi)
+print(formatted_string)  # 输出: Pi: 3.14
+```
+
+### 3. f-string（格式化字符串字面量）
+
+f-string是Python 3.6引入的一种新的格式化方法，提供了简洁和高效的方式。
+
+#### 基本用法：
+```python
+name = "Alice"
+age = 30
+formatted_string = f"Name: {name}, Age: {age}"
+print(formatted_string)  # 输出: Name: Alice, Age: 30
+```
+
+#### 控制浮点数精度：
+```python
+pi = 3.14159
+formatted_string = f"Pi: {pi:.2f}"
+print(formatted_string)  # 输出: Pi: 3.14
+```
+
+### 字符串格式化技术的应用场景
+
+- **日志记录**：格式化日志信息以便调试和分析。
+- **数据输出**：生成报告或导出数据。
+- **用户界面**：动态显示信息。
+  
