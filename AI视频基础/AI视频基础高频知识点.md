@@ -2,6 +2,8 @@
 
 - [1.目前主流的AI视频技术框架有哪几种？](#1.目前主流的AI视频技术框架有哪几种？)
 - [2.目前主流的AI视频大模型有哪些？](#2.目前主流的AI视频大模型有哪些？)
+- [3.Sora有哪些创新点？](#3.Sora有哪些创新点？)
+- [4.SVD（Stable-Video-Diffusion）有哪些创新点？](#4.SVD（Stable-Video-Diffusion）有哪些创新点？)
 
 
 <h2 id="1.目前主流的AI视频技术框架有哪几种？">1.目前主流的AI视频技术框架有哪几种？</h2>
@@ -22,3 +24,15 @@ Rocky为大家梳理总结了AIGC时代到目前为主的主流AI视频大模型
 4. LUMA
 5. Gen系列
 6. Stable Diffusion系列 + Animatediff
+
+
+<h2 id="3.Sora有哪些创新点？">3.Sora有哪些创新点？</h2>
+
+OpenAI对Sora的定位不只是视频生成工具，而是希望在此基础上开发出能够让计算机理解真实世界的算法与技术——“作为世界模拟器的视频生成模型”。在这个宏大愿景下最具潜力的技术基底之一便是生成式模型 (generative model)。
+
+下面是Sora的一些创新点：
+1. 海量的数据：在Sora的技术报告中，关于数据量级是一句话都没有提。这就说明，Sora使用了海量的高质量视频数据用作训练，Rocky相信未来全互联网的视频数据都会被Sora用作训练，同时在视频数据领域的数据生成、数据增强将会有非常大的机会。
+2. 灵活编码：在Sora中，借鉴了大语言模型的构建方式，使用video compression network（convolutional VAEs）将视频数据tokenizer化，获得visual patches，使得任何长度和内容的视频都能编码成AI视频模型可以直接处理（输入/输出）的embeddings。首先video compression network将输入视频的时间和空间两个维度同时进行压缩，编码成一个和视频大小成正比的3D visual patch矩阵，然后再将其展开成1D array of patches Embeddings，送入到后续的DiT model中。这样可以带来两个好处，分别是让Sora能够生成不同分辨率的视频分和生成的视频的边框更加合理。
+3. DiT模型架构：Sora使用了DiT（Diffusion Transformer）作为核心架构，这让Transformer在AI领域的大一统更进一步。
+4. 精细化数据标注：和DALL-E 3一样，OpenAI用内部标注工具（可能是GPT4-4o等）给视频数据进行详尽的描述标注，从而提升Sora模型生成视频与输入prompt的一致性、生成视频的质量和视频中正确显示文本的能力。Rocky认为数据工程是非常关键的一点，无论是传统深度学习时代还是AIGC时代，都是AI领域的杀手锏。
+5. 让AI视频领域的Scaling Law成立：保证模型越大，数据越多，效果就越好。Sora也不例外。一句话概括Sora的贡献，便是：在足量的数据，优质的标注，灵活的编码下，scaling law 在 transformer + diffusion model 的架构上继续成立。
