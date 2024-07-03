@@ -38,6 +38,7 @@
 - [36.Stable-Diffusion-3有哪些改进点？](#36.Stable-Diffusion-3有哪些改进点？)
 - [37.Playground-V2模型有哪些特点？](#37.Playground-V2模型有哪些特点？)
 - [38.Cross-Attention介绍](#38.Cross-Attention介绍)
+- [39.扩散模型中的引导技术：CG与CFG](#39.扩散模型中的引导技术：CG与CFG)
 
 
 <h2 id="1.目前主流的AI绘画大模型有哪些？">1.目前主流的AI绘画大模型有哪些？</h2>
@@ -844,5 +845,65 @@ Playground系列AI绘画大模型到目前已经发展到第三个版本，也�
 ### 简介
 属于Transformer常见Attention机制，用于合并两个不同的sequence embedding。两个sequence是：Query、Key/Value。
 ![](./imgs/cross-attention-detail-perceiver-io.png)Cross-Attention和Self-Attention的计算过程一致，区别在于输入的差别，通过上图可以看出，两个embedding的sequence length 和embedding_dim都不一样，故具备更好的扩展性，能够融合两个不同的维度向量，进行信息的计算交互。而Self-Attention的输入仅为一个。
+
 ### 作用
 Cross-Attention可以用于将图像与文本之间的关联建立，在stable-diffusion中的Unet部分使用Cross-Attention将文本prompt和图像信息融合交互，控制U-Net把噪声矩阵的某一块与文本里的特定信息相对应。
+
+
+
+<h2 id="39.扩散模型中的引导技术：CG与CFG">39.扩散模型中的引导技术：CG与CFG</h2>
+
+在扩散模型的逆向过程中，引导技术被广泛应用于可控生成。目前主要有两种引导技术：分类器引导（Classifier Guidance, CG）和无分类器引导（Classifier-Free Guidance, CFG）。
+
+### 分类器引导（CG）
+
+1. **定义**：CG额外训练一个分类器（如类别标签分类器）来引导逆向过程。
+
+2. **工作原理**：
+   
+   - 在每个时间步使用类别标签对数似然的梯度来引导：∇xt log pφ(y|xt)
+   - 产生条件分数估计
+   
+3. **公式**：
+   $$
+   CG :\tilde{\epsilon}_{\theta}(x_{t},t)\leftarrow\epsilon_{\theta}(x_{t},t)-\sqrt{1-\bar{\alpha}_{t}}\gamma\nabla_{x_{t}}\log p_{\phi}(y|x_{t})
+   $$
+   
+   
+   其中γ是CG比例。
+   
+4. **优势**：
+   
+   - 能够引导生成样本的任何所需属性，前提是有真实标签
+   - 在V2A设置中，所需属性指的是音频语义和时间对齐
+   
+5. **应用示例**：
+   如果想从预训练的图像扩散模型生成具有特定属性的图像（如黄发女孩），只需训练一个"黄发女孩"分类器来引导生成过程。
+
+### 无分类器引导（CFG）
+
+1. **定义**：CFG不需要额外的分类器，而是使用条件和无条件分数估计的线性组合来引导逆向过程。
+
+2. **工作原理**：
+   - 使用条件c和引导比例ω
+   - 在稳定扩散中实现
+
+3. **公式**：
+   $$
+   CFG:\quad\tilde{\epsilon}_\theta(x_t,t,c)\leftarrow\omega\epsilon_\theta(x_t,t,c)+(1-\omega)\epsilon_\theta(x_t,t,\varnothing)
+   $$
+   其中ω是CFG比例，c是条件。
+   
+4. **特点**：
+   - 当ω = 1时，CFG退化为条件分数估计
+   - 目前是扩散模型中的主流方法
+
+5. **优势**：
+   
+   - 不需要训练额外的分类器，实现更简单
+
+### 比较
+
+- CFG是当前扩散模型中的主流方法
+- CG提供了根据真实标签引导生成样本特定属性的优势
+- 两种方法并不相互排斥，可以结合使用以获得更好的效果
