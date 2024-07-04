@@ -36,6 +36,7 @@
 - [35.Python中函数传参时会改变参数本身吗？](#35.Python中函数传参时会改变参数本身吗？)
 - [36.什么是python的全局解释器锁GIL？](#36.什么是python的全局解释器锁GIL？)
 - [37.什么是python的字符串格式化技术？](#37.什么是python的字符串格式化技术？)
+- [38.Python中有哪些常用的设计模式？](#38.Python中有哪些常用的设计模式？)
 
 
 <h2 id="1.python中迭代器的概念？">1.Python中迭代器的概念？</h2>
@@ -1382,3 +1383,223 @@ print(formatted_string)  # 输出: Pi: 3.14
 - **数据输出**：生成报告或导出数据。
 - **用户界面**：动态显示信息。
   
+
+<h2 id="38.Python中有哪些常用的设计模式？">38.Python中有哪些常用的设计模式？</h2>
+
+Python作为一种多范式编程语言，支持多种设计模式。以下是AIGC、传统深度学习、自动驾驶领域中Python常用的设计模式：
+
+### 创建型模式
+
+1. **单例模式（Singleton Pattern）**
+   - 确保一个类只有一个实例，并提供一个全局访问点。
+   - **通俗例子**：想象一个系统中有一个打印机管理器（Printer Manager），这个管理器负责管理打印任务。为了确保所有打印任务都能被统一管理，系统中只能有一个打印机管理器实例。
+   - **代码示例**：
+     ```python
+     class PrinterManager:
+         _instance = None
+
+         def __new__(cls, *args, **kwargs):
+             if not cls._instance:
+                 cls._instance = super(PrinterManager, cls).__new__(cls, *args, **kwargs)
+             return cls._instance
+
+     pm1 = PrinterManager()
+     pm2 = PrinterManager()
+     print(pm1 is pm2)  # 输出: True
+     ```
+
+2. **工厂方法模式（Factory Method Pattern）**
+   - 定义一个创建对象的接口，但让子类决定实例化哪一个类。
+   - **通俗例子**：想象一家新能源汽车工厂，它根据订单生产不同类型的汽车（如轿车、卡车、SUV）。每种汽车都是一个类，通过工厂方法决定创建哪种类型的汽车。
+   - **代码示例**：
+     ```python
+     class Car:
+         def drive(self):
+             pass
+
+     class Sedan(Car):
+         def drive(self):
+             return "Driving a sedan"
+
+     class Truck(Car):
+         def drive(self):
+             return "Driving a truck"
+
+     class CarFactory:
+         def create_car(self, car_type):
+             if car_type == "sedan":
+                 return Sedan()
+             elif car_type == "truck":
+                 return Truck()
+
+     factory = CarFactory()
+     car = factory.create_car("sedan")
+     print(car.drive())  # 输出: Driving a sedan
+     ```
+
+3. **抽象工厂模式（Abstract Factory Pattern）**
+   - 提供一个创建一系列相关或相互依赖对象的接口，而无需指定它们具体的类。
+   - **通俗例子**：想象一个家具商店，它可以生产不同风格（现代风格、维多利亚风格）的家具。每种风格都有其特定的椅子和桌子，抽象工厂提供了创建这些家具的接口。
+   - **代码示例**：
+     ```python
+     class Chair:
+         def sit(self):
+             pass
+
+     class ModernChair(Chair):
+         def sit(self):
+             return "Sitting on a modern chair"
+
+     class VictorianChair(Chair):
+         def sit(self):
+             return "Sitting on a victorian chair"
+
+     class FurnitureFactory:
+         def create_chair(self):
+             pass
+
+     class ModernFurnitureFactory(FurnitureFactory):
+         def create_chair(self):
+             return ModernChair()
+
+     class VictorianFurnitureFactory(FurnitureFactory):
+         def create_chair(self):
+             return VictorianChair()
+
+     factory = ModernFurnitureFactory()
+     chair = factory.create_chair()
+     print(chair.sit())  # 输出: Sitting on a modern chair
+     ```
+
+### 结构型模式
+
+1. **适配器模式（Adapter Pattern）**
+   - 将一个类的接口转换为客户希望的另一个接口，适配器模式使得原本由于接口不兼容而不能一起工作的那些类可以一起工作。
+   - **通俗例子**：想象你有一个老式的播放器，它只能播放CD，但你现在有一个现代的音乐库在你的手机上。你可以使用一个适配器，把手机的音乐格式转换成播放器能够播放的格式。
+   - **代码示例**：
+     ```python
+     class OldPlayer:
+         def play_cd(self):
+             return "Playing music from CD"
+
+     class NewPlayer:
+         def play_music(self):
+             return "Playing music from phone"
+
+     class Adapter:
+         def __init__(self, new_player):
+             self.new_player = new_player
+
+         def play_cd(self):
+             return self.new_player.play_music()
+
+     old_player = OldPlayer()
+     print(old_player.play_cd())  # 输出: Playing music from CD
+
+     new_player = NewPlayer()
+     adapter = Adapter(new_player)
+     print(adapter.play_cd())  # 输出: Playing music from phone
+     ```
+
+2. **装饰器模式（Decorator Pattern）**
+   - 动态地给对象添加一些职责。
+   - **通俗例子**：想象我们在咖啡店点了一杯咖啡。你可以选择在咖啡上加牛奶、糖或者巧克力。这些添加物是装饰，装饰器模式允许我们动态地添加这些装饰。
+   - **代码示例**：
+     ```python
+     class Coffee:
+         def cost(self):
+             return 5
+
+     class MilkDecorator:
+         def __init__(self, coffee):
+             self.coffee = coffee
+
+         def cost(self):
+             return self.coffee.cost() + 1
+
+     coffee = Coffee()
+     print(coffee.cost())  # 输出: 5
+
+     milk_coffee = MilkDecorator(coffee)
+     print(milk_coffee.cost())  # 输出: 6
+     ```
+
+3. **代理模式（Proxy Pattern）**
+   - 为其他对象提供一种代理以控制对这个对象的访问。
+   - **通俗例子**：想象我们有一个银行账户。我们可以通过代理（如银行职员或ATM）来访问我们的账户，而不需要直接处理银行系统的复杂操作。
+   - **代码示例**：
+     ```python
+     class BankAccount:
+         def withdraw(self, amount):
+             return f"Withdrew {amount} dollars"
+
+     class ATMProxy:
+         def __init__(self, bank_account):
+             self.bank_account = bank_account
+
+         def withdraw(self, amount):
+             return self.bank_account.withdraw(amount)
+
+     account = BankAccount()
+     atm = ATMProxy(account)
+     print(atm.withdraw(100))  # 输出: Withdrew 100 dollars
+     ```
+
+### 行为型模式
+
+1. **观察者模式（Observer Pattern）**
+   - 定义对象间的一种一对多的依赖关系，以便当一个对象的状态发生改变时，所有依赖于它的对象都得到通知并被自动更新。
+   - **通俗例子**：想象我们订阅了一份杂志。每当有新一期杂志出版，杂志社就会通知我们。我们是观察者，杂志社是被观察者。
+   - **代码示例**：
+     ```python
+     class Publisher:
+         def __init__(self):
+             self.subscribers = []
+
+         def subscribe(self, subscriber):
+             self.subscribers.append(subscriber)
+
+         def notify(self):
+             for subscriber in self.subscribers:
+                 subscriber.update()
+
+     class ConcreteSubscriber(Subscriber):
+         def update(self):
+             print("New magazine issue is out!")
+
+     publisher = Publisher()
+     subscriber = ConcreteSubscriber()
+     publisher.subscribe(subscriber)
+     publisher.notify()  # 输出: New magazine issue is out!
+     ```
+
+2. **策略模式（Strategy Pattern）**
+   - 定义一系列的算法，把它们一个个封装起来，并且使它们可以相互替换。
+   - **通俗例子**：想象我们要去旅行，可以选择不同的交通方式（如开车、坐火车、坐飞机）。每种交通方式都是一个策略，策略模式允许我们在运行时选择不同的策略。
+   - **代码示例**：
+     ```python
+     class TravelStrategy:
+         def travel(self):
+             pass
+
+     class CarStrategy(TravelStrategy):
+         def travel(self):
+             return "Traveling by car"
+
+     class TrainStrategy(TravelStrategy):
+         def travel(self):
+             return "Traveling by train"
+
+     class TravelContext:
+         def __init__(self, strategy):
+             self.strategy = strategy
+
+         def travel(self):
+             return self.strategy.travel()
+
+     context = TravelContext(CarStrategy())
+     print(context.travel())  # 输出: Traveling by car
+
+     context.strategy = TrainStrategy()
+     print(context.travel())  # 输出: Traveling by train
+     ```
