@@ -40,6 +40,7 @@
 - [39.Python中is和==的区别？](#39.Python中is和==的区别？)
 - [40.Python中type()和isinstance()的区别？](#40.Python中type()和isinstance()的区别？)
 - [41.Python中switch-case语句的实现？](#41.Python中switch-case语句的实现？)
+- [42.Python中的lambda表达式？](#42.Python中的lambda表达式？)
 
 <h2 id="1.python中迭代器的概念？">1.Python中迭代器的概念？</h2>
 
@@ -61,7 +62,7 @@ False
 ```
 
 当对所有的可迭代对象调用 dir() 方法时，会发现他们都实现了 iter 方法。这样就可以通过 iter(object) 来返回一个迭代器。
-  
+
 ```
 x = [1, 2, 3]
 y = iter(x)
@@ -121,13 +122,13 @@ itertools 库提供了很多常见迭代器的使用。
 
 
 <h2 id="2.python中生成器的相关知识">2.Python中生成器的相关知识</h2>
-  
+
 我们创建列表的时候，受到内存限制，容量肯定是有限的，而且不可能全部给他一次枚举出来。Python常用的列表生成式有一个致命的缺点就是定义即生成，非常的浪费空间和效率。
 
 如果列表元素可以按照某种算法推算出来，那我们可以在循环的过程中不断推算出后续的元素，这样就不必创建完整的list，从而节省大量的空间。在Python中，这种一边循环一边计算的机制，称为生成器：generator。
 
 要创建一个generator，最简单的方法是改造列表生成式：
-  
+
 ```
 a = [x * x for x in range(10)]
 print(a)
@@ -163,7 +164,7 @@ generator还有 send() 和 close() 方法，都是只能在next()调用之后，
 python是支持协程的，也就是微线程，就是通过generator来实现的。配合generator我们可以自定义函数的调用层次关系从而自己来调度线程。
 
 <h2 id="3.python中装饰器的相关知识">3.Python中装饰器的相关知识</h2>
-  
+
 装饰器允许通过将现有函数传递给装饰器，从而<font color=DeepSkyBlue>向现有函数添加一些额外的功能</font>，该装饰器将执行现有函数的功能和添加的额外功能。
 
 装饰器本质上还是一个函数，它可以让已有的函数不做任何改动的情况下增加功能。
@@ -267,7 +268,7 @@ I am haha
 
 
 <h2 id="4.python的深拷贝与浅拷贝？">4.Python的深拷贝与浅拷贝？</h2>
-  
+
 在Python中，用一个变量给另一个变量赋值，其实就是给当前内存中的对象增加一个“标签”而已。
 
 ```
@@ -301,7 +302,7 @@ True（可以看出，其实a和b指向内存中同一个对象。）
 4489786768 4489786768
 # 但是他们的子对象地址相同
 ```
-  
+
 从上面的例子中可以看出，a浅拷贝得到b，a和b指向内存中不同的list对象，但是他们的元素指向相同的int对象，这就是浅拷贝。
 
 <font color=DeepSkyBlue>深拷贝</font>是指创建一个新的对象，然后递归的拷贝原对象所包含的子对象。深拷贝出来的对象与原对象没有任何关联。
@@ -309,7 +310,7 @@ True（可以看出，其实a和b指向内存中同一个对象。）
 深拷贝只有一种方式：copy模块中的deepcopy函数。
 
 我们接下来用一个包含可变对象的列表来确切地展示浅拷贝和深拷贝的区别：
-  
+
 ```
 >>> a = [[6, 6], [8, 8], [9, 9]]
 >>> b = copy.copy(a)   # 浅拷贝
@@ -333,7 +334,7 @@ True（可以看出，其实a和b指向内存中同一个对象。）
 ```
 
 <h2 id="5.python是解释语言还是编译语言？">5.Python是解释语言还是编译语言？</h2>
-  
+
 Python是解释语言。
 
 <font color=DeepSkyBlue>解释语言</font>的优点是可移植性好，缺点是运行需要解释环境，运行起来比编译语言要慢，占用的资源也要多一些，代码效率低。
@@ -344,11 +345,11 @@ Python是解释语言。
 
 
 <h2 id="6.python的垃圾回收机制">6.Python的垃圾回收机制</h2>
-  
+
 在Python中，使用<font color=DeepSkyBlue>引用计数</font>进行垃圾回收；同时通过<font color=DeepSkyBlue>标记-清除算法</font>解决容器对象可能产生的循环引用问题；最后通过<font color=DeepSkyBlue>分代回收算法</font>提高垃圾回收效率。
 
 <h2 id="7.python里有多线程吗？">7.Python里有多线程吗？</h2>
-  
+
 <font color=DeepSkyBlue>Python里的多线程是假的多线程</font>。
 
 Python解释器由于设计时有GIL全局锁，导致了多线程无法利用多核，只有一个线程在解释器中运行。
@@ -362,11 +363,11 @@ Python解释器由于设计时有GIL全局锁，导致了多线程无法利用�
 缓解GIL锁的方法：多进程和协程（协程也只是单CPU，但是能减小切换代价提升性能）
 
 <h2 id="8.python中range和xrange的区别？">8.Python中range和xrange的区别？</h2>
-  
+
 首先，xrange函数和range函数的用法完全相同，不同的地方是xrange函数生成的不是一个list对象，而是一个生成器。
 
 要生成很大的数字序列时，使用xrange会比range的性能优很多，因为其不需要一上来就开辟很大的内存空间。
-  
+
 ```
 Python 2.7.15 | packaged by conda-forge | (default, Jul  2 2019, 00:42:22) 
 [GCC 4.2.1 Compatible Clang 4.0.1 (tags/RELEASE_401/final)] on darwin
@@ -416,11 +417,11 @@ xrange函数和range函数一般都用在循环的时候。具体例子如下所
 4. Python将低开销的较大的块分配给元组，因为它们是不可变的。对于列表则分配小内存块。与列表相比，元组的内存更小。当你拥有大量元素时，元组比列表快。
 
 <h2 id="10.python中dict（字典）的底层结构？">10.Python中dict（字典）的底层结构？</h2>
-  
+
 Python的dict（字典）为了支持快速查找使用了哈希表作为底层结构，哈希表平均查找时间复杂度为O(1)。CPython 解释器使用二次探查解决哈希冲突问题。
 
 <h2 id="11.常用的深度学习框架有哪些，都是哪家公司开发的？">11.常用的深度学习框架有哪些，都是哪家公司开发的？</h2>
-  
+
 1. PyTorch：Facebook
 
 2. TensorFlow：Google
@@ -434,9 +435,9 @@ Python的dict（字典）为了支持快速查找使用了哈希表作为底层�
 6. PaddlePaddle：百度
 
 <h2 id="12.pytorch动态图和tensorflow静态图的区别？">12.PyTorch动态图和TensorFlow静态图的区别？</h2>
-  
+
 PyTorch动态图：计算图的运算与搭建同时进行；其较灵活，易调节。
-  
+
 TensorFlow静态图：计算图先搭建图，后运算；其较高效，不灵活。
 
 ![](https://files.mdnice.com/user/33499/877c601c-9522-4caa-9b67-2f3591bee071.png)
@@ -462,7 +463,7 @@ Traceback (most recent call last):
 AssertionError
 >>> assert 1 != 2
 ```
-  
+
 <h2 id="14.python中互换变量有不用创建临时变量的方法吗？">14.Python中互换变量有不用创建临时变量的方法吗？</h2>
 
 在Python中，当我们想要互换两个变量的值或将列表中的两个值交换时，我们可以使用如下的格式进行，不需要创建临时变量：
@@ -485,7 +486,7 @@ x, y = y, x
 2. 元组（tuple）
 3. 字典（dict）
 4. 集合（set）
-  
+
 <h2 id="16.python中的可变对象和不可变对象？">16.Python中的可变对象和不可变对象？</h2>
 
 可变对象与不可变对象的区别在于对象本身是否可变。
@@ -512,7 +513,7 @@ False
 ```
 
 我们可以将None复制给任何变量，也可以给None赋值。
-  
+
 <h2 id="18.python中args和kwargs的区别？">18.Python中$*args$和$**kwargs$的区别？</h2>
 
 $*args$和$**kwargs$主要用于函数定义。我们可以将不定数量的参数传递给一个函数。
@@ -663,7 +664,7 @@ Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
 ValueError: operands could not be broadcast together with shapes (3,) (3,2)
 ```
-  
+
 <h2 id="20.python中的实例方法、静态方法和类方法三者区别？">20.Python中的实例方法、静态方法和类方法三者区别？</h2>
 
 <font color=DeepSkyBlue>不用@classmethod和@staticmethod修饰的方法为实例方法</font>。在类中定义的方法默认都是实例方法。实例方法最大的特点是它至少要包含一个self参数，用于绑定调用此方法的实例对象，实例方法通常可以用类对象直接调用。
@@ -1399,12 +1400,12 @@ Python作为一种多范式编程语言，支持多种设计模式。以下是AI
      ```python
      class PrinterManager:
          _instance = None
-
+     
          def __new__(cls, *args, **kwargs):
              if not cls._instance:
                  cls._instance = super(PrinterManager, cls).__new__(cls, *args, **kwargs)
              return cls._instance
-
+     
      pm1 = PrinterManager()
      pm2 = PrinterManager()
      print(pm1 is pm2)  # 输出: True
@@ -1418,22 +1419,22 @@ Python作为一种多范式编程语言，支持多种设计模式。以下是AI
      class Car:
          def drive(self):
              pass
-
+     
      class Sedan(Car):
          def drive(self):
              return "Driving a sedan"
-
+     
      class Truck(Car):
          def drive(self):
              return "Driving a truck"
-
+     
      class CarFactory:
          def create_car(self, car_type):
              if car_type == "sedan":
                  return Sedan()
              elif car_type == "truck":
                  return Truck()
-
+     
      factory = CarFactory()
      car = factory.create_car("sedan")
      print(car.drive())  # 输出: Driving a sedan
@@ -1447,27 +1448,27 @@ Python作为一种多范式编程语言，支持多种设计模式。以下是AI
      class Chair:
          def sit(self):
              pass
-
+     
      class ModernChair(Chair):
          def sit(self):
              return "Sitting on a modern chair"
-
+     
      class VictorianChair(Chair):
          def sit(self):
              return "Sitting on a victorian chair"
-
+     
      class FurnitureFactory:
          def create_chair(self):
              pass
-
+     
      class ModernFurnitureFactory(FurnitureFactory):
          def create_chair(self):
              return ModernChair()
-
+     
      class VictorianFurnitureFactory(FurnitureFactory):
          def create_chair(self):
              return VictorianChair()
-
+     
      factory = ModernFurnitureFactory()
      chair = factory.create_chair()
      print(chair.sit())  # 输出: Sitting on a modern chair
@@ -1483,21 +1484,21 @@ Python作为一种多范式编程语言，支持多种设计模式。以下是AI
      class OldPlayer:
          def play_cd(self):
              return "Playing music from CD"
-
+     
      class NewPlayer:
          def play_music(self):
              return "Playing music from phone"
-
+     
      class Adapter:
          def __init__(self, new_player):
              self.new_player = new_player
-
+     
          def play_cd(self):
              return self.new_player.play_music()
-
+     
      old_player = OldPlayer()
      print(old_player.play_cd())  # 输出: Playing music from CD
-
+     
      new_player = NewPlayer()
      adapter = Adapter(new_player)
      print(adapter.play_cd())  # 输出: Playing music from phone
@@ -1511,17 +1512,17 @@ Python作为一种多范式编程语言，支持多种设计模式。以下是AI
      class Coffee:
          def cost(self):
              return 5
-
+     
      class MilkDecorator:
          def __init__(self, coffee):
              self.coffee = coffee
-
+     
          def cost(self):
              return self.coffee.cost() + 1
-
+     
      coffee = Coffee()
      print(coffee.cost())  # 输出: 5
-
+     
      milk_coffee = MilkDecorator(coffee)
      print(milk_coffee.cost())  # 输出: 6
      ```
@@ -1534,14 +1535,14 @@ Python作为一种多范式编程语言，支持多种设计模式。以下是AI
      class BankAccount:
          def withdraw(self, amount):
              return f"Withdrew {amount} dollars"
-
+     
      class ATMProxy:
          def __init__(self, bank_account):
              self.bank_account = bank_account
-
+     
          def withdraw(self, amount):
              return self.bank_account.withdraw(amount)
-
+     
      account = BankAccount()
      atm = ATMProxy(account)
      print(atm.withdraw(100))  # 输出: Withdrew 100 dollars
@@ -1557,18 +1558,18 @@ Python作为一种多范式编程语言，支持多种设计模式。以下是AI
      class Publisher:
          def __init__(self):
              self.subscribers = []
-
+     
          def subscribe(self, subscriber):
              self.subscribers.append(subscriber)
-
+     
          def notify(self):
              for subscriber in self.subscribers:
                  subscriber.update()
-
+     
      class ConcreteSubscriber(Subscriber):
          def update(self):
              print("New magazine issue is out!")
-
+     
      publisher = Publisher()
      subscriber = ConcreteSubscriber()
      publisher.subscribe(subscriber)
@@ -1583,25 +1584,25 @@ Python作为一种多范式编程语言，支持多种设计模式。以下是AI
      class TravelStrategy:
          def travel(self):
              pass
-
+     
      class CarStrategy(TravelStrategy):
          def travel(self):
              return "Traveling by car"
-
+     
      class TrainStrategy(TravelStrategy):
          def travel(self):
              return "Traveling by train"
-
+     
      class TravelContext:
          def __init__(self, strategy):
              self.strategy = strategy
-
+     
          def travel(self):
              return self.strategy.travel()
-
+     
      context = TravelContext(CarStrategy())
      print(context.travel())  # 输出: Traveling by car
-
+     
      context.strategy = TrainStrategy()
      print(context.travel())  # 输出: Traveling by train
      ```
@@ -1755,3 +1756,59 @@ match-case和switch-case的不同：
 3) 缺省情况：在 match-case 结构中可以使用 _ 作为默认模式，用于处理无法匹配到其他模式的情况。而在 switch-case 结构中，如果没有匹配到任何 case，需要自己另外处理这种情况。
 
 4) 可迭代对象：在 match-case 结构中，可以使用 match 对可迭代对象进行解构匹配，匹配其中的每个元素。而在 switch-case 结构中，需要手动遍历可迭代对象进行匹配。
+
+<h2 id="42.Python中的lambda表达式？">42.Python中的lambda表达式？</h2>
+
+Lambda 表达式，也称为匿名函数，是 Python 中的一个特性，允许创建小型的、一次性使用的函数，而无需使用 `def` 关键字。
+
+### 语法
+
+Lambda 函数的基本语法为：
+
+```python
+lambda 参数: 表达式
+```
+
+### 主要特征
+
+1. Lambda 函数可以有任意数量的参数，但只能有一个表达式。
+2. 通常用于简短、简单的操作。
+3. 当 lambda 函数被调用时，表达式会被计算并返回结果。
+
+### 示例
+
+#### 基本用法
+
+```python
+f = lambda x: x * 2
+print(f(3))  # 输出: 6
+```
+
+#### 多个参数
+
+```python
+g = lambda x, y: x + y
+print(g(2, 3))  # 输出: 5
+```
+
+#### 在高阶函数中的应用
+
+Lambda 函数经常与 `map()`、`filter()` 和 `sort()` 等函数一起使用。
+
+```python
+# 按单词中唯一字母的数量对单词列表进行排序
+sorted_words = sorted(words, key=lambda word: len(set(word)))
+```
+
+### 优点
+
+1. 简洁：Lambda 函数允许内联函数定义，使代码更加紧凑。
+2. 可读性：对于简单操作，lambda 可以通过消除单独的函数定义来提高代码可读性。
+3. 函数式编程：Lambda 函数在函数式编程范式中很有用，特别是在使用高阶函数时。
+
+### 局限性
+
+1. 单一表达式：Lambda 函数限于单一表达式，这限制了它们的复杂性。
+2. 可读性：对于更复杂的操作，传统的函数定义可能更合适且更易读。
+
+Lambda 函数为 Python 中创建小型匿名函数提供了强大的工具，特别适用于函数式编程和处理高阶函数的场景。
