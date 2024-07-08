@@ -8,7 +8,7 @@
 
 Rocky Ding 主编
 
-Rocky Ding，AIGCmagic社区创始人，公众号WeThinkIn主理人，资深AIGC算法专家，全网文章阅读量200万+，专注于AIGC创新产品与AI算法解决方案的落地应用。在互联网大厂、AI独角兽、传统科技公司、国有企业、研究院等有丰富的工作经验。
+Rocky Ding，AIGCmagic社区创始人，公众号WeThinkIn主理人，资深AIGC算法专家，全网文章阅读量200万+，专注于AIGC产品与AI算法解决方案的落地应用。在互联网大厂、AI独角兽、传统科技公司、国企研究院等有丰富的工作经验。多次带队获得CVPR、AAAI、Kaggle等顶级竞赛的冠军成绩。
 
 张一凡 副主编
 
