@@ -39,6 +39,9 @@
 - [37.Playground-V2模型有哪些特点？](#37.Playground-V2模型有哪些特点？)
 - [38.Cross-Attention介绍](#38.Cross-Attention介绍)
 - [39.扩散模型中的引导技术：CG与CFG](#39.扩散模型中的引导技术：CG与CFG)
+- [40.Controlnet++的模型结构和原理](#40.Controlnet++的模型结构和原理)
+- [41.什么是DDIM?](#41.什么是DDIM?)
+- [42.什么是EMA?](#42.什么是EMA?)
 
 
 <h2 id="1.目前主流的AI绘画大模型有哪些？">1.目前主流的AI绘画大模型有哪些？</h2>
@@ -514,7 +517,9 @@ U-Net
 
 ​	U-Net 具有编码器部分和解码器部分，均由 ResNet 块组成。编码器将图像表示压缩为较低分辨率图像表示，并且解码器将较低分辨率图像表示解码回据称噪声较小的原始较高分辨率图像表示。更具体地说，U-Net 输出预测噪声残差，该噪声残差可用于计算预测的去噪图像表示。为了防止U-Net在下采样时丢失重要信息，通常在编码器的下采样ResNet和解码器的上采样ResNet之间添加快捷连接。
 
-​	Stable Diffusion的U-Net 能够通过交叉注意力层在文本嵌入上调节其输出。交叉注意力层被添加到 U-Net 的编码器和解码器部分，通常位于 ResNet 块之间。![image-20240611200630350](./imgs/LDMs.png)
+​	Stable Diffusion的U-Net 能够通过交叉注意力层在文本嵌入上调节其输出。交叉注意力层被添加到 U-Net 的编码器和解码器部分，通常位于 ResNet 块之间。
+
+![image-20240611200630350](./imgs/LDMs.png)
 
 <h2 id="24.使用lora微调Stable_Diffusion模型">24.使用lora微调Stable_Diffusion模型</h2>
 
@@ -727,44 +732,51 @@ Stable Diffusion 3使用以下三个文本编码器:
 
 判别器用来识别数据是真实样本还是由生成器生成的模拟样本，使用交叉熵建立损失函数
 
-$\begin{align}
+$$
+\begin{align}
 H(p,q) &= -\mathbb{E}_{x\sim p\left(x\right)} \left[\log\left(q\left(x\right)\right)\right]= -\sum_{x}p\left(x\right)\log\left(q\left(x\right)\right)
 = -\int\limits_{x}f\left(x\right)\log\left(q\left(x\right)\right) dx
-\end{align}$
-
+\end{align}
+$$
 由于这是一个二分类问题，其中D(x)表示判别器认为x为真实样本的概率，有
 
-$\begin{align}
+$$
+\begin{align}
 L &= -\sum_{x} p\left(x\right)\log\left(q\left(x\right)\right)\\
 & = -p(x)\log [q(x)] - (1-p(x))log[1-q(x)]\\
 & = -p(x,data)\log [D(x)] - p(x,g)log[1-D(x)] \\
 & = -p(data)p(x\vert data)\log [D(x)] - p(g)p(x\vert g)log[1-D(x)] \\
 & = -\frac{1}{2}\left(p_{data}(x)\log [D(x)] + p_{g}(x)log[1-D(x)]\right) \\
 & = -\frac{1}{2}\left(\mathbb{E}_{x\sim p(data)}\left[\log (D(x))\right] + \mathbb{E}_{x\sim p(g)}\left[\log [1-D(x)]\right]\right) \\
-\end{align}$
-
+\end{align}
+$$
 在此基础上可以得到Gans的值函数
 
-$V(G,D) = \mathbb{E}_{x\sim p(data)}\left[\log (D(x))\right] + \mathbb{E}_{x\sim p(g)}\left[\log (1-D(x))\right]$
-
+$$
+V(G,D) = \mathbb{E}_{x\sim p(data)}\left[\log (D(x))\right] + \mathbb{E}_{x\sim p(g)}\left[\log (1-D(x))\right]
+$$
 训练判别器D时,最大化V，训练生成器时，最小化V，整个训练过程可以表示为
 
-$\min_{G}\max_{D}V(G,D)$
-
+$$
+\min_{G}\max_{D}V(G,D)
+$$
 给定生成器G，求当下最优判别器D，令V对D的导数等于零，即可求得最优判别器
 
-$\max_{D}V(G,D) = \mathbb{E}_{x\sim p(data)}\left[\log (D(x))\right] + \mathbb{E}_{x\sim p(g)}\left[\log (1-D(x))\right]$
-$D^{*}(x)=\frac{\mathrm{P}_{data}(x)}{\mathrm{P}_{data}(x)+\mathrm{P}_{g}(x)}$
-
+$$
+\max_{D}V(G,D) = \mathbb{E}_{x\sim p(data)}\left[\log (D(x))\right] + \mathbb{E}_{x\sim p(g)}\left[\log (1-D(x))\right]$
+$D^{*}(x)=\frac{\mathrm{P}_{data}(x)}{\mathrm{P}_{data}(x)+\mathrm{P}_{g}(x)}
+$$
 如今我们已经找到了最大化的D，现要将其固定，寻找最小化的G，即求下式：
-
-$\begin{align}
+$$
+\begin{align}
 \min_{G}V(G,D) &= \mathbb{E}_{x\sim p(data)}\left[\log (D(x))\right] + \mathbb{E}_{x\sim p(g)}\left[\log (1-D(x))\right] \\
 &= \mathbb{E}_{x\sim p(data)}\left[\log\frac{p_{data}(x)}{p_{data}(x)+p_{g}(x)}\right] + \mathbb{E}_{x\sim p(g)}\left[\log\frac{p_{g}(x)}{p_{data}(x)+p_{g}(x)}\right] \\
 &= \mathbb{E}_{x\sim p(data)}\left[\log\frac{\frac{1}{2}p_{data}(x)}{\frac{1}{2}(p_{data}(x)+p_{g}(x))}\right] + \mathbb{E}_{x\sim p(g)}\left[\log\frac{\frac{1}{2}p_{g}(x)}{\frac{1}{2}(p_{data}(x)+p_{g}(x))}\right] \\
 &= KL(p_{data}(x)\|\frac{p_{data}(x)+p_{g}(x)}{2}) + KL(p_{g}(x)\|\frac{p_{data}(x)+p_{g}(x)}{2}) -2\log2 \\
 & = 2JS(p_{data}\|p_{g}) - 2\log2
-\end{align}$
+\end{align}
+$$
+
 
 <h2 id="34.Gan的收敛性分析">34.Gan的收敛性分析</h2>
 
@@ -777,13 +789,15 @@ $G^{*}(x)= x \sim p_{data}(x)$， $D^{*}(x)=\frac{1}{2}$， $V(G^{*},D^{*}) = -2
 根据原始GAN定义的判别器loss，我们可以得到最优判别器的形式；而在最优判别器下，我们可以把原始GAN定义的生成器loss等价变换为最小化真实分布与生成分布之间的JS散度。训练判别器是在度量生成器分布和真实数据分布的JS距离，训练生成器是在减小这个JS距离。
 两个分布之间越接近它们的JS散度越小，我们通过优化JS散度就能将$p_{data}$ 拉向 $p_{g}$ 最终以假乱真。
 看似合理，但问题就出在这个JS散度上。JS散度只有当**两个分布有所重叠的时候才有意义**，如果两个分布完全没有重叠的部分，或者它们重叠的部分可忽略，则它们的JS散度为一个固定的常数！
-
-$\begin{align}
+$$
+\begin{align}
 J S\left(P_{1} \| P_{2}\right)&=\frac{1}{2} K L\left(P_{1} \| \frac{P_{1}+P_{2}}{2}\right)+\frac{1}{2} K L\left(P_{2} \| \frac{P_{1}+P_{2}}{2}\right) \\
 &= \frac{1}{2} \mathbb{E}_{x \sim p_{1}(x)}\left[\log\frac{2p_{1}(x)}{p_{1}(x)+p_{2}(x)}\right] + \frac{1}{2} \mathbb{E}_{x\sim p_{2}(x)}\left[\log\frac{2p_{2}(x)}{p_{1}(x)+p_{2}(x)}\right] \\
 &= \frac{1}{2} \mathbb{E}_{x \sim p_{1}(x)}\left[\log\frac{p_{1}(x)}{p_{1}(x)+p_{2}(x)}\right] + \frac{1}{2} \mathbb{E}_{x\sim p_{2}(x)}\left[\log\frac{p_{2}(x)}{p_{1}(x)+p_{2}(x)}\right] + \log 2\\
 &= \frac{1}{2} \sum_{x}p_{1}(x)\left[\log\frac{p_{1}(x)}{p_{1}(x)+p_{2}(x)}\right] + \frac{1}{2} \sum_{x} p_{2}(x)\left[\log\frac{p_{2}(x)}{p_{1}(x)+p_{2}(x)}\right] + \log 2\\
-\end{align}$
+\end{align}
+$$
+
 
 当两个分布不重合时，对于任意一点x，必有一分布在该点处概率为0，无论x取何值，最终计算出的JS始终等于log2
 
@@ -907,3 +921,71 @@ Cross-Attention可以用于将图像与文本之间的关联建立，在stable-d
 - CFG是当前扩散模型中的主流方法
 - CG提供了根据真实标签引导生成样本特定属性的优势
 - 两种方法并不相互排斥，可以结合使用以获得更好的效果
+
+
+
+<h2 id="40.Controlnet++的模型结构和原理">40.Controlnet++的模型结构和原理</h2>
+
+论文链接：https://arxiv.org/pdf/2404.07987.pdf
+
+参照cyclegan，采用预先训练的判别优化循环一致性损失。
+
+输入的条件信息与从生成的图像中提取出来的条件信息做损失，如mask。
+
+![img](./imgs/controlnet++_reward_loss.jpg)
+
+​									![img](.\imgs\controlnet++框架.jpg) 
+
+同时提出了一种通过添加噪声扰乱训练图像的一致性，并使用单步去噪图像进行奖励微调的新策略。相比从随机噪声开始多步采样，此方法显著减少了时间和内存成本，同时保持了高效的奖励微调,最终提高了生成图像与输入条件的一致性。
+
+![img](./imgs/Controlnet++_reward.dat)
+
+<h2 id="41.什么是DDIM?">41.什么是DDIM?</h2>
+
+论文链接：https://arxiv.org/pdf/2010.02502.pdf
+
+### 概述
+
+Denoising Diffusion Implicit Models（DDIM）是一种基于Denoising Diffusion Probabilistic Models（DDPM）的改进模型，通过引入非马尔可夫（Non-Markovian）扩散过程来实现更快的样本生成。DDIM在训练过程与DDPM相同，但通过简化生成过程，大大加速了样本的产生速度。
+
+![image-20240708150951604](.\imgs\DDIM.png)
+
+### DDPM与DDIM的对比
+
+DDPM通过模拟马尔可夫链来逐步生成样本，这一过程虽然可以生成高质量的图像，但需要较长的时间。DDIM通过以下方式改进了这一过程：
+
+- **非马尔可夫扩散过程**：DDIM采用非马尔可夫扩散过程，使得生成过程可以是确定性的，而非随机。
+- **加速样本生成**：DDIM能够在更短的时间内生成高质量的样本，与DDPM相比，生成速度提升了10倍到50倍。
+- **计算与样本质量的权衡**：DDIM允许在计算资源和样本质量之间进行权衡，用户可以根据需要调整生成速度和质量。
+- **语义图像插值与重建**：DDIM支持在潜在空间中进行语义有意义的图像插值，并且能够以极低的误差重建观察结果。
+
+
+
+<h2 id="42.什么是EMA?">42.什么是EMA?</h2>
+
+EMA（指数移动平均，Exponential Moving Average）是一种在深度学习和统计领域常用的技术，特别是在参数优化和数据平滑处理中非常有用。在深度学习中，EMA 常用于模型训练过程中参数的更新，以帮助提高模型的稳定性和性能。
+
+### EMA 的工作原理
+
+EMA 的核心思想是对数据或参数进行加权平均，其中较新的观测值会被赋予更高的权重。这种方法可以快速反映最近的变化，同时还能保留一部分之前的信息，从而在保持数据平滑的同时减少噪声的影响。即将每次梯度更新后的权值和前一次的权重进行联系，使得本次更新收到上次权值的影响。
+
+公式表示为：
+$$
+EMA_t = \alpha \times x_t + (1 - \alpha) \times EMA_{t-1}
+$$
+其中：
+- \( EMA_t \) 是在时间点 t 的 EMA 值。
+- \( x_t \) 是在时间点 t 的观测值。
+- \( \alpha \) 是平滑因子，通常在 0 和 1 之间。
+
+### EMA 在深度学习中的应用
+
+在深度学习中，EMA 可用于模型参数的更新。例如，在训练一个深度神经网络时，通过计算参数的 EMA 可以得到更稳定的模型版本。这在训练过程中尤其有用，因为它可以减少参数更新中的高频波动，从而帮助模型更好地收敛。
+
+### 优势
+
+使用 EMA 更新模型参数的优势包括：
+- **减少过拟合**：EMA 可以平滑模型在训练过程中的表现，避免过度追踪训练数据中的噪声。
+- **增强泛化能力**：通过平滑化参数更新，模型在未见数据上的表现往往更加稳定和强健。
+
+ema版本的模型可以生成更多创意性的结果，适合训练使用
