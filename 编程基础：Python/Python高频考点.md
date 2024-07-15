@@ -42,6 +42,7 @@
 - [41.Python中switch-case语句的实现？](#41.Python中switch-case语句的实现？)
 - [42.Python中的lambda表达式？](#42.Python中的lambda表达式？)
 - [43.介绍一下Python中耦合和解耦的代码设计思想](#43.介绍一下Python中耦合和解耦的代码设计思想)
+- [44.Python中的函数参数有哪些类型与规则？](#44.Python中的函数参数有哪些类型与规则？)
 
 <h2 id="1.python中迭代器的概念？">1.Python中迭代器的概念？</h2>
 
@@ -1945,3 +1946,76 @@ event_bus.publish("GET_USER")
 ```
 在这个示例中，`UserService` 通过事件总线 `EventBus` 进行通信，而不是直接依赖其他模块。这种架构提高了系统的模块化和扩展性。
 
+
+<h2 id="44.Python中的函数参数有哪些类型与规则？">44.Python中的函数参数有哪些类型与规则？</h2>
+
+在Python中，函数的参数有多种类型和一套设定的规则需要遵守，这使得函数定义和调用非常灵活。以下是Python详细的参数规则和类型解释：
+
+### 1. 位置参数（Positional Arguments）
+位置参数是最常见的参数类型，按顺序传递给函数。
+
+```python
+def greet(name, age):
+    print(f"Hello, my name is {name} and I am {age} years old.")
+
+greet("Alice", 30)
+```
+
+### 2. 关键字参数（Keyword Arguments）
+关键字参数允许在函数调用时通过参数名指定参数值，使得参数传递更具可读性，并且不必按顺序传递。
+
+```python
+greet(age=30, name="Alice")
+```
+
+### 3. 默认参数（Default Arguments）
+默认参数在函数定义时指定默认值，如果在函数调用时未提供该参数，则使用默认值。
+
+```python
+def greet(name, age=25):
+    print(f"Hello, my name is {name} and I am {age} years old.")
+
+greet("Alice")  # 使用默认值25
+greet("Bob", 30)  # 覆盖默认值
+```
+
+### 4. 可变位置参数（Variable Positional Arguments）
+使用 `*args` 语法，允许函数接受任意数量的位置参数。 `*args` 是一个元组。
+
+```python
+def greet(*names):
+    for name in names:
+        print(f"Hello, {name}!")
+
+greet("Alice", "Bob", "Charlie")
+```
+
+### 5. 可变关键字参数（Variable Keyword Arguments）
+使用 `**kwargs` 语法，允许函数接受任意数量的关键字参数。 `**kwargs` 是一个字典。
+
+```python
+def greet(**kwargs):
+    for key, value in kwargs.items():
+        print(f"{key} is {value}")
+
+greet(name="Alice", age=30, location="Wonderland")
+```
+
+### 参数顺序规则
+在定义函数时，参数应按照以下顺序排列：
+
+1. 位置参数
+2. 关键字参数
+3. 默认参数
+4. 可变位置参数 `*args`
+5. 可变关键字参数 `**kwargs`
+
+#### 示例
+
+```python
+def example(a, b=2, *args, **kwargs):
+    print(a, b, args, kwargs)
+
+example(1)  # 输出: 1 2 () {}
+example(1, 3, 4, 5, x=10, y=20)  # 输出: 1 3 (4, 5) {'x': 10, 'y': 20}
+```
