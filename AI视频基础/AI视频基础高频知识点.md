@@ -52,3 +52,4 @@ Rocky认为SVD（Stable Video Diffusion）模型非常有价值，其开源精�
 
 Rocky总结了如下图所示的AIGC时代主流AI视频生成流程，可以作为大家构建AI视频产品构架的基础底座：
 
+![AIGC时代的主流AI视频生成流程](./imgs/AIGC时代的主流AI视频生成流程.png)
