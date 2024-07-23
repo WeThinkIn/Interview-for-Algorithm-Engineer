@@ -3,7 +3,7 @@
 - [1.BLIP的原理？](#1.BLIP的原理？)
 - [2.CLIP的原理？](#2.CLIP的原理？)
 - [3.为什么StableDiffusion使用CLIP而不使用BLIP?](#3.为什么StableDiffusion使用CLIP而不使用BLIP?)
-- [4.CLIP的text encoder能输入多少个单词？](#4.CLIP的text encoder能输入多少个单词？)
+- [4.CLIP的textEncoder能输入多少个单词?](#4.CLIP的textEncoder能输入多少个单词?)
 
 <h2 id="1.BLIP的原理？">1.BLIP的原理？</h2>
 
@@ -34,7 +34,7 @@ BLIP由于其图像特征受到了图文匹配（ITM）和图像条件语言建�
 最大区别：损失函数，CLIP和BLIP针对任务不同，不同任务不同损失函数。
 
 
-<h2 id="4.CLIP的text encoder能输入多少个单词？">4.CLIP的text encoder能输入多少个单词？</h2>
+<h2 id="4.CLIP的textEncoder能输入多少个单词?">4.CLIP的textEncoder能输入多少个单词?</h2>
 
 **CLIP 模型中的 context_length 设置为 77**，表示每个输入句子会被 tokenized 成最多 77 个token。这个 77 并不是直接对应到 77 个单词，
 因为一个单词可能会被拆分成多个 token，特别是对于较长的或不常见的单词。
