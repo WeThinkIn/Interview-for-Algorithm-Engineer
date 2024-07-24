@@ -24,7 +24,7 @@
 - [20.FaceChain的训练和推理流程是什么样的？](#20.FaceChain的训练和推理流程是什么样的？)
 - [21.什么是diffusers?](#21.什么是diffusers?)
 - [22.文生图和图生图的区别是什么?](#22.文生图和图生图的区别是什么?)
-- [23.为什么Stable Diffusion 3使用三个文本编码器?](#23.为什么Stable-Diffusion-3使用三个文本编码器?)
+- [23.为什么StableDiffusion3使用三个文本编码器?](#23.为什么StableDiffusion3使用三个文本编码器?)
 - [24.什么是重参数化技巧](#24.什么是重参数化技巧)
 - [25.Stable-Diffusion-3有哪些改进点？](#25.Stable-Diffusion-3有哪些改进点？)
 - [26.Playground-V2模型有哪些特点？](#26.Playground-V2模型有哪些特点？)
@@ -555,7 +555,7 @@ Diffusers不仅兼容一种类型的模型，还支持多种类型的模型。�
 它们在技术使用上有所重叠,但应用场景有别。文生图更注重多样性和创造力,而图生图则侧重于对现有图像的编辑和转换。
 
 
-<h2 id="23.为什么Stable Diffusion 3使用三个文本编码器?">23.为什么Stable-Diffusion-3使用三个文本编码器?</h2>
+<h2 id="23.为什么StableDiffusion3使用三个文本编码器?">23.为什么StableDiffusion3使用三个文本编码器?</h2>
 
 Stable Diffusion 3作为一款先进的文本到图像模型,采用了三重文本编码器的方法。这一设计选择显著提升了模型的性能和灵活性。
 
