@@ -5,6 +5,7 @@
 - [3.人物一致性模型PhotoMaker原理](#3.人物一致性模型PhotoMaker原理)
 - [4.人物一致性模型InstantID原理](#4.人物一致性模型InstantID原理)
 - [5.单ID图像为什么InstantID人物一致性比Photomaker效果好](#5.单ID图像为什么InstantID人物一致性比Photomaker效果好)
+- [6.Controlnet++的模型结构和原理](#6.Controlnet++的模型结构和原理)
 
 
 <h2 id="1.Ip-adapter的模型结构与原理">1.Ip-adapter的模型结构与原理 </h2>
@@ -58,3 +59,20 @@ ControlNet：InstantID还使用了ControlNet来增强面部特征提取，进一
 2.InstantID还使用ControlNet来增强面部特征提取，进一步提高图像生成的质量和准确性。
 
 3.Photomaker是先将文本特征和图像特征通过MLPs融合，再做CrossAttention加入U-net.InstantID是图像特征和文本特征分开做CrossAttention,再融合。（可以认为是区别，不要一定是效果好的原因）
+
+
+<h2 id="6.Controlnet++的模型结构和原理">6.Controlnet++的模型结构和原理</h2>
+
+论文链接：https://arxiv.org/pdf/2404.07987.pdf
+
+参照cyclegan，采用预先训练的判别优化循环一致性损失。
+
+输入的条件信息与从生成的图像中提取出来的条件信息做损失，如mask。
+
+![img](./imgs/controlnet++_reward_loss.jpg)
+
+![img](./imgs/controlnet++框架.jpg) 
+
+同时提出了一种通过添加噪声扰乱训练图像的一致性，并使用单步去噪图像进行奖励微调的新策略。相比从随机噪声开始多步采样，此方法显著减少了时间和内存成本，同时保持了高效的奖励微调,最终提高了生成图像与输入条件的一致性。
+
+![img](./imgs/Controlnet++_reward.dat)
