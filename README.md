@@ -22,6 +22,8 @@ Rocky Ding，AIGCmagic社区创始人，公众号《WeThinkIn》主理人，资�
 
 <img src="imgs/AIGC产业交流群.jpg" alt="WeThinkIn-AIGC产业交流群" width="300"/><img src="imgs/AI绘画交流群.jpg" alt="AIGCmagic社区-AI绘画交流群" width="300"/>
 
+<img src="imgs/大模型交流群.jpg" alt="AIGCmagic社区-大模型交流群" width="300"/><img src="imgs/AI视频交流群.jpg" alt="AIGCmagic社区-AI视频交流群" width="300"/>
+
 ## AIGCmagic社区与知识星球
 AIGCmagic社区主要探讨交流AIGC、传统深度学习、自动驾驶、机器学习、计算机视觉、自然语言处理、图像处理、元宇宙、SLAM等AI行业话题。
 
