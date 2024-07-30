@@ -44,6 +44,7 @@
 - [43.介绍一下Python中耦合和解耦的代码设计思想](#43.介绍一下Python中耦合和解耦的代码设计思想)
 - [44.Python中的函数参数有哪些类型与规则？](#44.Python中的函数参数有哪些类型与规则？)
 - [45.什么是Python中的魔术方法?](#45.什么是Python中的魔术方法？)
+- [46.python如何清理AI模型的显存占用?](#46.python如何清理AI模型的显存占用?)
 
 <h2 id="1.python中迭代器的概念？">1.Python中迭代器的概念？</h2>
 
@@ -2161,3 +2162,101 @@ example(1, 3, 4, 5, x=10, y=20)  # 输出: 1 3 (4, 5) {'x': 10, 'y': 20}
   ```
 
 这些魔术方法使得类在使用时更加灵活和自然，能够与Python内置的操作和函数无缝衔接。
+
+
+<h2 id="46.python如何清理AI模型的显存占用?">46.python如何清理AI模型的显存占用?</h2>
+
+在AIGC、传统深度学习、自动驾驶领域，在AI项目服务的运行过程中，当我们不再需要使用AI模型时，可以通过以下两个方式来释放该模型占用的显存：
+
+1. 删除AI模型对象、清除缓存，以及调用垃圾回收（Garbage Collection）来确保显存被释放。
+2. 将AI模型对象从GPU迁移到CPU中进行缓存。
+
+### 1. 第一种方式（删除清理）
+
+```python
+import torch
+import gc
+
+# 定义一个简单的模型
+class SimpleModel(torch.nn.Module):
+    def __init__(self):
+        super(SimpleModel, self).__init__()
+        self.fc1 = torch.nn.Linear(10, 10)
+        self.fc2 = torch.nn.Linear(10, 1)
+    
+    def forward(self, x):
+        x = torch.relu(self.fc1(x))
+        x = self.fc2(x)
+        return x
+
+# 创建模型并将其移动到 GPU
+model = SimpleModel().cuda()
+
+# 模拟训练或推理
+dummy_input = torch.randn(1, 10).cuda()
+output = model(dummy_input)
+
+# 删除模型
+del model
+
+# 清除缓存
+# 使用 `torch.cuda.empty_cache()` 来清除未使用的显存缓存。这不会释放显存，但会将未使用的缓存显存返回给 GPU，以便其他 CUDA 应用程序可以使用。
+torch.cuda.empty_cache()
+
+# 调用垃圾回收
+# 使用 Python 的 `gc` 模块显式调用垃圾回收器，以确保删除模型对象后未引用的显存能够被释放：
+gc.collect()
+
+# 额外说明
+# `torch.cuda.empty_cache()`: 这个函数会释放 GPU 中缓存的内存，但不会影响已经分配的内存。它将缓存的内存返回给 GPU 以供其他 CUDA 应用程序使用。
+# `gc.collect()`: Python 的垃圾回收器会释放所有未引用的对象，包括 GPU 内存。如果删除对象后显存没有立即被释放，调用 `gc.collect()` 可以帮助确保显存被释放。
+
+# 检查显存使用情况
+print(torch.cuda.memory_allocated())
+print(torch.cuda.memory_reserved())
+```
+
+### 1. 第二种方式（迁移清理）
+
+```python
+import torch
+import gc
+
+# 定义一个简单的模型
+class SimpleModel(torch.nn.Module):
+    def __init__(self):
+        super(SimpleModel, self).__init__()
+        self.fc1 = torch.nn.Linear(10, 10)
+        self.fc2 = torch.nn.Linear(10, 1)
+    
+    def forward(self, x):
+        x = torch.relu(self.fc1(x))
+        x = self.fc2(x)
+        return x
+
+# 创建模型并将其移动到 GPU
+model = SimpleModel().cuda()
+
+# 模拟训练或推理
+dummy_input = torch.randn(1, 10).cuda()
+output = model(dummy_input)
+
+# 迁移模型
+model.cpu()
+
+# 清除缓存
+# 使用 `torch.cuda.empty_cache()` 来清除未使用的显存缓存。这不会释放显存，但会将未使用的缓存显存返回给 GPU，以便其他 CUDA 应用程序可以使用。
+torch.cuda.empty_cache()
+
+# 调用垃圾回收
+# 使用 Python 的 `gc` 模块显式调用垃圾回收器，以确保删除模型对象后未引用的显存能够被释放：
+gc.collect()
+
+# 额外说明
+# `torch.cuda.empty_cache()`: 这个函数会释放 GPU 中缓存的内存，但不会影响已经分配的内存。它将缓存的内存返回给 GPU 以供其他 CUDA 应用程序使用。
+# `gc.collect()`: Python 的垃圾回收器会释放所有未引用的对象，包括 GPU 内存。如果删除对象后显存没有立即被释放，调用 `gc.collect()` 可以帮助确保显存被释放。
+
+# 检查显存使用情况
+print(torch.cuda.memory_allocated())
+print(torch.cuda.memory_reserved())
+```
