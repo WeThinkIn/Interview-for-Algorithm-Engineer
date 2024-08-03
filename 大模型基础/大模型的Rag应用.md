@@ -8,7 +8,7 @@
 - [8.RAG的评估指标有哪些？](#8.RAG的评估指标有哪些？)
 - [9.llama-index的索引类别有哪些？](#9.llama-index的索引类别有哪些？)
 - [10.向量数据库介绍](#10.向量数据库介绍)
-- [11.RAG之Re-Ranking机制介绍](#RAG之Re-Ranking机制介绍)
+- [11.RAG之Re-Ranking机制介绍](#11.RAG之Re-Ranking机制介绍)
 
 
 ### 相关论文
