@@ -3,6 +3,7 @@
 - [1.BLIP的原理？](#1.BLIP的原理？)
 - [2.CLIP的原理？](#2.CLIP的原理？)
 - [3.为什么StableDiffusion使用CLIP而不使用BLIP?](#3.为什么StableDiffusion使用CLIP而不使用BLIP?)
+- [4.CLIP的textEncoder能输入多少个单词?](#4.CLIP的textEncoder能输入多少个单词?)
 
 <h2 id="1.BLIP的原理？">1.BLIP的原理？</h2>
 
@@ -31,3 +32,62 @@ CLIP是通过对比学习的方式训练图像和文本的编码器，使得图�
 BLIP由于其图像特征受到了图文匹配（ITM）和图像条件语言建模(LM)的影响，可以理解为其图像特征和文本特征在语义空间不算对齐的。
 
 最大区别：损失函数，CLIP和BLIP针对任务不同，不同任务不同损失函数。
+
+
+<h2 id="4.CLIP的textEncoder能输入多少个单词?">4.CLIP的textEncoder能输入多少个单词?</h2>
+
+**CLIP 模型中的 context_length 设置为 77**，表示每个输入句子会被 tokenized 成最多 77 个token。这个 77 并不是直接对应到 77 个单词，
+因为一个单词可能会被拆分成多个 token，特别是对于较长的或不常见的单词。
+
+在自然语言处理中，**token 通常指的是模型在处理文本时的最小单位**，可以是单个词，也可以是词的一部分或多个词的组合。
+这是因为 CLIP 模型使用了 Byte-Pair Encoding (BPE) 分词器，这种方法会将常见的词作为单个 token，但会把不常见的词拆分成多个 token。
+
+**实际例子**
+
+为了更好地理解，我们来看一个具体的例子：
+
+```Python
+import clip
+
+# 加载模型
+device = "cuda" if torch.cuda.is_available() else "cpu"
+model, preprocess = clip.load("ViT-B/32", device)
+
+# 示例句子
+text = "a quick brown fox jumps over the lazy dog."
+
+# 对句子进行 tokenization
+tokenized_text = clip.tokenize([text])
+
+print(tokenized_text)
+print(tokenized_text.shape)
+```
+
+在这个例子中，我们对句子 `"a quick brown fox jumps over the lazy dog."` 进行了 tokenization。让我们看看它的输出：
+
+```Python
+tensor([[49406,    320,  1125,  2387,   539,  1906,   315,   262,   682,  1377,
+            269, 49407,      0,     0,     0,     0,     0,     0,     0,     0,
+            0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+            0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+            0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+            0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+            0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+            0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+            0]])
+torch.Size([1, 77])
+```
+
+在这个例子中，句子被转换成了 77 个 token ID，其中包含了句子的 token ID 和填充的零。句子的 token 包括起始和结束的特殊 token (49406 和 49407)，
+剩余的空位用 0 进行填充。
+
+可以看到，虽然句子有 9 个单词，但经过 tokenization 后得到了 11 个 token（包括起始和结束 token），加上填充后的长度为 77。
+
+**总结**
+
+- context_length 设置为 77 表示模型的输入长度限制为 77 个 token。
+- 77 个 token 不等同于 77 个单词，因为一个单词可能会被拆分成多个 token。
+- 实际的单词数量会少于 77 个，具体取决于句子的复杂度和分词方式。
+- 通常情况下，77 个 token 可以容纳大约 70 个左右的单词，这取决于句子的内容和复杂度。
+
+为了在实际应用中得到精确的单词数量与 token 数量的关系，可以对输入文本进行 tokenization 并观察其输出。通过这种方式，可以更好地理解模型的输入限制。

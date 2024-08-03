@@ -8,15 +8,21 @@
 
 Rocky Ding 主编
 
-Rocky Ding，AIGCmagic社区创始人，公众号WeThinkIn主理人，资深AIGC算法专家，全网文章阅读量200万+，专注于AIGC产品与AI算法解决方案的落地应用。在互联网大厂、AI独角兽、传统科技公司、国企研究院等有丰富的工作经验。多次带队获得CVPR、AAAI、Kaggle等顶级竞赛的冠军成绩。
+Rocky Ding，AIGCmagic社区创始人，公众号《WeThinkIn》主理人，资深AIGC算法专家，全网文章阅读量200万+，专注于AIGC产品与AI算法解决方案的落地应用。在互联网大厂、AI独角兽、传统科技公司、国企研究院等有丰富的工作经验。多次带队获得CVPR、AAAI、Kaggle等顶级竞赛的冠军成绩。
 
 张一凡 副主编
 
 张一凡，资深AIGC算法专家，曾就职于某国内某top安防公司，专注于AIGC算法实现与落地部署，目前在国内某研究所主要从事AI大模型相关的研究。
 
+猫先生 副主编   
+
+猫先生，公众号“魔方AI空间”主理人，资深AIGC算法专家，具有丰富AI模型部署及落地经验，多次参加赛事取得冠军成绩，专注于AIGC技术探索与商业案例应用。
+
 ## AI行业技术交流群
 
 <img src="imgs/AIGC产业交流群.jpg" alt="WeThinkIn-AIGC产业交流群" width="300"/><img src="imgs/AI绘画交流群.jpg" alt="AIGCmagic社区-AI绘画交流群" width="300"/>
+
+<img src="imgs/大模型交流群.jpg" alt="AIGCmagic社区-大模型交流群" width="300"/><img src="imgs/AI视频交流群.jpg" alt="AIGCmagic社区-AI视频交流群" width="300"/>
 
 ## AIGCmagic社区与知识星球
 AIGCmagic社区主要探讨交流AIGC、传统深度学习、自动驾驶、机器学习、计算机视觉、自然语言处理、图像处理、元宇宙、SLAM等AI行业话题。
