@@ -840,8 +840,7 @@ $$ \text{image-bucket} = argmin(abs(\text{bucket-aspects} — \text{image-aspect
 
 当image_aspect与bucket_aspects完全一致时，可以直接将图片放入对应的存储桶中；当image_aspect与bucket_aspects不一致时，需要对图片进行中心裁剪，获得与存储桶一致的长宽比，再放入存储桶中。中心裁剪的过程如下图所示：
 
-
-对图片进行中心裁剪后放入对应的存储桶（bucket）
+![对图片进行中心裁剪后放入对应的存储桶（bucket）](./imgs/对图片进行中心裁剪后放入对应的存储桶（bucket）.jpg)
 
 由于我们以经做了精细化的存储桶设计，所以**出现长宽比不匹配时的图像裁剪比例一般小于0.033，只去除了小于32像素的实际图像内容，所以对训练影响不大**。
 
