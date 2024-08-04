@@ -5,6 +5,7 @@
 - [3.Sora有哪些创新点？](#3.Sora有哪些创新点？)
 - [4.SVD（Stable-Video-Diffusion）有哪些创新点？](#4.SVD（Stable-Video-Diffusion）有哪些创新点？)
 - [5.AIGC时代的主流AI视频生成流程有哪些？](#5.AIGC时代的主流AI视频生成流程有哪些？)
+- [6.Sora在训练时是如何处理输入数据的？](#6.Sora在训练时是如何处理输入数据的？)
 
 
 <h2 id="1.目前主流的AI视频技术框架有哪几种？">1.目前主流的AI视频技术框架有哪几种？</h2>
@@ -53,3 +54,23 @@ Rocky认为SVD（Stable Video Diffusion）模型非常有价值，其开源精�
 Rocky总结了如下图所示的AIGC时代主流AI视频生成流程，可以作为大家构建AI视频产品构架的基础底座：
 
 ![AIGC时代的主流AI视频生成流程](./imgs/AIGC时代的主流AI视频生成流程.jpg)
+
+
+<h2 id="6.Sora在训练时是如何处理输入数据的？">6.Sora在训练时是如何处理输入数据的？</h2>
+
+**Sora在处理输入数据的过程中引入了大语言模型标配的Tokenizer思想。**
+
+在文本对话领域，Tokenizer可使任何长度和内容的文本编码成大语言模型可以直接处理（输入/输出）的Text Embeddings特征。在AI视频领域则是将视频数据进行编码获得**visual patches**，下图展示了Sore将输入视频转换成visual patches的过程：
+
+![Sora对输入的视频数据进行编码](./imgs/Sora对输入的视频数据进行编码.png)
+
+**其中先使用一个Visual Encoder模型将视频数据（空间和时间维度）压缩编码到Latent特征空间，获得一个3D visual patch array，接着将整个Latent特征分解成spacetime patches，最后再排列组合成为一个visual patches向量。**
+
+为了能有一个高质量的视频数据压缩编码效果，OpenAI针对性训练了一个Video compression network作为Visual Encoder模型。同时也训练了一个Visual Decoder模型用于Sora的解码来获取生成的视频结果。
+
+Sora通过对输入数据的压缩编码，**为AI视频的生成带来了很多帮助：**
+
+1. **训练的数据分辨率获得了解放：** Sora能够训练任意的分辨率、时间长度和长宽比的视频/图像数据。
+2. **灵活的生成分辨率：** Sora可以生成1920x1080像素（横屏）到1080x1920像素（竖屏）之间任意分辨率的视频。
+3. **生成视频的边缘更加符合真实常理：** Sora尝试过固定分辨率进行训练，这种情况下就需要裁剪视频数据。这样数据的裁剪bias会被带入到模型中，导致Sora模型生成很多主要内容缺失的视频。
+
