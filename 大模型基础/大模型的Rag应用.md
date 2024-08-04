@@ -9,7 +9,10 @@
 - [9.llama-index的索引类别有哪些？](#9.llama-index的索引类别有哪些？)
 - [10.向量数据库介绍](#10.向量数据库介绍)
 - [11.RAG之Re-Ranking机制介绍](#11.RAG之Re-Ranking机制介绍)
-
+- [12.RAG之Embedding模型介绍](#12.RAG之Embedding模型介绍)
+- [13.RAG之PDF文档加载器介绍](#13.RAG之PDF文档加载器介绍)
+- [14.RAG之chunking方法介绍](#14.RAG之chunking方法介绍)
+- [15.RAG之查询重写的策略介绍](#15.RAG之查询重写的策略介绍)
 
 ### 相关论文
 - Retrieval-Augmented Generation for Large Language Models: A Survey (https://arxiv.org/abs/2312.10997)
@@ -303,3 +306,148 @@ Re-Ranking的过程可以分为以下几个步骤：
 - 可解释性和透明度： Re-Ranking的结果直接影响生成结果的质量，但其内部工作机制通常较为复杂，缺乏可解释性和透明度。这使得难以理解和调试Re-Ranking过程中的问题，也限制了用户对结果的信任度。
 
 -   数据偏差和公平性： Re-Ranking的效果往往受到数据的影响，如果训练数据存在偏差，可能会导致Re-Ranking结果的偏差。此外，Re-Ranking策略可能对不同群体或类别的文档产生不同程度的影响，需要考虑公平性和平衡性的问题。
+
+<h2 id="12.RAG之Embedding模型介绍">12.RAG之Embedding模型介绍</h2>
+
+1.BGE
+
+BGE，即BAAI General Embedding，是由智源研究院（BAAI）团队开发的一款文本Embedding模型。该模型可以将任何文本映射到低维密集向量，这些向量可用于检索、分类、聚类或语义搜索等任务。此外，它还可以用于LLMs的向量数据库。
+
+BGE模型在2023年有多次更新，包括发布论文和数据集、发布新的reranker模型以及更新Embedding模型。BGE模型已经集成到Langchain中，用户可以方便地使用它。此外，BGE模型在MTEB和C-MTEB基准测试中都取得了第一名的成绩。
+
+BGE模型的主要特点如下：
+
+- 多语言支持：BGE模型支持中英文。
+- 多版本：BGE模型有多个版本，包括bge-large-en、bge-base-en、bge-small-en等，以满足不同的需求。
+- 高效的reranker：BGE提供了reranker模型，该模型比Embedding模型更准确，但比Embedding模型更耗时。因此，它可以用于重新排名Embedding模型返回的前k个文档。
+- 开源和许可：BGE模型是开源的，并在MIT许可下发布。这意味着用户可以免费用于商业目的。
+- 丰富集成：用户可以使用FlagEmbedding、Sentence-Transformers、Langchain或Huggingface Transformers等工具来使用BGE模型。
+
+2.GTE
+
+GTE模型，也称为General Text Embeddings，是阿里巴巴达摩院推出的文本Embedding技术。它基于BERT框架构建，并分为三个版本：GTE-large、GTE-base和GTE-small。
+
+该模型在大规模的多领域文本对语料库上进行训练，确保其广泛适用于各种场景。因此，GTE可以应用于信息检索、语义文本相似性、文本重新排序等任务。
+
+尽管GTE模型的参数规模为110M，但其性能卓越。它不仅超越了OpenAI的Embedding API，在大型文本Embedding基准测试中，其表现甚至超过了参数规模是其10倍的其他模型。更值得一提的是，GTE模型可以直接处理代码，无需为每种编程语言单独微调，从而实现优越的代码检索效果。
+
+3.E5 Embedding
+
+E5-embedding是由intfloat团队研发的一款先进的Embedding模型。E5的设计初衷是为各种需要单一向量表示的任务提供高效且即用的文本Embedding，与其他Embedding模型相比，E5在需要高质量、多功能和高效的文本Embedding的场景中表现尤为出色。
+
+E5-embedding的主要特点：
+
+- 新的训练方法：E5采用了“EmbEddings from bidirEctional Encoder rEpresentations”这一创新方法进行训练，这意味着它不仅仅依赖传统的有标记数据，也不依赖低质量的合成文本对。
+- 高质量的文本表示：E5能为文本提供高质量的向量表示，这使得它在多种任务上都能表现出色，尤其是在需要句子或段落级别表示的任务中。
+- 多场景：无论是在Zero-shot场景还是微调应用中，E5都能提供强大的现成文本Embedding，这使得它在多种NLP任务中都有很好的应用前景。
+
+4.Jina Embedding
+
+jina-embedding-s-en-v1是Jina AI的Finetuner团队精心打造的文本Embedding模型。它基于Jina AI的Linnaeus-Clean数据集进行训练，这是一个包含了3.8亿对句子的大型数据集，涵盖了查询与文档之间的配对。这些句子对涉及多个领域，并已经经过严格的筛选和清洗。值得注意的是，Linnaeus-Clean数据集是从更大的Linnaeus-Full数据集中提炼而来，后者包含了高达16亿的句子对。
+
+Jina Embedding的主要特点：
+
+- 广泛应用：jina-embedding-s-en-v1适合多种场景，如信息检索、语义文本相似性判断和文本重新排序等。
+- 卓越性能：虽然该模型参数量仅为35M，但其性能出众，而且能够快速进行推理。
+- 多样化版本：除了标准版本，用户还可以根据需求选择其他大小的模型，包括14M、110M、330M
+
+5.Instructor
+
+Instructor是由香港大学自然语言处理实验室团队推出的一种指导微调的文本Embedding模型。该模型可以生成针对任何任务（例如分类、检索、聚类、文本评估等）和领域（例如科学、金融等）的文本Embedding，只需提供任务指导，无需任何微调。Instructor在70个不同的Embedding任务（MTEB排行榜）上都达到了最先进的性能。该模型可以轻松地与定制的sentence-transformer库一起使用。
+
+Instructor的主要特点：
+
+- 多任务适应性：只需提供任务指导，即可生成针对任何任务的文本Embedding。
+- 高性能：在MTEB排行榜上的70个不同的Embedding任务上都达到了最先进的性能。
+- 易于使用：与定制的sentence-transformer库结合使用，使得模型的使用变得非常简单。
+
+6.XLM-Roberta
+
+XLM-Roberta（简称XLM-R）是Facebook AI推出的一种多语言版本的Roberta模型。它是在大量的多语言数据上进行预训练的，目的是为了提供一个能够处理多种语言的强大的文本表示模型。XLM-Roberta模型在多种跨语言自然语言处理任务上都表现出色，包括机器翻译、文本分类和命名实体识别等。
+
+XLM-Roberta的主要特点：
+
+- 多语言支持：XLM-Roberta支持多种语言，可以处理来自不同语言的文本数据。
+- 高性能：在多种跨语言自然语言处理任务上，XLM-Roberta都表现出了最先进的性能。
+- 预训练模型：XLM-Roberta是在大量的多语言数据上进行预训练的，这使得它能够捕获跨语言的文本表示。
+
+7.text-embedding-ada-002
+
+text-embedding-ada-002是一个由Xenova团队开发的文本Embedding模型。该模型提供了一个与Hugging Face库兼容的版本的text-embedding-ada-002分词器，该分词器是从openai/tiktoken适应而来的。这意味着它可以与Hugging Face的各种库一起使用，包括Transformers、Tokenizers和Transformers.js。
+
+text-embedding-ada-002的主要特点：
+
+- 兼容性：该模型与Hugging Face的各种库兼容，包括Transformers、Tokenizers和Transformers.js。
+- 基于openai/tiktoken：该模型的分词器是从openai/tiktoken适应而来的。
+
+<h2 id="13.RAG之PDF文档加载器介绍">13.RAG之PDF文档加载器介绍</h2>
+
+### PDF的解析方法：
+- 基于规则的方法：根据文档的组织特征确定每个部分的风格和内容。然而，这种方法不是很通用，因为PDF有很多类型和布局，不可能用预定义的规则覆盖所有类型和布局。
+- 基于深度学习模型的方法：例如将目标检测和OCR模型相结合的流行解决方案。
+- 基于多模态大模型对复杂结构进行Pasing或提取PDF中的关键信息。
+
+### 常见的PDF文档加载器
+1) PyPDF
+PyPDF 是一个用于处理PDF文件的Python库。它提供了一系列的功能，允许用户读取、写入、分析和修改PDF文档。在LangChain中，PyPDFLoader 使用 pypdf 库加载PDF文档为文档数组，PDF将会按照page逐页读取，每个文档包含页面内容和带有页码的元数据。
+```
+from langchain_community.document_loaders import PyPDFLoader
+loader = PyPDFLoader("example_data/layout-parser-paper.pdf")
+pages = loader.load_and_split()
+print(pages[0]
+```
+图片信息提取：pip install rapidocr-onnxruntime
+```
+from langchain_community.document_loaders import PyPDFLoader
+ 
+loader = PyPDFLoader("https://arxiv.org/pdf/2103.15348.pdf", extract_images=True)
+pages = loader.load()
+print(pages[4].page_content)
+```
+2) pyplumber
+```
+from langchain_community.document_loaders import PDFPlumberLoader
+loader = PDFPlumberLoader("example_data/layout-parser-paper.pdf")
+pages = loader.load()
+```
+
+3) PDFMiner
+
+将整个文档解析成一个完整的文本，文本结构可以自行定义
+```
+from langchain_community.document_loaders import PDFMinerLoader
+loader = PDFMinerLoader("example_data/layout-parser-paper.pdf")
+pages = loader.load()
+```
+
+以上三种是基于规则解析
+
+4) Unstructured(基于深度学习模型)
+
+非结构化加载器针对不同的文本块创建了不同的元素。默认情况下将其组合在一起，可以通过指定model="elements"保持这种分离，然后根据自己的逻辑进行分离
+```
+from langchain_community.document_loaders import UnstructuredPDFLoader
+loader = UnstructuredPDFLoader("example_data/layout-parser-paper.pdf", model="elements")
+pages = loader.load()
+```
+
+<h2 id="14.RAG之chunking方法介绍">14.RAG之chunking方法介绍</h2>
+
+1) Fixed size chunking：这是最常见、最直接的分块方法。我们只需决定分块中的tokens数量，以及它们之间是否应该有任何重叠。一般来说，我们希望在块之间保持一些重叠，以确保语义上下文不会在块之间丢失。与其他形式的分块相比，固定大小的分块在计算上便宜且使用简单，因为它不需要使用任何NLP库。
+
+2) Recursive Chunking：递归分块使用一组分隔符，以分层和迭代的方式将输入文本划分为更小的块。如果最初分割文本没有产生所需大小或结构的块，则该方法会使用不同的分隔符或标准递归地调用结果块，直至达到所需的块大小或结构。这意味着，虽然块的大小不会完全相同，但它们仍然具有相似的大小，并可以利用固定大小块和重叠的优点。
+
+3) Document Specific Chunking：该方法不像上述两种方法一样，它不会使用一定数量的字符或递归过程，而是基于文档的逻辑部分（如段落或小节）来生成对齐的块。该方法可以保持内容的组织，从而保持了文本的连贯性，比如Markdown、Html等特殊格式。
+
+4) Semantic Chunking：语义分块会考虑文本内容之间的关系。它将文本划分为有意义的、语义完整的块。这种方法确保了信息在检索过程中的完整性，从而获得更准确、更符合上下文的结果。与之前的分块策略相比，速度较慢。
+
+
+<h2 id="15.RAG之查询重写的策略介绍">15.RAG之查询重写的策略介绍</h2>
+
+### 查询重写的策略
+
+- 假设文档嵌入 (HyDE) ：通过创建虚拟文档来使查询和文档的语义空间保持一致。
+- 重写-检索-阅读：提出了一种全新的框架，它颠覆了传统的检索-阅读顺序，将重点放在查询重写上。
+- 回溯提示 (Step-Back Prompting)： 允许大语言模型 (LLM) 基于- 高层概念进行抽象推理和检索。
+- Query2Doc： 利用来自大语言模型 (LLM) 的少量提示生成伪文档，并将这些伪文档与原始查询合并，构建新的查询。
+- ITER-RETGEN：提出了一种迭代式检索生成方法。它将前一次生成的结果与之前的查询相结合，然后检索相关文档并生成新的结果。这个过程会重复多次，直到最终得到理想的结果。
