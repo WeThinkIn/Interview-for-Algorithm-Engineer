@@ -20,7 +20,7 @@ Rocky Ding，AIGCmagic社区创始人，公众号《WeThinkIn》主理人，资�
 
 ## AI行业技术交流群
 
-<img src="imgs/AIGC产业交流群.jpg" alt="WeThinkIn-AIGC产业交流群" width="300"/><img src="imgs/AI绘画交流群.jpg" alt="AIGCmagic社区-AI绘画交流群" width="300"/>
+<img src="imgs/AI绘画交流群.jpg" alt="AIGCmagic社区-AI绘画交流群" width="300"/><img src="imgs/AI多模态交流群.jpg" alt="AIGCmagic社区-AI多模态交流群" width="300"/>
 
 <img src="imgs/大模型交流群.jpg" alt="AIGCmagic社区-大模型交流群" width="300"/><img src="imgs/AI视频交流群.jpg" alt="AIGCmagic社区-AI视频交流群" width="300"/>
 
