@@ -9,6 +9,8 @@
 - [7.Sora是如何对视频数据进行标注的？](#7.Sora是如何对视频数据进行标注的？)
 - [8.为什么说Sora等AI视频大模型具备世界模拟器（world simulator）的潜质？](#8.为什么说Sora等AI视频大模型具备世界模拟器（world-simulator）的潜质？)
 - [9.AI视频领域的数据工程是什么样的？](#9.AI视频领域的数据工程是什么样的？)
+- [10.Sora模型的整体架构是什么样的？](#10.Sora模型的整体架构是什么样的？)
+- [11.CogVideoX模型的整体架构是什么样的？](#11.CogVideoX模型的整体架构是什么样的？)
 
 
 <h2 id="1.目前主流的AI视频技术框架有哪几种？">1.目前主流的AI视频技术框架有哪几种？</h2>
@@ -130,3 +132,31 @@ AI视频大模型的训练数据必须是经过筛选的高质量视频数据集
 1. 将视频数据输入Panda-70M模型（Caption Model）先生成简短的字幕标注（Short Caption）。
 2. 再将视频数据逐帧（Video Frames）和简短的字幕标注一起输入到CogView3模型（Recaption Model）中，生成密集详细的每一帧图像字幕标签。
 3. 然后使用GPT-4模型对这些图像字幕标签进行总结，生成最终的视频数据标签。与此同时，基于GPT-4的总结标签微调训练Llama 2模型，来为GPT-4分担压力，加速视频数据集完整字幕标签的生成。
+
+
+<h2 id="10.Sora模型的整体架构是什么样的？">10.Sora模型的整体架构是什么样的？</h2>
+
+虽然Sora模型暂未开源，**但是Rocky相信2024年之后的主流AI视频大模型的架构都将在Sora模型架构的基础上进行扩展创新，是AI视频领域从业者必须要熟悉的“核心基础架构”** 。
+
+![Sora模型的核心架构图示](./imgs/Sora模型的核心架构图示.png)
+
+**Sora模型是AI视频领域第一个基于DiT架构（diffusion transformer）的大模型，具有灵活的采样维度**，如上图所示。Sora主要包括三个部分：
+
+1. **3D VAE模型**：3D VAE Encoder能在时间和空间维度上将输入的原始视频映射到Latent空间中。同时3D VAE Decoder能将扩散模型生成的视频Latent特征进行重建，获得像素级视频内容。
+2. **基于DiT的扩散模型架构**：使用类似于ViT（视觉转换器）的处理方式将视频的Latent特征进行Patch化，并进行扩散过程输出去噪后的视频Latent特征。
+3. **一个类似CLIP模型架构的条件接收机制**：接收经过大型语言模型（LLM）增强的用户输入Prompt和视觉信息的Prompt，用以引导扩散模型生成具有特定风格或者主题的视频内容。
+
+
+<h2 id="11.CogVideoX模型的整体架构是什么样的？">11.CogVideoX模型的整体架构是什么样的？</h2>
+
+**CogVideoX是基于DiT架构的AI视频大模型**，可以说DiT架构已经经过考验，成为AI视频领域的核心基底模型。
+
+![CogVideoX-2B模型的完整架构图示](./imgs/CogVideoX-2B模型的完整架构图示.png)
+
+CogVideoX主要包括三个部分：
+
+1. **3D Causal VAE模型**：3D Causal VAE Encoder能在时间和空间维度上将输入的原始视频映射到Latent空间中。同时3D Causal VAE Decoder能将扩散模型生成的视频Latent特征进行重建，获得像素级视频内容。
+2. **DiT Expert模型**：将视频信息的Latent特征和文本信息的Embeddings特征进行Concat后，再Patch化，并进行扩散过程输出去噪后的视频Latent特征。
+3. **Text Encoder模型**：Text Encoder模型将输入的文本Prompt编码成Text Embeddings，作为条件注入DiT Expert模型中。CogVideoX中选用T5-XXL作为Text Encoder，Text Encoder具备较强的文本信息提取能力。
+
+目前CogVideoX-2B的输入Prompt提示词上限为226个tokens，可以生成的视频长度为6秒，帧率为8帧/秒，生成视频分辨率为720*480。

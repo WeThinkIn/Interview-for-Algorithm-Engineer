@@ -35,6 +35,7 @@
 - [31.长宽比分桶训练策略（Aspect Ratio Bucketing）有什么作用?](#31.长宽比分桶训练策略（AspectRatioBucketing）有什么作用?)
 - [32.介绍一下长宽比分桶训练策略（Aspect Ratio Bucketing）的具体流程](#32.介绍一下长宽比分桶训练策略（AspectRatioBucketing）的具体流程)
 - [33.Stable Diffusion 3中数据标签工程的具体流程是什么样的？](#33.Stable-Diffusion-3中数据标签工程的具体流程是什么样的？)
+- [34.FLUX.1系列模型有哪些创新点？](#34.FLUX.1系列模型有哪些创新点？)
 
 ## 第二章 Midjourney高频考点
 
@@ -873,6 +874,17 @@ SD 3借鉴了DALL-E 3的数据标注方法，使用**多模态大模型CogVLM**�
 具体效果如下所示：
 
 ![SD 3数据标注工程](./imgs/SD3数据标注工程.png)
+
+
+<h2 id="34.FLUX.1系列模型有哪些创新点？">34.FLUX.1系列模型有哪些创新点？</h2>
+
+FLUX.1系列模型是基于Stable Diffuson 3进行了升级优化，是目前性能最强的开源AI绘画大模型，其主要的创新点如下所示：
+
+1. FLUX.1系列模型将VAE的通道数扩展至64，比SD3的VAE通道数足足增加了4倍（16）。
+2. 目前公布的两个FLUX.1系列模型都是经过指引蒸馏的产物，这样我们就无需使用Classifier-Free Guidance技术，只需要把指引强度当成一个约束条件输入进模型，就能在推理过程中得到带指定指引强度的输出。
+3. FLUX.1系列模型继承了Stable Diffusion 3 的噪声调度机制，对于分辨率越高的图像，把越多的去噪迭代放在了高噪声的时刻上。但和Stable Diffusion 3不同的是，FLUX.1不仅在训练时有这种设计，采样时也使用了这种技巧。
+4. FLUX.1系列模型中在DiT架构中设计了双流DiT结构和单流DiT结构，同时加入了二维旋转式位置编码 (RoPE) 策略。
+5. FLUX.1系列模型在单流的DiT中引入了并行注意力层的设计，注意力层和MLP并联执行，执行速度有所提升。
 
 ## 第二章 Midjourney高频考点正文
 
