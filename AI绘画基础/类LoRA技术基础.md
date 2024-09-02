@@ -2,6 +2,7 @@
 
 - [1.使用lora微调Stable_Diffusion模型](#1.使用lora微调Stable_Diffusion模型)
 - [2.用于图像生成的多lora组合](#2.用于图像生成的多lora组合)
+- [3.DiffLoRA是什么？](#3.DiffLoRA是什么？)
 
 
 <h2 id="1.使用lora微调Stable_Diffusion模型">1.使用lora微调Stable_Diffusion模型</h2>
@@ -41,3 +42,24 @@ LoRA也是一种微调 Stable Diffusion 模型的技术，其可用于对关键�
 - 这种方法有助于保持所有不同LoRA代表的元素的连贯整合，增强了图像的整体一致性和质量。
 
 ![image-20240611202719934](./imgs/多lora生成.png)
+
+<h2 id="3.DiffLoRA是什么？">3.DiffLoRA是什么？</h2>
+
+论文链接：https://arxiv.org/pdf/2408.06740
+
+DiffLoRA框架包含以下关键组成部分:
+
+1. LoRA权重自动编码器(LAE):将LoRA权重压缩到隐空间并进行重构。LAE采用1D卷积层作为主要压缩层,并引入权重保留损失来提高重构精度。
+2. 混合图像特征(MIF):利用MoE启发的门控网络,将人脸特征和图像特征相结合,更好地提取身份信息。
+3. 去噪过程:使用DiT架构和条件集成,通过迭代去噪生成LoRA隐表示。
+4. LoRA权重数据集构建:自动化流程生成多身份LoRA权重数据集,用于训练DiffLoRA。
+
+整体框架如下图：
+
+![difflora](.\imgs\difflora.png)
+
+MIF结构图:
+
+![MIF](.\imgs\MIF.png)
+
+这是一种利用扩散模型作为超网络来根据参考图像预测个性化低秩适应（LoRA）权重的方法。通过将这些 LoRA 权重集成到文本到图像模型中，DiffLoRA 无需进一步训练即可在推理过程中实现个性化。这是第一个利用扩散模型来生成面向身份的 LoRA 权重的模型
