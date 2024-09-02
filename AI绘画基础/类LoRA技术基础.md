@@ -95,11 +95,11 @@ Hypernetwork，也被称为“超网络”，是一种附加到 Stable Diffusion
 
 整体框架如下图：
 
-![image-20240902192807641](.\imgs\HyperDreamBooth.png)
+![image-20240902192807641](./imgs/HyperDreamBooth.png)
 
 Lightweight DreamBooth结构如下：
 
-![image-20240902193005109](.\imgs\Lightweight DreamBooth.png)
+![image-20240902193005109](./imgs/Lightweight DreamBooth.png)
 
 HyperDreamBooth 实现了快速、轻量级和高质量的文本到图像模型个性化,为创意应用开辟了新的可能性。
 
@@ -118,10 +118,10 @@ DiffLoRA框架包含以下关键组成部分:
 
 整体框架如下图：
 
-![difflora](.\imgs\difflora.png)
+![difflora](./imgs/difflora.png)
 
 MIF结构图:
 
-![MIF](.\imgs\MIF.png)
+![MIF](./imgs/MIF.png)
 
 这是一种利用扩散模型作为超网络来根据参考图像预测个性化低秩适应（LoRA）权重的方法。通过将这些 LoRA 权重集成到文本到图像模型中，DiffLoRA 无需进一步训练即可在推理过程中实现个性化。这是第一个利用扩散模型来生成面向身份的 LoRA 权重的模型
