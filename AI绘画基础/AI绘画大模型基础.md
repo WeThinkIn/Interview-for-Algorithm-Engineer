@@ -36,6 +36,7 @@
 - [32.介绍一下长宽比分桶训练策略（Aspect Ratio Bucketing）的具体流程](#32.介绍一下长宽比分桶训练策略（AspectRatioBucketing）的具体流程)
 - [33.Stable Diffusion 3中数据标签工程的具体流程是什么样的？](#33.Stable-Diffusion-3中数据标签工程的具体流程是什么样的？)
 - [34.FLUX.1系列模型有哪些创新点？](#34.FLUX.1系列模型有哪些创新点？)
+- [35.介绍一下DiT模型的基本概念](#35.介绍一下DiT模型的基本概念)
 
 ## 第二章 Midjourney高频考点
 
@@ -886,6 +887,20 @@ FLUX.1系列模型是基于Stable Diffuson 3进行了升级优化，是目前性
 4. FLUX.1系列模型中在DiT架构中设计了双流DiT结构和单流DiT结构，同时加入了二维旋转式位置编码 (RoPE) 策略。
 5. FLUX.1系列模型在单流的DiT中引入了并行注意力层的设计，注意力层和MLP并联执行，执行速度有所提升。
 
+
+<h2 id="35.介绍一下DiT模型的基本概念">35.介绍一下DiT模型的基本概念</h2>
+
+DiT（Diffusion Transformer）模型由Meta在2022年首次提出，**其主要是在ViT（Vision Transformer）的架构上进行了优化设计得到的**。**DiT是基于Transformer架构的扩散模型，将扩散模型中经典的U-Net架构完全替换成了Transformer架构**。
+
+同时DiT是一个可扩展的架构，**DiT不仅证明了Transformer思想与扩散模型结合的有效性，并且还验证了Transformer架构在扩散模型上具备较强的Scaling能力**，在稳步增大DiT模型参数量与增强数据质量时，DiT的生成性能稳步提升。其中最大的DiT-XL/2模型在ImageNet 256x256的类别条件生成上达到了当时的SOTA（FID为2.27）性能。
+
+DiT的整体框架并没有采用常规的Pixel Diffusion（像素扩散）架构，而是使用和Stable Diffusion相同的Latent Diffusion（潜变量扩散）架构。
+
+为了获得图像的Latent Feature，所以DiT使用了和SD一样的VAE（基于KL-f8）模型。当我们输入512x512x3的图像时，通过VAE能够压缩生成64x64x4分辨率的Latent特征，这极大地降低了扩散模型的计算复杂度（减少Transformer的token的数量）。
+
+同时，DiT扩散过程的nosie scheduler采用简单的Linear scheduler（timesteps=1000，beta_start=0.0001，beta_end=0.02），这与SD模型是不同的。在SD模型中，所采用的noise scheduler通常是Scaled Linear scheduler。
+
+
 ## 第二章 Midjourney高频考点正文
 
 
@@ -962,3 +977,4 @@ Midjourney 是一个基于人工智能的图像生成工具，广泛应用于多
 不过画幅并不是越宽越好，比如设置成 `--ar 16:9` 的时候，图像生成的效果又会开始下降。经过测试对比，画幅比在 `7:5` 或者 `14:9` 时三视图效果最稳定。
 
 另外建议一组参数至少生成 3 次，确定了稳定的出图效果后，再决定要不要换另一组参数。
+
