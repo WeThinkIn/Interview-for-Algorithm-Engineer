@@ -12,6 +12,7 @@
 - [10.Sora模型的整体架构是什么样的？](#10.Sora模型的整体架构是什么样的？)
 - [11.CogVideoX模型的整体架构是什么样的？](#11.CogVideoX模型的整体架构是什么样的？)
 - [12.AI视频经典的工作流有哪些？](#12.AI视频经典的工作流有哪些？)
+- [13.CogVideoX-5B和CogVideoX-2B有哪些异同？](#13.CogVideoX-5B和CogVideoX-2B有哪些异同？)
 
 
 <h2 id="1.目前主流的AI视频技术框架有哪几种？">1.目前主流的AI视频技术框架有哪几种？</h2>
@@ -171,3 +172,11 @@ CogVideoX主要包括三个部分：
 2. 图生视频：可以使用SVD + LoRA + ControlNet组成的工作流。
 3. 视频编辑（视频生视频）：AnimateDiff + LoRA + ControlNet组成的工作流。
 
+
+<h2 id="13.CogVideoX-5B和CogVideoX-2B有哪些异同？">13.CogVideoX-5B和CogVideoX-2B有哪些异同？</h2>
+
+CogVideoX-5B模型是CogVideoX-2B模型的升级版本，CogVideoX-2B模型的特点是入门级模型，兼顾兼容性。运行、二次开发成本低。CogVideoX-5B模型的特点是视频生成质量更高，视觉效果更好，同时模型参数量也更大。
+
+下面汇总了CogVideoX-5B模型和CogVideoX-2B模型的异同，供大家参考：
+
+![CogVideoX-5B模型和CogVideoX-2B模型的异同](./imgs/CogVideoX-5B模型和CogVideoX-2B模型的异同.jpg)
