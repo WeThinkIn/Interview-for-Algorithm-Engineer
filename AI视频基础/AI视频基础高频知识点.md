@@ -11,6 +11,7 @@
 - [9.AI视频领域的数据工程是什么样的？](#9.AI视频领域的数据工程是什么样的？)
 - [10.Sora模型的整体架构是什么样的？](#10.Sora模型的整体架构是什么样的？)
 - [11.CogVideoX模型的整体架构是什么样的？](#11.CogVideoX模型的整体架构是什么样的？)
+- [12.AI视频经典的工作流有哪些？](#12.AI视频经典的工作流有哪些？)
 
 
 <h2 id="1.目前主流的AI视频技术框架有哪几种？">1.目前主流的AI视频技术框架有哪几种？</h2>
@@ -160,3 +161,13 @@ CogVideoX主要包括三个部分：
 3. **Text Encoder模型**：Text Encoder模型将输入的文本Prompt编码成Text Embeddings，作为条件注入DiT Expert模型中。CogVideoX中选用T5-XXL作为Text Encoder，Text Encoder具备较强的文本信息提取能力。
 
 目前CogVideoX-2B的输入Prompt提示词上限为226个tokens，可以生成的视频长度为6秒，帧率为8帧/秒，生成视频分辨率为720*480。
+
+
+<h2 id="12.AI视频经典的工作流有哪些？">12.AI视频经典的工作流有哪些？</h2>
+
+本问答Rocky将根据AI视频领域的发展阶段持续更新，将最有价值的AI视频工作流分享给大家：
+
+1. 文生视频：可以使用Sora、可灵、CogVideoX + LoRA + ControlNet组成的工作流。
+2. 图生视频：可以使用SVD + LoRA + ControlNet组成的工作流。
+3. 视频编辑（视频生视频）：AnimateDiff + LoRA + ControlNet组成的工作流。
+
