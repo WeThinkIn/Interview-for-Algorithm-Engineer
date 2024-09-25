@@ -5,6 +5,7 @@
 - [4.介绍一下如何使用Python中的fastapi构建AI服务](#4.介绍一下如何使用Python中的fastapi构建AI服务)
 - [5.python如何清理AI模型的显存占用?](#5.python如何清理AI模型的显存占用?)
 - [6.python中对透明图的处理大全](#6.python中对透明图的处理大全)
+- [7.python字典和json字符串如何相互转化？](#7.python字典和json字符串如何相互转化？)
 
 <h2 id='1.多进程multiprocessing基本使用代码段'>1.多进程multiprocessing基本使用代码段</h2>
 
@@ -547,7 +548,7 @@ print(torch.cuda.memory_reserved())
 ```
 
 
-<h2 id="49.python中对透明图的处理大全">49.python中对透明图的处理大全</h2>
+<h2 id="6.python中对透明图的处理大全">6.python中对透明图的处理大全</h2>
 
 ### 判断输入图像是不是透明图
 
@@ -756,4 +757,113 @@ pil_image = Image.fromarray(opencv_image)
 
 # 现在，pil_image是一个保留透明通道的Pillow图像，可以使用pil_image.show()显示或pil_image.save保存
 pil_image.save('output_pillow.png')
+```
+
+
+<h2 id="7.python字典和json字符串如何相互转化？">7.python字典和json字符串如何相互转化？</h2>
+
+在 AI 行业中，**Python 的字典（dict）** 和 **JSON 字符串** 是非常常用的数据结构和格式。Python 提供了非常简便的方法来将字典与 JSON 字符串相互转化，主要使用 `json` 模块中的两个函数：`json.dumps()` 和 `json.loads()`。
+
+### 1. **字典转 JSON 字符串**
+将 Python 字典转换为 JSON 字符串使用的是 `json.dumps()` 函数。
+
+#### 示例：
+```python
+import json
+
+# Python 字典
+data_dict = {
+    'name': 'AI',
+    'type': 'Technology',
+    'year': 2024
+}
+
+# 转换为 JSON 字符串
+json_str = json.dumps(data_dict)
+print(json_str)
+```
+
+输出：
+```json
+{"name": "AI", "type": "Technology", "year": 2024}
+```
+
+- **`json.dumps()` 参数**：
+  - `indent`：可以美化输出，指定缩进级别。例如 `json.dumps(data_dict, indent=4)` 会生成带缩进的 JSON 字符串。
+  - `sort_keys=True`：会将输出的 JSON 键按字母顺序排序。
+  - `ensure_ascii=False`：用于处理非 ASCII 字符（如中文），避免转换为 Unicode 形式。
+
+### 2. **JSON 字符串转字典**
+要将 JSON 字符串转换为 Python 字典，可以使用 `json.loads()` 函数。
+
+#### 示例：
+```python
+import json
+
+# JSON 字符串
+json_str = '{"name": "AI", "type": "Technology", "year": 2024}'
+
+# 转换为 Python 字典
+data_dict = json.loads(json_str)
+print(data_dict)
+```
+
+输出：
+```python
+{'name': 'AI', 'type': 'Technology', 'year': 2024}
+```
+
+### 3. **字典与 JSON 文件的转换**
+
+在实际项目中，可能需要将字典保存为 JSON 文件或从 JSON 文件读取字典。`json` 模块提供了 `dump()` 和 `load()` 方法来处理文件的输入输出。
+
+#### 将字典保存为 JSON 文件：
+```python
+import json
+
+data_dict = {
+    'name': 'AI',
+    'type': 'Technology',
+    'year': 2024
+}
+
+# 保存为 JSON 文件
+with open('data.json', 'w') as json_file:
+    json.dump(data_dict, json_file, indent=4)
+```
+
+#### 从 JSON 文件读取为字典：
+```python
+import json
+
+# 从 JSON 文件中读取数据
+with open('data.json', 'r') as json_file:
+    data_dict = json.load(json_file)
+    print(data_dict)
+```
+
+### 4. **处理特殊数据类型**
+在 Python 中，JSON 数据类型与 Python 数据类型基本对应，但是某些特殊类型（如 `datetime`、`set`）需要自定义处理，因为 JSON 不支持这些类型。可以通过自定义编码器来处理。
+
+#### 例如，处理 `datetime`：
+```python
+import json
+from datetime import datetime
+
+# Python 字典包含 datetime 类型
+data = {
+    'name': 'AI',
+    'timestamp': datetime.now()
+}
+
+# 自定义编码器
+class DateTimeEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, datetime):
+            return obj.isoformat()
+        return super(DateTimeEncoder, self).default(obj)
+
+# 转换为 JSON 字符串
+json_str = json.dumps(data, cls=DateTimeEncoder)
+print(json_str)
 ```
