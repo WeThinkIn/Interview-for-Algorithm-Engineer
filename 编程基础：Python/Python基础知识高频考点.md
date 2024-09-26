@@ -38,6 +38,8 @@
 - [36.介绍一下Python中常用的标准库以及功能](#36.介绍一下Python中常用的标准库以及功能)
 - [37.python中有哪些内建数据类型？](#37.python中有哪些内建数据类型？)
 - [38.python中文件有哪些打开模式，它们的区别是什么？](#38.python中文件有哪些打开模式，它们的区别是什么？)
+- [39.python中eval函数的作用？](#39.python中eval函数的作用？)
+- [40.python中海象运算符的介绍](#40.python中海象运算符的介绍)
 
 
 <h2 id="1.python是解释语言还是编译语言？">1.Python是解释语言还是编译语言？</h2>
@@ -1734,3 +1736,88 @@ memoryview_type = memoryview(b'hello')
 | `'b'` | 二进制模式 |
 | `'+'` | 读写模式 |
 
+
+<h2 id="39.python中eval函数的作用？">39.python中eval函数的作用？</h2>
+
+### 语法
+```python
+eval(expression[, globals[, locals]])
+```
+参数：
+- `expression`：字符串表达式，表示要执行的 Python 表达式。
+- `globals`：可选参数，表示全局命名空间，默认为当前全局命名空间。
+- `locals`：可选参数，表示局部命名空间，默认为当前局部命名空间。
+
+1) 求值表达式
+```python
+>>>x = 7
+>>> eval( '3 * x' )
+21
+>>> eval('pow(2,2)')
+4
+>>> eval('2 + 2')
+4
+>>> n=81
+>>> eval("n + 4")
+85
+```
+2) 字符串转数据类型
+```
+num = eval("42")
+print(type(num))  # 输出： <class 'int'>
+ 
+string = eval("'Hello, World!'")
+print(type(string))  # 输出： <class 'str'>
+```
+
+3) 执行代码块
+```python
+
+code = '''
+if x > 5:
+    print("x is greater than 5")
+else:
+    print("x is not greater than 5")
+'''
+ 
+x = 8
+eval(code)  # 输出：x is greater than 5
+```
+
+### 注意事项
+- `eval()` 函数会执行传入的字符串表达式，并返回表达式的结果。如果传入的字符串包含恶意代码，`eval()` 函数会执行这些代码，可能会带来安全风险。因此，在使用 `eval()` 时，需要确保传入的字符串是可信的。
+- `eval()` 函数的 `globals` 和 `locals` 参数允许指定执行表达式时的全局和局部命名空间。如果不指定这两个参数，`eval()` 函数会在当前的全局和局部命名空间中执行表达式。
+
+<h2 id="40.python中海象运算符的介绍">40.python中海象运算符的介绍</h2>
+
+### 介绍
+Python 3.8 引入了赋值表达式（也称为海象运算符），它允许在表达式中进行赋值操作。赋值表达式的基本语法是 `:=`，它将右侧的值赋给左侧的变量，并返回该值。
+
+### 语法
+```python
+<variable> := <expression>
+```
+
+### 示例
+1. **基本用法**
+```python
+if (n := len(a)) > 10:
+    print(f"List is too long ({n} elements, expected <= 10)")
+```
+2. **循环中**
+```python
+while (line := file.readline()) != '':
+    process(line)
+```
+3. **函数参数**
+```python
+def send_email(address, /, *, subject, message, sender):
+    """发送电子邮件"""
+    # 使用海象运算符来获取用户名和域名
+    user, domain = address.split('@')
+    # 发送电子邮件
+    send_email(user, domain, subject, message, sender)
+```
+
+### 注意事项
+- 赋值表达式可以简化代码，特别是在需要计算和赋值的情况下。
