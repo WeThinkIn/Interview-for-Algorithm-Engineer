@@ -1,6 +1,6 @@
-# 【三年面试五年模拟】算法工程师的求职面试秘籍
+# 🔥【三年面试五年模拟】算法工程师的求职面试秘籍
 
-## 【三年面试五年模拟】内容大纲
+## 💥【三年面试五年模拟】内容大纲
 
 ![【三年面试五年模拟】内容大纲](imgs/框架.png)
 
@@ -8,7 +8,9 @@
 
 Rocky Ding 主编
 
-Rocky Ding，AIGCmagic社区创始人，知乎AI领域知名博主（同名Rocky Ding），公众号《WeThinkIn》主理人，资深AIGC算法专家，全网文章阅读量200万+，专注于AIGC产品与AI算法解决方案的商业应用。在互联网大厂、AI独角兽、传统科技公司以及国企研究院有丰富的工作经验。多次带队获得CVPR、AAAI、Kaggle等AI领域顶级竞赛的冠军成绩。发表多篇AI领域论文专利。
+<a href="https://www.zhihu.com/people/bei-jing-de-wen-zhou-ren"><img src="https://img.shields.io/badge/Rocky Ding-知乎-blue"></a> 
+
+Rocky Ding，AIGCmagic社区创始人，知乎AI领域知名博主（同名Rocky Ding），公众号《WeThinkIn》主理人，资深AIGC算法专家，全网文章阅读量200万+，专注于AIGC产品与AI算法解决方案的商业应用。在互联网大厂、AI独角兽、传统科技公司以及国企研究院有丰富的工作经验与创业经验。多次带队获得CVPR、AAAI、Kaggle等AI领域顶级竞赛的冠军成绩。发表多篇AI领域论文专利。
 
 张一凡 副主编
 
