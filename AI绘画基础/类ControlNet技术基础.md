@@ -107,7 +107,7 @@ ODGEN（**O**bject **D**etection **GEN**eration）是一个基于扩散模型（
 
 模型框架如下：
 
-![image-20241008202733181](.\imgs\ODGEN.png)
+![image-20241008202733181](./imgs/ODGEN.png)
 
 该方法的关键技术包括：
 
@@ -156,4 +156,4 @@ ODGEN不仅是一个生成模型，还设计了一套完整的数据集生成流
 
 流程图如下：
 
-![ODGEN_data_pipeline](.\imgs\ODGEN_data_pipeline.png)
+![ODGEN_data_pipeline](./imgs/ODGEN_data_pipeline.png)
