@@ -8,6 +8,10 @@
 - [6.Controlnet++的模型结构和原理](#6.Controlnet++的模型结构和原理)
 - [7.Controlnext的模型结构和原理](#7.Controlnext的模型结构和原理)
 - [8.ODGEN的模型结构和原理](#8.ODGEN的模型结构和原理)
+- [9.Controlnet如何处理条件图的？](#9.Controlnet如何处理条件图的？)
+- [10.加入Controlnet训练后，训练时间和显存的变化？](#10.加入Controlnet训练后，训练时间和显存的变化？)
+- [11.T2I-Adapter的模型结构和原理](#11.T2I-Adapter的模型结构和原理)
+- [12.T2I-Adapter和ControlNet的异同点是什么？](#12.T2I-Adapter和ControlNet的异同点是什么？)
 
 
 <h2 id="1.Ip-adapter的模型结构与原理">1.Ip-adapter的模型结构与原理 </h2>
@@ -157,3 +161,34 @@ ODGEN不仅是一个生成模型，还设计了一套完整的数据集生成流
 流程图如下：
 
 ![ODGEN_data_pipeline](./imgs/ODGEN_data_pipeline.png)
+
+<h2 id="9.Controlnet如何处理条件图的？">9.Controlnet如何处理条件图的？</h2>
+
+我们知道在 sd 中，模型会使用 VAE-encoder 将图像映射到隐空间，512×512 的像素空间图像转换为更小的 64×64 的潜在图像。而 controlnet 为了将条件图与 VAE 解码过的特征向量进行相加，controlnet 使用了一个小型的卷积网络，其中包括一些普通的卷积层，搭配着 ReLU 激活函数来完成降维的功能。
+
+<h2 id="10.加入Controlnet训练后，训练时间和显存的变化？">10.加入Controlnet训练后，训练时间和显存的变化？</h2>
+
+在论文中，作者提到，与直接优化 sd 相比，优化 controlnet 只需要 23% 的显存，但是每一个 epoch 需要额外的 34% 的时间。可以方便理解的是，因为 controlnet 其实相当于只优化了unet-encoder，所以需要的显存较少，但是 controlnet 需要走两个网络，一个是原 sd 的 unet，另一个是复制的 unet-encoder，所以需要的时间会多一些。
+
+<h2 id="11.T2I-Adapter的模型结构和原理">11.T2I-Adapter的模型结构和原理</h2>
+如图所示为 T2I-Adapter 模型结构，它包含了四个特征提取模块和三个下采样模块。模型首
+先利用了 Pixel Unshuffle 来将 512x512 的图片下采样到 64x64，然后经过 Adapter 模块，他会输出四个不同尺寸的特征图 
+
+$$
+F_c ={F^1_c, F^2_c, F^3_c, F^4_c}
+$$
+注意Adapter 输出的特征图的大小是和 Unet-encoder 输出的特征图 
+
+$$
+F_enc = {F^1_enc, F^2_enc, F^3_enc, F^4_enc}
+$$
+大小一致，然后再通过按位相加的方式来完成特征融合：
+
+![T2I-Adapter的模型结构和原理](./imgs/T2I-Adapter.png)
+
+
+<h2 id="12.T2I-Adapter和ControlNet的异同点是什么？">12.T2I-Adapter和ControlNet的异同点是什么？</h2>
+
+- 如何将图片转化为隐变量：controlnet 和 T2I-Adapter 采用了不同的方法来将图片转化为隐向量。在 controlnet 中，作者是设计了一个小型的卷积网络，这其中包括了不同的卷积和激活函数，其中由 4x4 和 2x2 的卷积，来完成下采样的功能，而在 T2I-Adapter 中，作者是使用了Pixel-Unshuffle 的操作来完成该功能。
+- Condition Encoder：controlnet 和 T2I-Adapter 采用了不同的方式来对条件控制信息进行编码。在 controlnet 中，作者是直接将 sd-encoder 将复制了一份，当作可训练模块，因为作者认为，sd 是在 10 亿级别上进行训练的，它的 encoder 足够强大和鲁棒，因此作者并没有专门设计针对条件信息的编码器。而在 T2I-Adapter 的作者是设计了一个小型的卷积网络，来完成下采样的功能，让下采样倍数和 sd-encoder 的下采样倍数一样，然后通过按位相加的方式来完成特征融合。
+- 参数量和训练时间：前面我们提到了，controlnet 的 condition encoder 是 sd-encoder，这其中的参数数目比 T2I-Adapter 的参数要多的多，因此，controlnet 的训练时间也比 T2I-Adapter要长。
