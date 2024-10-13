@@ -171,8 +171,13 @@ ODGEN不仅是一个生成模型，还设计了一套完整的数据集生成流
 在论文中，作者提到，与直接优化 sd 相比，优化 controlnet 只需要 23% 的显存，但是每一个 epoch 需要额外的 34% 的时间。可以方便理解的是，因为 controlnet 其实相当于只优化了unet-encoder，所以需要的显存较少，但是 controlnet 需要走两个网络，一个是原 sd 的 unet，另一个是复制的 unet-encoder，所以需要的时间会多一些。
 
 <h2 id="11.T2I-Adapter的模型结构和原理">11.T2I-Adapter的模型结构和原理</h2>
+
+![T2I-Adapter的模型结构和原理](./imgs/T2I-Adapter.png)
+
 如图所示为 T2I-Adapter 模型结构，它包含了四个特征提取模块和三个下采样模块。模型首
 先利用了 Pixel Unshuffle 来将 512x512 的图片下采样到 64x64，然后经过 Adapter 模块，他会输出四个不同尺寸的特征图 
+
+F_c ={F^1_c, F^2_c, F^3_c, F^4_c}
 
 $$
 F_c ={F^1_c, F^2_c, F^3_c, F^4_c}
@@ -184,7 +189,7 @@ F_enc = {F^1_enc, F^2_enc, F^3_enc, F^4_enc}
 $$
 大小一致，然后再通过按位相加的方式来完成特征融合：
 
-![T2I-Adapter的模型结构和原理](./imgs/T2I-Adapter.png)
+
 
 
 <h2 id="12.T2I-Adapter和ControlNet的异同点是什么？">12.T2I-Adapter和ControlNet的异同点是什么？</h2>
