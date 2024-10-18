@@ -16,6 +16,7 @@
 - [14.multiprocessing模块怎么使用?](#14.multiprocessing模块怎么使用?)
 - [15.ProcessPoolExecutor怎么使用?](#15.ProcessPoolExecutor怎么使用?)
 - [16.Python中什么情况下会产生内存泄漏?](#16.Python中什么情况下会产生内存泄漏?)
+- [17.介绍一下Python中的封装(Encapsulation)思想](#17.介绍一下Python中的封装(Encapsulation)思想)
 
 
 <h2 id="1.python中迭代器的概念？">1.Python中迭代器的概念？</h2>
@@ -1566,3 +1567,171 @@ print(top_stats[0])
 - 定期清理缓存和长生命周期的数据。
 - 使用工具分析代码并优化内存管理。
 
+
+<h2 id="17.介绍一下Python中的封装(Encapsulation)思想">17.介绍一下Python中的封装(Encapsulation)思想</h2>
+
+### 封装 (Encapsulation) 在 Python 中的概念
+
+**封装**是面向对象编程（OOP）的四大基本原则之一，其他三个是继承（Inheritance）、多态（Polymorphism）和抽象（Abstraction）。封装的核心思想是将对象的数据（属性）和行为（方法）打包在一起，并限制外界对它们的直接访问。通过封装，开发人员可以控制哪些数据可以从外部访问，哪些只能在类的内部使用。
+
+Python 虽然不像一些其他面向对象的编程语言（如 Java、C++）那样严格地限制数据的访问，但它依然支持通过命名约定和访问控制来实现封装的概念。
+
+### 封装的主要思想
+封装主要涉及以下几个方面：
+1. **隐藏内部实现**：对象的内部状态对外界不可见，外界只能通过公开的接口（即方法）访问或修改对象的状态。
+2. **保护对象的完整性**：通过封装，类的设计者可以控制外部如何访问或修改内部数据，避免外部对内部数据进行非法的操作，确保对象的一致性和完整性。
+3. **提供安全的访问接口**：通过定义类的**公有方法**（public methods），外部可以在不直接操作内部数据的情况下，安全地对对象进行操作。
+
+### Python 中的封装机制
+
+在 Python 中，封装的实现主要依赖**命名约定**和**访问控制**，Python 没有像某些编程语言那样提供明确的访问权限控制符（如 Java 的 `public`、`private`、`protected`），但它有一些约定俗成的规则来实现封装。
+
+#### 1. **公有成员 (Public Members)**
+
+在 Python 中，默认情况下，类的所有属性和方法都是**公有的**（public）。这意味着外部可以直接访问或修改这些属性和方法。例如：
+
+```python
+class MyClass:
+    def __init__(self, name):
+        self.name = name  # 公有属性
+
+    def greet(self):  # 公有方法
+        return f"Hello, {self.name}"
+
+# 使用
+obj = MyClass("Alice")
+print(obj.name)  # 直接访问公有属性
+print(obj.greet())  # 调用公有方法
+```
+
+在这个例子中，`name` 属性和 `greet()` 方法都是公有的，外部可以直接访问它们。
+
+#### 2. **私有成员 (Private Members)**
+
+在 Python 中，使用双下划线 (`__`) 开头的属性或方法被认为是**私有的**，不能被类外部直接访问。这是通过名称重整（name mangling）实现的，Python 会在属性名前加上类名来避免外部访问它们。
+
+```python
+class MyClass:
+    def __init__(self, name):
+        self.__name = name  # 私有属性
+
+    def __private_method(self):  # 私有方法
+        return f"Hello, {self.__name}"
+
+    def public_method(self):
+        return self.__private_method()  # 公有方法调用私有方法
+
+# 使用
+obj = MyClass("Alice")
+# print(obj.__name)  # 会抛出 AttributeError，无法直接访问私有属性
+# print(obj.__private_method())  # 会抛出 AttributeError，无法直接调用私有方法
+print(obj.public_method())  # 可以通过公有方法间接访问私有方法
+```
+
+在这个例子中，`__name` 属性和 `__private_method()` 方法是私有的，外部无法直接访问它们。如果尝试访问，会报 `AttributeError` 错误。但是，可以通过类内部的公有方法来访问私有成员。
+
+> **注意**：虽然双下划线的属性和方法是“私有”的，但实际上 Python 只是对它们的名称进行了重整。你可以通过 `_ClassName__attribute` 的方式来访问它们，Python 并没有完全禁止访问。这种设计更多的是一种“约定”而不是强制的隐藏。
+
+```python
+# 通过名称重整访问私有属性
+print(obj._MyClass__name)  # 通过 name mangling 访问私有属性
+```
+
+#### 3. **受保护成员 (Protected Members)**
+
+在 Python 中，使用单下划线 (`_`) 开头的属性或方法被认为是**受保护的**，这是一个弱封装的约定。受保护的成员不建议在类外部直接访问，但并没有强制限制，可以通过子类继承和扩展时访问。
+
+```python
+class MyClass:
+    def __init__(self, name):
+        self._name = name  # 受保护属性
+
+    def _protected_method(self):  # 受保护方法
+        return f"Hello, {self._name}"
+
+# 使用
+obj = MyClass("Alice")
+print(obj._name)  # 可以访问受保护属性，但不建议
+print(obj._protected_method())  # 可以访问受保护方法，但不建议
+```
+
+受保护的成员可以在类外部访问，但一般在设计时，约定不应该直接访问这些成员，通常用于类内部或子类中。
+
+#### 4. **公有方法与私有属性的结合使用**
+
+一个常见的封装模式是将类的属性设置为私有，然后通过公有的方法（通常称为**getter**和**setter**方法）来控制外界如何访问或修改这些属性。这种方法允许对属性的访问进行更精细的控制，避免不当的操作。
+
+```python
+class MyClass:
+    def __init__(self, name):
+        self.__name = name  # 私有属性
+
+    def get_name(self):  # getter 方法
+        return self.__name
+
+    def set_name(self, new_name):  # setter 方法
+        if isinstance(new_name, str):
+            self.__name = new_name
+        else:
+            raise ValueError("Name must be a string")
+
+# 使用
+obj = MyClass("Alice")
+print(obj.get_name())  # 通过 getter 访问私有属性
+obj.set_name("Bob")  # 通过 setter 修改私有属性
+print(obj.get_name())
+```
+
+通过这种设计，程序员可以确保只有经过验证的数据才能修改属性。比如在 `set_name` 方法中，我们检查输入是否为字符串，如果不是，则抛出异常。这种方式有效地保护了类的内部状态。
+
+#### 5. **属性装饰器 (@property) 的使用**
+
+Python 提供了 `@property` 装饰器来简化 getter 和 setter 方法的定义，允许我们像访问普通属性一样调用方法。这是一种更 Pythonic 的封装方式。
+
+```python
+class MyClass:
+    def __init__(self, name):
+        self.__name = name  # 私有属性
+
+    @property
+    def name(self):  # getter 方法
+        return self.__name
+
+    @name.setter
+    def name(self, new_name):  # setter 方法
+        if isinstance(new_name, str):
+            self.__name = new_name
+        else:
+            raise ValueError("Name must be a string")
+
+# 使用
+obj = MyClass("Alice")
+print(obj.name)  # 通过属性访问
+obj.name = "Bob"  # 修改属性
+print(obj.name)
+```
+
+`@property` 允许你将方法包装成属性的形式，从而使类的使用更加直观，同时保持了封装性。
+
+- **`@property`**：将方法转化为属性，用于读取。
+- **`@name.setter`**：为属性定义赋值逻辑，用于写入。
+
+### 封装的优势
+
+1. **提高代码的安全性**：
+   - 封装隐藏了类的内部细节，防止外部对内部属性进行非法操作，减少了数据不一致或无效数据的风险。
+   
+2. **提高代码的灵活性**：
+   - 通过封装，可以灵活地修改类的内部实现，而无需修改类的外部使用代码。这种设计允许类的实现细节发生变化而不影响其接口，具有较高的扩展性。
+   
+3. **更好的代码维护性**：
+   - 封装使得代码更加模块化，每个类或模块只暴露必要的接口，减少了耦合性，增强了代码的可维护性。
+
+4. **控制属性访问**：
+   - 通过 getter 和 setter 方法，可以控制对属性的访问和修改操作，确保类的内部状态始终有效。
+
+### 封装与其他 OOP 概念的关系
+
+- **封装与继承**：封装可以结合继承一起使用，通过子类继承父类的公有方法和受保护的属性，封装性依然得以保持。
+  
+- **封装与多态**：封装和多态相辅相成，封装允许将实现隐藏，而多态允许对象在运行时决定具体调用的实现，使得代码的扩展性更强。
