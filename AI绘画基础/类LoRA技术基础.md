@@ -145,10 +145,8 @@ AutoLoRA 结合了这两者的思路，通过让基础模型与 LoRA 微调模�
 ### 2. **核心机制**
 
 - **指导机制**：AutoLoRA 通过在每一步生成中，将基础模型 `ϵ(xt, y)` 和 LoRA 微调后的模型 `ϵLoRA(xt, y)` 的输出结合起来，控制生成的多样性：
-
-  
   $$
-  ϵγAutoLoRA(xt,y)=ϵ(xt,y)+γ⋅(ϵLoRA(xt,y)−ϵ(xt,y))
+  \epsilon_{\mathrm{\Lambda utoLoRA}}^{\gamma}(\mathbf{x}_t,y)=\epsilon(\mathbf{x}_t,y)+\gamma\cdot(\epsilon_{\mathrm{LoR\Lambda}}(\mathbf{x}_t,y)-\epsilon(\mathbf{x}_t,y)),
   $$
   其中 `γ` 是调节参数，决定了生成图像中基础模型多样性和 LoRA 模型适应性之间的平衡。
 
