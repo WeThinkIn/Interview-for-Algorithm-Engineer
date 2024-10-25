@@ -17,6 +17,8 @@
 - [15.ProcessPoolExecutor怎么使用?](#15.ProcessPoolExecutor怎么使用?)
 - [16.Python中什么情况下会产生内存泄漏?](#16.Python中什么情况下会产生内存泄漏?)
 - [17.介绍一下Python中的封装(Encapsulation)思想](#17.介绍一下Python中的封装(Encapsulation)思想)
+- [18.介绍一下Python中的继承（Inheritance）思想](#18.介绍一下Python中的继承（Inheritance）思想)
+- [19.介绍一下Python中的多态（Polymorphism）思想](#19.介绍一下Python中的多态（Polymorphism）思想)
 
 
 <h2 id="1.python中迭代器的概念？">1.Python中迭代器的概念？</h2>
@@ -1735,3 +1737,555 @@ print(obj.name)
 - **封装与继承**：封装可以结合继承一起使用，通过子类继承父类的公有方法和受保护的属性，封装性依然得以保持。
   
 - **封装与多态**：封装和多态相辅相成，封装允许将实现隐藏，而多态允许对象在运行时决定具体调用的实现，使得代码的扩展性更强。
+
+
+<h2 id="18.介绍一下Python中的继承（Inheritance）思想">18.介绍一下Python中的继承（Inheritance）思想</h2>
+
+**继承**是面向对象编程（OOP）的一个核心概念，它允许一个类（称为子类或派生类）从另一个类（称为父类或基类）继承属性和方法。子类可以继承父类的特性，并且可以在此基础上添加自己的新特性，从而实现代码的重用和扩展。Python 作为一门支持面向对象编程的语言，提供了强大的继承机制。
+
+Python中继承的优势：
+1. **代码重用**：子类可以直接使用父类已经定义的方法和属性，避免了重复编写相同的代码片段。
+2. **可扩展性**：子类可以在不修改父类的情况下，添加新的属性和方法，从而使得代码更具可扩展性。这样可以在不影响父类的基础上，为程序添加新的功能。
+
+### 一、继承的基本概念
+
+#### 1. **父类（基类）**
+
+- **定义**：被继承的类，提供基本的属性和方法。
+- **作用**：作为子类的模板，子类可以继承父类的属性和方法。
+
+#### 2. **子类（派生类）**
+
+- **定义**：从父类继承而来的类，可以新增或重写父类的方法和属性。
+- **作用**：在继承父类的基础上进行扩展或修改，实现特定的功能。
+
+#### 3. **继承的目的**
+
+- **代码重用**：避免重复编写相同的代码，提高开发效率。
+- **可扩展性**：通过继承，子类可以扩展父类的功能。
+- **多态性**：同一个方法在不同的类中可能有不同的实现，增强程序的灵活性。
+
+### 二、Python 中的继承实现
+
+#### 1. **基本语法**
+
+在 Python 中，继承通过在类定义时指定父类来实现。
+
+```python
+class 子类名(父类名):
+    # 类的定义
+```
+
+#### 2. **示例**
+
+**父类：**
+
+```python
+class Animal:
+    def __init__(self, name):
+        self.name = name
+
+    def speak(self):
+        pass
+```
+
+**子类：**
+
+```python
+class Dog(Animal):
+    def speak(self):
+        return f"{self.name} says Woof!"
+
+class Cat(Animal):
+    def speak(self):
+        return f"{self.name} says Meow!"
+```
+
+#### **使用子类：**
+
+```python
+dog = Dog("Buddy")
+cat = Cat("Kitty")
+
+print(dog.speak())  # 输出: Buddy says Woof!
+print(cat.speak())  # 输出: Kitty says Meow!
+```
+
+### 三、继承的类型
+
+#### 1. **单继承**
+
+- **定义**：一个子类只继承一个父类。
+- **示例**：
+
+  ```python
+  class Parent:
+      pass
+
+  class Child(Parent):
+      pass
+  ```
+
+#### 2. **多重继承**
+
+- **定义**：一个子类继承多个父类。
+- **语法**：
+
+  ```python
+  class 子类名(父类1, 父类2, ...):
+      pass
+  ```
+
+- **示例**：
+
+  ```python
+  class Flyable:
+      def fly(self):
+          return "I can fly!"
+
+  class Swimmable:
+      def swim(self):
+          return "I can swim!"
+
+  class Duck(Flyable, Swimmable):
+      pass
+
+  duck = Duck()
+  print(duck.fly())   # 输出: I can fly!
+  print(duck.swim())  # 输出: I can swim!
+  ```
+
+#### 3. **多层继承**
+
+- **定义**：子类继承父类，父类再继承其父类，形成继承链。
+- **示例**：
+
+  ```python
+  class GrandParent:
+      pass
+
+  class Parent(GrandParent):
+      pass
+
+  class Child(Parent):
+      pass
+  ```
+
+### 四、方法重写（Override）
+
+- **定义**：子类重新定义父类的同名方法，以实现不同的功能。
+- **作用**：让子类能够根据需要修改或扩展父类的方法行为。
+
+#### **示例：**
+
+```python
+class Vehicle:
+    def move(self):
+        print("The vehicle is moving.")
+
+class Car(Vehicle):
+    def move(self):
+        print("The car is driving on the road.")
+
+vehicle = Vehicle()
+car = Car()
+
+vehicle.move()  # 输出: The vehicle is moving.
+car.move()      # 输出: The car is driving on the road.
+```
+
+### 五、调用父类的方法
+
+- **使用 `super()` 函数**：在子类中调用父类的方法或初始化父类。
+- **语法**：
+
+  ```python
+  class 子类名(父类名):
+      def 方法名(self, 参数):
+          super().方法名(参数)
+  ```
+
+#### **示例：**
+
+```python
+class Person:
+    def __init__(self, name):
+        self.name = name
+
+class Employee(Person):
+    def __init__(self, name, employee_id):
+        super().__init__(name)  # 调用父类的构造函数
+        self.employee_id = employee_id
+
+employee = Employee("Alice", "E123")
+print(employee.name)         # 输出: Alice
+print(employee.employee_id)  # 输出: E123
+```
+
+### 六、继承中的特殊方法
+
+#### 1. **`__init__` 构造函数**
+
+- **继承特性**：子类的 `__init__` 方法会覆盖父类的 `__init__` 方法。
+- **注意**：如果子类定义了 `__init__` 方法，需要显式调用父类的 `__init__` 方法来初始化父类的属性。
+
+**示例：**
+
+```python
+class Parent:
+    def __init__(self):
+        print("Parent init")
+
+class Child(Parent):
+    def __init__(self):
+        super().__init__()  # 调用父类的构造函数
+        print("Child init")
+
+child = Child()
+# 输出:
+# Parent init
+# Child init
+```
+
+#### 2. **`__str__` 和 `__repr__` 方法**
+
+- **作用**：定义对象的字符串表示形式。
+- **继承特性**：子类可以重写这些方法，提供自定义的字符串表示。
+
+**示例：**
+
+```python
+class Animal:
+    def __str__(self):
+        return "This is an animal."
+
+class Dog(Animal):
+    def __str__(self):
+        return "This is a dog."
+
+dog = Dog()
+print(dog)  # 输出: This is a dog.
+```
+
+### 七、继承的注意事项
+
+#### 1. **访问权限**
+
+- Python 中不存在像 Java 或 C++ 那样的访问修饰符（public、private、protected）。
+- 以双下划线 `__` 开头的属性或方法被视为私有成员，不能在子类中直接访问。
+- **示例：**
+
+  ```python
+  class Parent:
+      def __init__(self):
+          self.__private_var = 42
+
+  class Child(Parent):
+      def get_private_var(self):
+          return self.__private_var  # 这将引发 AttributeError
+
+  child = Child()
+  print(child.get_private_var())
+  ```
+
+#### 2. **方法解析顺序（MRO）**
+
+- 在多重继承中，Python 使用**方法解析顺序（Method Resolution Order, MRO）**来确定属性和方法的查找顺序。
+- 可以使用 `类名.mro()` 查看 MRO 列表。
+
+### **示例：**
+
+```python
+class A:
+    pass
+
+class B(A):
+    pass
+
+class C(A):
+    pass
+
+class D(B, C):
+    pass
+
+print(D.mro())
+# 输出: [<class '__main__.D'>, <class '__main__.B'>, <class '__main__.C'>, <class '__main__.A'>, <class 'object'>]
+```
+
+
+<h2 id="19.介绍一下Python中的多态（Polymorphism）思想">19.介绍一下Python中的多态（Polymorphism）思想</h2>
+
+**多态（Polymorphism）** 是面向对象编程（OOP）的核心概念之一，指的是同一操作作用于不同对象时，能够产生不同的解释和行为。简单来说，多态允许我们在不考虑对象具体类型的情况下，对不同类型的对象执行相同的操作。在 Python 中，多态性通过动态类型和灵活的对象模型得以实现。
+
+### 一、什么是多态？
+
+#### 1. **定义**
+
+- **多态性**（Polymorphism）：源自希腊语，意为“多种形式”。在编程中，它指的是**同一操作在不同对象上具有不同的行为**。
+
+#### 2. **多态的类型**
+
+- **编译时多态（静态多态）**：通过方法重载和运算符重载实现（Python 中不支持方法重载，但支持运算符重载）。
+- **运行时多态（动态多态）**：通过继承和方法重写实现（Python 中主要通过这种方式实现多态）。
+
+### 二、Python 中的多态实现
+
+#### 1. **动态类型和鸭子类型**
+
+- **动态类型**：Python 是动态类型语言，变量的类型在运行时确定。这使得多态性更自然。
+- **鸭子类型（Duck Typing）**：只要对象具有所需的方法或属性，就可以使用，无需关心对象的具体类型。
+
+ **示例：**
+
+```python
+class Dog:
+    def speak(self):
+        return "Woof!"
+
+class Cat:
+    def speak(self):
+        return "Meow!"
+
+class Duck:
+    def speak(self):
+        return "Quack!"
+
+def animal_speak(animal):
+    return animal.speak()
+
+animals = [Dog(), Cat(), Duck()]
+for animal in animals:
+    print(animal_speak(animal))
+```
+
+**输出：**
+
+```
+Woof!
+Meow!
+Quack!
+```
+
+- **解释**：`animal_speak` 函数可以接受任何具有 `speak` 方法的对象，而不关心其具体类型。这就是鸭子类型的体现。
+
+
+#### 2. **继承和方法重写**
+
+- **继承**：子类继承父类的方法和属性。
+- **方法重写（Override）**：子类可以重写父类的方法，实现不同的行为。
+
+**示例：**
+
+```python
+class Animal:
+    def speak(self):
+        raise NotImplementedError("Subclasses must implement this method.")
+
+class Dog(Animal):
+    def speak(self):
+        return "Woof!"
+
+class Cat(Animal):
+    def speak(self):
+        return "Meow!"
+
+def animal_speak(animal):
+    return animal.speak()
+
+animals = [Dog(), Cat()]
+for animal in animals:
+    print(animal_speak(animal))
+```
+
+**输出：**
+
+```
+Woof!
+Meow!
+```
+
+- **解释**：`Animal` 类定义了一个抽象方法 `speak`，子类 `Dog` 和 `Cat` 分别实现了自己的版本。`animal_speak` 函数调用时，根据传入对象的类型执行对应的方法。
+
+#### 3. **运算符重载**
+
+- **运算符重载**：在类中定义特殊方法，实现对内置运算符的重载。
+
+**示例：**
+
+```python
+class Vector:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    # 重载加法运算符
+    def __add__(self, other):
+        return Vector(self.x + other.x, self.y + other.y)
+
+    # 重载字符串表示
+    def __str__(self):
+        return f"Vector({self.x}, {self.y})"
+
+v1 = Vector(2, 3)
+v2 = Vector(5, 7)
+v3 = v1 + v2
+print(v3)
+```
+
+**输出：**
+
+```
+Vector(7, 10)
+```
+
+- **解释**：通过定义 `__add__` 方法，实现了 `Vector` 对象的加法运算。这是 Python 的另一种多态形式。
+
+### 三、鸭子类型详解
+
+#### 1. **概念**
+
+- **鸭子类型**：如果一只鸟走起来像鸭子、游泳像鸭子、叫声像鸭子，那么这只鸟可以被称为鸭子。
+- **在 Python 中**：只要对象具有所需的方法或属性，就可以将其视为某种类型。
+
+**示例：**
+
+```python
+class Bird:
+    def fly(self):
+        print("Bird is flying.")
+
+class Airplane:
+    def fly(self):
+        print("Airplane is flying.")
+
+class Fish:
+    def swim(self):
+        print("Fish is swimming.")
+
+def lift_off(entity):
+    entity.fly()
+
+bird = Bird()
+plane = Airplane()
+fish = Fish()
+
+lift_off(bird)   # 输出: Bird is flying.
+lift_off(plane)  # 输出: Airplane is flying.
+# lift_off(fish)  # AttributeError: 'Fish' object has no attribute 'fly'
+```
+
+- **解释**：`lift_off` 函数可以接受任何具有 `fly` 方法的对象。`Fish` 对象由于没有 `fly` 方法，调用时会抛出 `AttributeError`。
+
+### 四、多态性的优点
+
+#### 1. **提高代码的灵活性**
+
+- 可以编写与特定类型无关的代码，处理不同类型的对象。
+
+#### 2. **增强代码的可扩展性**
+
+- 添加新类型的对象时，无需修改现有代码，只需确保新对象实现了所需的方法。
+
+#### 3. **代码重用**
+
+- 通过多态，可以编写通用的函数或方法，避免重复代码。
+
+## 五、抽象基类（Abstract Base Class）
+
+- **概念**：抽象基类定义了接口规范，子类必须实现特定的方法。
+- **作用**：确保子类实现必要的方法，提供一致的接口。
+
+### **示例：**
+
+```python
+from abc import ABC, abstractmethod
+
+class Shape(ABC):
+    @abstractmethod
+    def area(self):
+        pass
+
+class Rectangle(Shape):
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+
+    def area(self):
+        return self.width * self.height
+
+class Circle(Shape):
+    def __init__(self, radius):
+        self.radius = radius
+
+    def area(self):
+        return 3.1416 * self.radius ** 2
+
+shapes = [Rectangle(3, 4), Circle(5)]
+for shape in shapes:
+    print(f"Area: {shape.area()}")
+```
+
+**输出：**
+
+```
+Area: 12
+Area: 78.53999999999999
+```
+
+- **解释**：`Shape` 是一个抽象基类，定义了 `area` 方法。`Rectangle` 和 `Circle` 实现了该方法。通过多态，可以统一处理不同形状的面积计算。
+
+## 六、Python 中不支持方法重载
+
+- **说明**：在 Python 中，方法重载（相同方法名，不同参数）并不被支持。后定义的方法会覆盖先前的方法。
+- **替代方案**：使用默认参数或可变参数。
+
+### **示例：**
+
+```python
+class MathOperations:
+    def multiply(self, x, y, z=None):
+        if z is not None:
+            return x * y * z
+        else:
+            return x * y
+
+math_ops = MathOperations()
+print(math_ops.multiply(2, 3))       # 输出: 6
+print(math_ops.multiply(2, 3, 4))    # 输出: 24
+```
+
+- **解释**：通过使用默认参数，实现类似方法重载的效果。
+
+## 七、方法解析顺序（MRO）在多态中的作用
+
+- **MRO（Method Resolution Order）**：在多重继承中，Python 按照 MRO 决定调用哪个类的方法。
+- **多态与 MRO**：当子类继承多个父类，且父类中有同名方法时，MRO 决定了方法的调用顺序。
+
+### **示例：**
+
+```python
+class A:
+    def do_something(self):
+        print("Method from A")
+
+class B:
+    def do_something(self):
+        print("Method from B")
+
+class C(B, A):
+    pass
+
+c = C()
+c.do_something()
+print(C.mro())
+```
+
+**输出：**
+
+```
+Method from B
+[<class '__main__.C'>, <class '__main__.B'>, <class '__main__.A'>, <class 'object'>]
+```
+
+- **解释**：`C` 继承了 `B` 和 `A`，由于 `B` 在前，调用同名方法时，`B` 的方法优先。
+
