@@ -29,13 +29,14 @@ Rocky Ding，AIGCmagic社区创始人，知乎AI领域知名博主（同名Rocky
 <img src="imgs/传统深度学习交流群.jpg" alt="AIGCmagic社区-传统深度学习交流群" width="300"/><img src="imgs/自动驾驶交流群.jpg" alt="AIGCmagic社区-自动驾驶交流群" width="300"/>
 
 ## AIGCmagic社区与知识星球
-AIGCmagic社区主要探讨交流AIGC、传统深度学习、自动驾驶、机器学习、计算机视觉、自然语言处理、图像处理、元宇宙、SLAM等AI行业话题。
 
-AIGCmagic社区的主旨是找到更多志同道合的伙伴，在各个成员都能有成长、有进步、能提升个人基本面的基础上，一起推动AI行业的发展与繁荣。
+AIGCmagic社区持续分享AIGC、传统深度学习、自动驾驶、机器学习、计算机视觉、自然语言处理、具身智能、元宇宙、SLAM等AI行业的干货知识与前沿技术资讯。
+
+AIGCmagic社区的宗旨是找到更多志同道合的伙伴，在星球居民们都能有成长、有进步、能提升个人基本面的基础上，一起推动AI行业的发展与繁荣。
 
 AIGCmagic社区交流群里有很多人工智能行业的大牛，欢迎大家加入～（请添加小助手微信Jarvis8866，备注**姓名+城市+从事方向+公司**）
 
-**Rocky也和AIGC的专家们一起建立了AIGCmagic社区知识星球**。AIGCmagic社区知识星球是国内首个以AIGC全栈技术与应用为主线的学习交流平台，涉及AI绘画、AI视频、ChatGPT等大模型、AI多模态、数字人、全行业AIGC赋能等50+应用方向，内部包含海量学习资源、专业问答、前沿资讯、内推招聘、AIGC模型、AIGC数据集和源码。欢迎大家加入，一起学习交流，共同推动AIGC行业的发展与普惠！
+**Rocky也和AIGC的专家们一起建立了AIGCmagic社区知识星球**。AIGCmagic社区知识星球是国内首个以AIGC全栈技术与应用为主线的学习交流平台，涉及AI绘画、AI视频、大模型、AI多模态、数字人以及全行业AIGC赋能等100+应用方向。星球内部包含海量学习资源、专业问答、前沿资讯、内推招聘、AI课程、AIGC模型、AIGC数据集和源码。欢迎大家加入，一起学习交流，共同推动AIGC行业的发展与普惠！
 
 <div align=center>
 <img src="imgs/星球优惠卷.png" alt="AIGCmagic社区知识星球海报" width="400"/>
