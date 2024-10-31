@@ -148,7 +148,15 @@ UNet通过编码层将输入图像转换为越来越低的空间分辨率的潜�
 
 - **Cascaded Diffusion Models (CDM)：** 由多个UNet模型组成，这些模型以递增的图像分辨率操作，通过上采样低分辨率输出图像来生成高保真度图像。
 
+<div align="center">
+    <img src="imgs/CDM.png" alt="CDM网络结构" >
+</div>
+
 - **Latent Diffusion Models (LDM)：** 使用预训练的变分自编码器（VQ-VAE）将输入图像编码为具有较低空间分辨率和更多特征通道的潜在表示，
 然后在VQ-VAE编码器的潜在空间中进行整个扩散和去噪过程。
+
+<div align="center">
+    <img src="imgs/LDM.png" alt="LDM网络结构" >
+</div>
 
 这些架构在处理视频数据时，通常会结合时间和空间维度，以实现更好的性能和效率。
