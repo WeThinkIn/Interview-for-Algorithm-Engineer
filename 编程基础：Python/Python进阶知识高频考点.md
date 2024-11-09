@@ -19,6 +19,7 @@
 - [17.介绍一下Python中的封装(Encapsulation)思想](#17.介绍一下Python中的封装(Encapsulation)思想)
 - [18.介绍一下Python中的继承（Inheritance）思想](#18.介绍一下Python中的继承（Inheritance）思想)
 - [19.介绍一下Python中的多态（Polymorphism）思想](#19.介绍一下Python中的多态（Polymorphism）思想)
+- [20.介绍一下Python的自省特性](#20.介绍一下Python的自省特性)
 
 
 <h2 id="1.python中迭代器的概念？">1.Python中迭代器的概念？</h2>
@@ -2288,4 +2289,80 @@ Method from B
 ```
 
 - **解释**：`C` 继承了 `B` 和 `A`，由于 `B` 在前，调用同名方法时，`B` 的方法优先。
+
+
+<h2 id="20.介绍一下Python的自省特性">20.介绍一下Python的自省特性</h2>
+
+Python 的自省（Introspection）特性指的是程序在运行时动态检查和获取自身对象信息的能力。借助自省特性，Python 程序可以在执行过程中了解对象的类型、属性、方法以及内存位置等信息，这对于调试、动态操作、元编程等场景非常有用。
+
+### 自省的主要用途
+
+1. **动态获取对象类型**
+   - 使用 `type()` 函数获取对象的类型。
+   - 使用 `isinstance()` 判断对象是否属于某种类型。
+
+   ```python
+   x = 10
+   print(type(x))  # <class 'int'>
+   print(isinstance(x, int))  # True
+   ```
+
+2. **检查对象的属性和方法**
+   - `dir()` 函数用于列出对象的所有属性和方法。
+
+   ```python
+   class Person:
+       def __init__(self, name):
+           self.name = name
+       def greet(self):
+           print(f"Hello, {self.name}")
+
+   p = Person("Alice")
+   print(dir(p))  # 输出 p 对象的属性和方法列表
+   ```
+
+3. **获取对象的属性值**
+   - 使用 `getattr()`、`setattr()` 和 `hasattr()` 动态获取、设置和检查对象属性的值。
+
+   ```python
+   print(getattr(p, "name"))  # 获取属性 'name' 的值
+   setattr(p, "age", 25)  # 动态设置一个新的属性 'age'
+   print(hasattr(p, "age"))  # 检查是否有属性 'age'
+   ```
+
+4. **函数与可调用对象检查**
+   - `callable()` 用于检查对象是否是可调用的（如函数、类实例等）。
+
+   ```python
+   print(callable(p.greet))  # True, 因为 greet 是可调用的
+   ```
+
+5. **模块与类的自省**
+   - 使用 `__name__` 获取模块名，`__class__` 获取对象的类。
+   - `__dict__` 列出对象的所有属性和方法。
+
+   ```python
+   print(p.__class__)  # 输出 <class '__main__.Person'>
+   print(p.__dict__)  # 输出 {'name': 'Alice', 'age': 25}
+   ```
+
+6. **内置库 `inspect`**
+   - `inspect` 模块提供了更强大的自省功能，如获取函数签名、源代码、调用层次等信息。
+
+   ```python
+   import inspect
+
+   def my_function(x):
+       return x + 1
+
+   print(inspect.getmembers(my_function))  # 列出函数的所有成员
+   print(inspect.signature(my_function))  # 获取函数签名
+   ```
+
+### 自省的应用场景
+
+1. **调试与日志记录**：可以在运行时动态检查对象的类型和属性值，有助于快速调试和生成详细的日志。
+2. **元编程**：在 Python 中使用装饰器、动态类等元编程技巧时，自省特性提供了关键支持。
+3. **自动化测试**：通过自省可以检查测试对象的结构、属性和方法，帮助自动生成和执行测试用例。
+4. **动态操作**：在框架设计中，如序列化/反序列化，依赖自省来动态获取对象信息和自动处理数据。
 
