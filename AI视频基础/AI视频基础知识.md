@@ -293,7 +293,25 @@ ViT通过其全局感知能力，能够有效地处理复杂的视觉场景。
 较低的 FVD 值表示生成的视频在视觉上更接近真实视频。
 
 **2. 运动质量（Motion Quality）**
-- **ObjMC (Object Motion Consistency)**：一种衡量生成视频中对象运动一致性的指标。它通过计算生成视频中对象的运动轨迹与目标轨迹之间的平均距离来实现。
-较低的值表示生成的视频具有更高的运动一致性。
+- **ObjMC (Object Motion Consistency)**：一种衡量生成视频中对象运动一致性的指标。它通过计算生成视频中对象的**运动轨迹与目标轨迹之间的平均距离**来实现。
+较低的值表示生成的视频具有**更高的运动一致性**。
 
-- **Kinematic Consistency**：这种指标评估生成视频中对象的运动是否符合物理规律，例如速度和加速度的一致性。
+- **Kinematic Consistency**：这种指标评估生成视频中对象的运动是否符合物理规律，例如**速度和加速度**的一致性。
+
+**3. 语义一致性（Semantic Consistency）**
+- IoU (Intersection over Union)：用于评估生成视频中对象分割掩码与真实视频中的分割掩码之间的重叠程度。较高的 IoU 值表示生成的视频在语义上更接近真实视频。
+- PSNR (Peak Signal-to-Noise Ratio)：虽然主要用于图像评估，但也可以用于视频帧的评估，衡量生成视频帧与真实视频帧之间的像素级差异。
+
+**4. 多样性（Diversity）**
+Inception Score (IS)：虽然主要用于图像生成，但也可以扩展到视频生成，衡量生成视频的多样性和质量。较高的 IS 值表示生成的视频不仅质量高，而且具有多样性。
+
+5. 时间连贯性（Temporal Coherence）
+Fréchet Temporal Distance (FTD)：类似于 FID，但专门用于衡量视频序列的时间连贯性。较低的 FTD 值表示生成的视频在时间上更连贯。
+Video Compression Artifact Detection (VCAD)：用于检测视频压缩伪影，评估生成视频在压缩后的质量。
+
+6. 用户评价（User Evaluation）
+Human Evaluation：通过让人类观察者对生成视频进行主观评价，可以提供更直观的质量感知。通常通过问卷调查或直接观看视频来进行。
+
+7. 计算效率（Computational Efficiency）
+Time to Generate：衡量生成视频所需的时间，包括模型推理时间和任何后处理时间。
+GPU Memory Usage：评估生成视频所需的 GPU 内存，这对于实际应用非常重要。
