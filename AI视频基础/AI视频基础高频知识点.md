@@ -18,6 +18,7 @@
 - [16.Sora等AI视频大模型的创新与优化经验有哪些？](#16.Sora等AI视频大模型的创新与优化经验有哪些？)
 - [17.AI视频大模型的宏观关键指标有哪些？](#17.AI视频大模型的宏观关键指标有哪些？)
 - [18.Sora的扩散模型部分架构是什么样的？](#18.Sora的扩散模型部分架构是什么样的？)
+- [19.CogVideoX的扩散模型部分架构是什么样的？](#19.CogVideoX的扩散模型部分架构是什么样的？)
 
 
 
@@ -264,3 +265,29 @@ CogVideoX-5B模型是CogVideoX-2B模型的升级版本，CogVideoX-2B模型的�
 Sora的扩散模型架构大概率参考了 Scalable Diffusion Models with Transformers，这是Sora技术分析中引用的文章，同时Sora透露出的细节和这篇文章也比较吻合。
 
 **Sora也验证了scaling law在AI视频领域的有效性，也给全球AI视频领域的从业者一个启发与经验，在不断扩大数据量级和模型规模的基础上，进而探索创新的AI视频模型架构，是AI视频领域持续发展的正确道路。**
+
+
+<h2 id="19.CogVideoX的扩散模型部分架构是什么样的？">19.CogVideoX的扩散模型部分架构是什么样的？</h2>
+
+在CogVideoX的3D VAE将视频数据的每一帧编码为一个形状为 $T\times H\times W\times C$ 的视频潜在向量（Latent Vector）后（ $T$ 代表帧数， $H$ 和 $W$ 代表每帧图像的高度和宽度， $C$ 代表通道数），再将这些视频潜在向量在空间维度上进行补丁化（patching）处理，生成长度为 $T\times frac{H}{p}\times frac{W}{p}$ 的序列 $z_{vision}$ 。
+
+值得注意，**CogVideoX并未在时间维度上进行补丁化处理，这样做的目的是实现图像和视频的联合训练**。
+
+同时，CogVideoX的Text Encoder部分将输入的文本Prompt编码层文本嵌入 $z_{text}$ ，然后将 $z_{text}$ 和 $z_{vision}$ 进行Concat拼接，来更好地对齐视觉信息和语义信息。**但是这两种信息模态的特征空间可能差异很大，它们的Embeddings可能具有不同的数值尺度**。
+
+为了在同一序列中更好地处理它们，CogVideoX设计了Expert Adaptive Layernorm来分别处理每个模态。如下图所示，我们使用扩散过程中的时间步长 $t$ 作为调制模块的输入。然后，视觉专家自适应层归一化（Vision Expert AdaLN）和文本专家自适应层归一化（Text Expert AdaLN）分别将这种调制机制应用于视觉隐藏状态和文本隐藏状态。**这种策略促进了两种模态之间特征空间的对齐，同时尽量减少了额外的参数**。
+
+![CogVideoX的完整结构流程图](./imgs/CogVideoX的完整结构流程图.png)
+
+同时在CogVideoX中还引入了旋转位置嵌入（Rotary Position Embedding, RoPE），这是一种相对位置编码技术，已被证明在LLMs中能够有效捕捉词元间关系，尤其擅长处理长序列数据。为了适应视频数据，CogVideoX将RoPE技术扩展为3D-RoPE。视频张量中的每个潜在向量都可以由三维坐标 $x,y,t$ 表示。因此分别将1D-RoPE应用于这些坐标的每个维度，分别占据隐藏状态通道的3/8、3/8和2/8。最终，这些编码沿着通道维度Concat起来，以获得最终的3D-RoPE编码。
+
+在之前的AI视频模型中，通常采用分离的空间注意力机制和时间注意力机制，这样虽然能减少计算复杂性。但是这种注意力分离的方法需要视觉信息的隐式传递，这显著增加了学习的复杂性与难度，并且AI视频模型很难学到大幅度运动物体的一致性。如下图所示，第i帧中的人物的头部无法直接关注到第i+1帧中的人物头部。
+
+![传统AI视频模型注意力机制存在的问题](./imgs/传统AI视频模型注意力机制存在的问题.png)
+
+为了解决这个问题，CogVideoX设计了一种3D文本-视频混合注意力机制（3D Full Attention）。3D Full Attention充分利用了长上下文训练和FlashAttention技术的优势，实现了高效且精确的多模态数据处理。
+
+下图是**Rocky梳理的CogVideoX 3D Expert Transformer的完整结构图**，大家可以感受一下其魅力，看着这个完整结构图学习CogVideoX 3D Expert Transformer部分，相信大家脑海中的思路也会更加清晰：
+
+![CogVideoX 3D Expert Transformer的完整结构图](./imgs/CogVideoX-3D-Expert-Transformer的完整结构图.png)
+
