@@ -305,13 +305,13 @@ ViT通过其全局感知能力，能够有效地处理复杂的视觉场景。
 **4. 多样性（Diversity）**
 Inception Score (IS)：虽然主要用于图像生成，但也可以扩展到视频生成，衡量生成视频的多样性和质量。较高的 IS 值表示生成的视频不仅质量高，而且具有多样性。
 
-5. 时间连贯性（Temporal Coherence）
-Fréchet Temporal Distance (FTD)：类似于 FID，但专门用于衡量视频序列的时间连贯性。较低的 FTD 值表示生成的视频在时间上更连贯。
-Video Compression Artifact Detection (VCAD)：用于检测视频压缩伪影，评估生成视频在压缩后的质量。
+**5. 时间连贯性（Temporal Coherence）**
+- **Fréchet Temporal Distance (FTD)**：类似于 FID，但专门用于衡量视频序列的时间连贯性。较低的 FTD 值表示生成的视频在时间上更连贯。
+- **Video Compression Artifact Detection (VCAD)**：用于检测视频压缩伪影，**评估生成视频在压缩**后的质量。
 
-6. 用户评价（User Evaluation）
-Human Evaluation：通过让人类观察者对生成视频进行主观评价，可以提供更直观的质量感知。通常通过问卷调查或直接观看视频来进行。
+**6. 用户评价（User Evaluation）**
+- **Human Evaluation**：通过让人类观察者对生成视频进行主观评价，可以提供更直观的质量感知。通常通过问卷调查或直接观看视频来进行。
 
-7. 计算效率（Computational Efficiency）
-Time to Generate：衡量生成视频所需的时间，包括模型推理时间和任何后处理时间。
-GPU Memory Usage：评估生成视频所需的 GPU 内存，这对于实际应用非常重要。
+**7. 计算效率（Computational Efficiency）**
+- **Time to Generate**：衡量生成视频所需的时间，包括模型推理时间和任何后处理时间。
+- **GPU Memory Usage**：评估生成视频所需的 GPU 内存，这对于实际应用非常重要。
