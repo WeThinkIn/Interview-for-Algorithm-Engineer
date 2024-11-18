@@ -1,3 +1,5 @@
+
+
 # 目录
 
 - [1.Ip-adapter的模型结构与原理](#1.Ip-adapter的模型结构与原理)
@@ -15,6 +17,10 @@
 - [13.InstanceDiffusion的模型结构和原理](#13.InstanceDiffusion的模型结构和原理)
 - [14.BeyondScene的模型结构和原理](#14.BeyondScene的模型结构和原理)
 - [15.HiCo的模型结构和原理](#15.HiCo的模型结构和原理)
+- [16.LayoutDM的模型结构和原理（LayoutDM: Transformer-based Diffusion Model for Layout Generation）2023](#16.LayoutDM的模型结构和原理（LayoutDM: Transformer-based Diffusion Model for Layout Generation）)
+- [17.LayoutDIffusion的模型结构和原理](#[17.LayoutDIffusion的模型结构和原理]())
+- [18.LayoutDiffuse的模型结构和原理](#18.LayoutDiffuse的模型结构和原理)
+- [19.LayoutDM的模型结构和原理（LayoutDM: Precision Multi-Scale Diffusion for Layout-to-Image）2024](#19.LayoutDM的模型结构和原理（LayoutDM: Precision Multi-Scale Diffusion for Layout-to-Image）)
 
 
 <h2 id="1.Ip-adapter的模型结构与原理">1.Ip-adapter的模型结构与原理 </h2>
@@ -314,3 +320,105 @@ HiCo基于扩散模型（Diffusion Model）的原理，从随机噪声逐步生�
 ### （4）支持多概念扩展
 
 HiCo支持多种概念扩展，允许在生成过程中加入多个LoRA插件，用于实现个性化、多语言生成等功能。此外，HiCo还支持快速生成插件（如LCM-LoRA），能够加速分辨率512x512和1024x1024的图像生成。
+
+
+
+
+
+<h2 id="16.LayoutDM的模型结构和原理（LayoutDM: Transformer-based Diffusion Model for Layout Generation）">16.LayoutDM的模型结构和原理（LayoutDM: Transformer-based Diffusion Model for Layout Generation）2023</h2>
+
+论文链接：[[2305.02567\] LayoutDM: Transformer-based Diffusion Model for Layout Generation](https://arxiv.org/abs/2305.02567)
+
+基于条件布局去噪器（cLayoutDenoiser）逐步去噪，生成符合给定属性的布局。
+
+**条件布局去噪器（cLayoutDenoiser）**：
+
+- 完全基于 Transformer 架构，包含以下模块：
+  - **几何嵌入（Geometric Embedding）**：将布局元素的几何参数（中心坐标与尺寸）嵌入到特定维度。
+  - **属性嵌入（Attributes Embedding）**：将元素的类别标签或文本特征嵌入到特定维度。
+  - **时间步嵌入（Timestep Embedding）**：引入正弦时间步嵌入，使模型感知时间步 ttt。
+  - **元素嵌入（Element Embedding）**：融合几何、属性和时间信息，为 Transformer 提供输入。
+
+![image-20241118202625628](./imgs/layoutdm-2023.png)
+
+
+
+<h2 id="17.LayoutDIffusion的模型结构和原理">17.LayoutDIffusion的模型结构和原理</h2>
+
+论文链接：[[2303.17189\] LayoutDiffusion: Controllable Diffusion Model for Layout-to-image Generation](https://arxiv.org/abs/2303.17189)
+
+#### 模型结构
+
+LayoutDiffusion是一种用于布局到图像生成的扩散模型，旨在通过高质量生成和精确控制来处理复杂的多对象场景。其主要结构包括以下几个部分：
+
+1. **布局嵌入（Layout Embedding）**：
+   - 将布局表示为对象集合，每个对象通过其边界框（bounding box）和类别ID来定义。
+   - 通过投影矩阵将边界框和类别嵌入映射到高维空间，并对布局序列进行固定长度填充。
+2. **布局融合模块（Layout Fusion Module, LFM）**：
+   - 基于自注意力机制的Transformer编码器，促进布局中多个对象之间的交互，生成融合后的布局嵌入。
+   - 提升对复杂场景的理解能力。
+3. **图像-布局融合模块（Image-Layout Fusion Module）**：
+   - 通过构建包含位置和尺寸信息的结构化图像补丁，将图像补丁视为特殊对象，以实现图像和布局在统一空间中的融合。
+   - 包含两种融合方式：
+     - **全局条件（Global Conditioning）**：直接加和全局布局嵌入。
+     - **基于对象的交叉注意力（Object-aware Cross Attention, OaCA）**：同时关注对象的类别、位置和尺寸信息，实现对局部布局的精细控制。
+
+![image-20241118201021782](./imgs/layoutdiffusion.png)
+
+
+
+<h2 id="18.LayoutDiffuse的模型结构和原理">18.LayoutDiffuse的模型结构和原理</h2>
+
+论文链接：[[2302.08908\] LayoutDiffuse: Adapting Foundational Diffusion Models for Layout-to-Image Generation](https://arxiv.org/abs/2302.08908)
+
+#### 模型结构
+
+LayoutDiffuse 基于 Latent Diffusion Model (LDM)，通过以下两个关键组件对预训练的扩散模型进行适配：
+
+1. **布局注意力层（Layout Attention）**：
+
+   - 在扩散模型的自注意力机制中加入实例感知的区域注意力，使模型更专注于布局中的实例特征。
+
+   - 每个实例通过可学习的类别嵌入（Instance Prompt）进行标记，以增强实例感知。
+
+   - 背景区域使用 Null Embedding，并结合前景-背景掩码进行特征融合。
+
+     ![image-20241118201547348](./imgs/layoutdiffuse-layout_attention.png)
+
+2. **任务自适应提示（Task-Adaptive Prompts）**：
+
+   - 向 QKV 注意力层添加任务提示，帮助模型从预训练任务（如文本到图像生成）适配到布局到图像生成任务。
+   - 通过在注意力层的键值（Key 和 Value）中加入可学习嵌入，提供布局生成任务的额外上下文信息。
+
+   整体结构：
+
+![image-20241118201401444](./imgs/layoutdiffuse.png)
+
+
+
+<h2 id="19.LayoutDM的模型结构和原理（LayoutDM:Precision Multi-Scale Diffusion for Layout-to-Image）">19.LayoutDM的模型结构和原理（LayoutDM:Precision Multi-Scale Diffusion for Layout-to-Image）2024</h2>
+
+论文链接：[LayoutDM: Precision Multi-Scale Diffusion for Layout-to-Image](https://www.computer.org/csdl/proceedings-article/icme/2024/10688052/20F0CkVbfHy)
+
+#### 模型结构
+
+LayoutDM 的主要结构如下：
+
+1. **并行采样模块 (Parallel Sampling Module, PSM)**：
+   - 提供局部精细控制，通过并行处理不同掩膜区域的梯度指导生成，改进了区域细节的生成质量。
+   - 通过基于扩散的自适应方法生成非掩膜区域。
+2. **语义一致性模块 (Semantic Coherence Module, SCM)**：
+   - 提供全局语义一致性支持，通过全局梯度引导保证生成的各区域在语义上的连贯性。
+3. **区域融合方法 (Region Fusion Method, RFM)**：
+   - 针对前景与背景区域的重叠问题，通过梯度融合与区域均值计算实现平滑过渡。
+
+![image-20241118201707587](./imgs/layoutdm-2024.png)
+
+**生成流程**：
+
+- 从布局中提取掩膜和文本提示作为输入。
+- 以随机噪声初始化图像，通过逆扩散过程逐步生成图像。
+- 采用以下机制在生成中逐步细化：
+  - 掩膜区域：PSM 对掩膜区域进行局部引导，优化每个区域与文本提示的对齐程度。
+  - 非掩膜区域：基于当前生成状态加入噪声，保留全局背景信息。
+  - 全局一致性：SCM 在生成后期（t < 200 时）通过语义信息调整图像整体质量。
