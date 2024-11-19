@@ -20,6 +20,7 @@
 - [18.介绍一下Python中的继承（Inheritance）思想](#18.介绍一下Python中的继承（Inheritance）思想)
 - [19.介绍一下Python中的多态（Polymorphism）思想](#19.介绍一下Python中的多态（Polymorphism）思想)
 - [20.介绍一下Python的自省特性](#20.介绍一下Python的自省特性)
+- [21.介绍一下Python中的sequence和mapping代表的数据结构](#21.介绍一下Python中的sequence和mapping代表的数据结构)
 
 
 <h2 id="1.python中迭代器的概念？">1.Python中迭代器的概念？</h2>
@@ -2365,4 +2366,126 @@ Python 的自省（Introspection）特性指的是程序在运行时动态检查
 2. **元编程**：在 Python 中使用装饰器、动态类等元编程技巧时，自省特性提供了关键支持。
 3. **自动化测试**：通过自省可以检查测试对象的结构、属性和方法，帮助自动生成和执行测试用例。
 4. **动态操作**：在框架设计中，如序列化/反序列化，依赖自省来动态获取对象信息和自动处理数据。
+
+
+<h2 id="21.介绍一下Python中的sequence和mapping代表的数据结构">21.介绍一下Python中的sequence和mapping代表的数据结构</h2>
+
+在 Python 中，**`Sequence`** 和 **`Mapping`** 是两种核心的数据结构抽象类型，定义了不同的行为模式和用途。这些抽象类型在 `collections.abc` 模块中被定义，表示 Python 中通用的序列和映射行为。
+
+- **Sequence** 是按位置组织的有序数据结构，适合需要通过索引访问数据的场景。
+- **Mapping** 是键值对组织的无序数据结构，适合通过键快速查找值的场景。
+
+Python 提供了丰富的内置类型和扩展类型，使得 `Sequence` 和 `Mapping` 能满足各种编程需求。了解它们的特性有助于选择合适的数据结构进行AI项目的高效开发。
+
+### **Sequence**
+`Sequence` 是一种线性排列的有序数据结构，允许通过整数索引访问元素。序列支持切片和迭代操作，是最常见的容器之一。
+
+#### **常见的 Sequence 类型**
+- **`list`**：可变序列，可以动态修改内容。
+- **`tuple`**：不可变序列，内容一旦定义就无法修改。
+- **`str`**：表示文本的不可变序列，每个元素是字符。
+- **`range`**：表示整数序列的不可变对象。
+- **`collections.deque`**：双端队列，可高效地在两端插入或删除元素。
+
+#### **Sequence 的特点**
+1. **有序性**：元素按照插入顺序排列。
+2. **支持索引**：可以使用整数索引访问元素。
+3. **支持切片**：可以通过切片操作获取子序列。
+4. **支持迭代**：可以使用 `for` 循环遍历元素。
+
+#### **Sequence 的常用操作**
+以下是序列支持的一些通用操作：
+
+| 操作                | 描述                                    | 示例                                   |
+|---------------------|-----------------------------------------|----------------------------------------|
+| `obj[index]`        | 获取指定索引的元素                     | `my_list[0]`                          |
+| `obj[start:end]`    | 切片操作，获取子序列                   | `my_list[1:3]`                        |
+| `len(obj)`          | 获取序列长度                          | `len(my_list)`                        |
+| `in`/`not in`       | 检查元素是否存在                       | `3 in my_list`                        |
+| `+`/`*`             | 连接或重复序列                        | `[1, 2] + [3, 4]` 或 `[1] * 3`       |
+| `for x in obj`      | 遍历序列的每个元素                    | `for x in my_list: print(x)`          |
+
+#### **示例代码**
+```python
+from collections.abc import Sequence
+
+# 定义不同类型的 Sequence
+my_list = [1, 2, 3]       # list
+my_tuple = (4, 5, 6)      # tuple
+my_str = "hello"          # string
+
+# 检查是否为 Sequence 类型
+print(isinstance(my_list, Sequence))  # True
+print(isinstance(my_tuple, Sequence)) # True
+print(isinstance(my_str, Sequence))   # True
+
+# 使用序列操作
+print(my_list[0])         # 1
+print(my_tuple[-1])       # 6
+print(my_str[1:4])        # "ell"
+```
+
+---
+
+### **Mapping**
+`Mapping` 是一种键值对（key-value）结构，表示元素的无序集合。它允许通过键（key）快速访问对应的值（value）。
+
+#### **常见的 Mapping 类型**
+- **`dict`**：Python 内置的字典类型，支持哈希表操作。
+- **`collections.OrderedDict`**：保留插入顺序的字典。
+- **`collections.defaultdict`**：提供默认值的字典。
+- **`collections.Counter`**：计数器，统计元素出现次数。
+
+#### **Mapping 的特点**
+1. **键值对存储**：每个元素是 `key: value` 形式。
+2. **键的唯一性**：每个键必须唯一，不能重复。
+3. **无序性**：普通字典中，键值对的排列无序（从 Python 3.7 开始，`dict` 保留插入顺序）。
+4. **快速查找**：通过键可以快速找到对应的值。
+
+#### **Mapping 的常用操作**
+以下是映射支持的一些通用操作：
+
+| 操作                   | 描述                                | 示例                                   |
+|------------------------|-------------------------------------|----------------------------------------|
+| `obj[key]`             | 获取指定键的值                     | `my_dict["name"]`                     |
+| `obj[key] = value`     | 设置或更新键对应的值               | `my_dict["age"] = 25`                 |
+| `del obj[key]`         | 删除指定键的键值对                 | `del my_dict["name"]`                 |
+| `key in obj`           | 检查键是否存在                     | `"name" in my_dict`                   |
+| `obj.keys()`           | 返回所有键                         | `my_dict.keys()`                      |
+| `obj.values()`         | 返回所有值                         | `my_dict.values()`                    |
+| `obj.items()`          | 返回所有键值对                     | `my_dict.items()`                     |
+| `len(obj)`             | 返回映射的键值对个数               | `len(my_dict)`                        |
+
+#### **示例代码**
+```python
+from collections.abc import Mapping
+
+# 定义不同类型的 Mapping
+my_dict = {"name": "Alice", "age": 30}        # dict
+from collections import defaultdict
+my_defaultdict = defaultdict(int)            # defaultdict
+
+# 检查是否为 Mapping 类型
+print(isinstance(my_dict, Mapping))          # True
+print(isinstance(my_defaultdict, Mapping))   # True
+
+# 使用映射操作
+print(my_dict["name"])                       # "Alice"
+my_dict["age"] = 35                          # 更新值
+my_dict["gender"] = "Female"                 # 添加新键值对
+print(my_dict.keys())                        # 返回所有键
+```
+
+---
+
+### **Sequence vs Mapping**
+| 特性                     | **Sequence**                     | **Mapping**                         |
+|--------------------------|----------------------------------|-------------------------------------|
+| 数据结构                 | 有序                              | 无序                                |
+| 访问方式                 | 通过索引访问                     | 通过键访问                         |
+| 数据存储                 | 按位置存储元素                   | 键值对存储                         |
+| 可迭代性                 | 可以迭代元素                     | 可以迭代键、值或键值对             |
+| 示例类型                 | `list`, `tuple`, `str`           | `dict`, `defaultdict`, `OrderedDict`|
+
+---
 
