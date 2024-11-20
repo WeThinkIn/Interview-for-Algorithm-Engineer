@@ -7,6 +7,7 @@
 - [6.python中对透明图的处理大全](#6.python中对透明图的处理大全)
 - [7.python字典和json字符串如何相互转化？](#7.python字典和json字符串如何相互转化？)
 - [8.python中RGBA图像和灰度图如何相互转化？](#8.python中RGBA图像和灰度图如何相互转化？)
+- [9.在AI服务中如何设置项目的base路径？](#9.在AI服务中如何设置项目的base路径？)
 
 <h2 id='1.多进程multiprocessing基本使用代码段'>1.多进程multiprocessing基本使用代码段</h2>
 
@@ -1013,3 +1014,151 @@ cv2.imwrite("rgba_image.png", rgba_image)
 在这段代码中：
 - `cv2.COLOR_GRAY2RGB` 将灰度图像转换为 3 通道 RGB 图像。
 - `cv2.merge` 添加一个 A 通道，并设置为 255 表示完全不透明。
+
+
+<h2 id="9.在AI服务中如何设置项目的base路径？">9.在AI服务中如何设置项目的base路径？</h2>
+
+在 AI 服务中设置 **Base Path** 是一个关键步骤，它能够统一管理项目中的相对路径，确保代码在开发和部署环境中都可以正确运行。
+
+### **1. 常见 Base Path 设置方案**
+
+#### **(1) 使用项目根目录作为 Base Path**
+项目根目录是最常见的 Base Path 选择，适合组织良好的代码结构，所有文件和资源相对于根目录存放。
+
+##### **代码实现**
+在入口脚本中设置项目根目录：
+```python
+import os
+
+# 设置项目根目录
+BASE_PATH = os.path.dirname(os.path.abspath(__file__))
+
+# 示例：构造文件路径
+config_path = os.path.join(BASE_PATH, "config", "settings.yaml")
+print(config_path)
+```
+
+- **`os.path.abspath(__file__)`**：获取当前脚本的绝对路径。
+- **`os.path.dirname()`**：提取文件所在目录。
+- **优势**：简单易用，适合大多数开发场景。
+
+#### **(2) 使用当前工作目录作为 Base Path**
+当前工作目录（Current Working Directory, CWD）是运行脚本时所在的目录。
+
+##### **代码实现**
+```python
+import os
+
+# 获取当前工作目录
+BASE_PATH = os.getcwd()
+
+# 示例：构造文件路径
+model_path = os.path.join(BASE_PATH, "models", "model.pt")
+print(model_path)
+```
+
+- **适用场景**：
+  - 项目运行时始终从固定目录启动，例如通过 `cd /path/to/project` 再运行脚本。
+- **注意**：如果脚本从不同目录运行，可能导致路径解析错误。
+
+#### **(3) 使用环境变量设置 Base Path**
+通过环境变量配置 Base Path，适合多环境部署，能够动态调整路径。
+
+##### **设置环境变量**
+- Linux/Mac：
+  ```bash
+  export BASE_PATH=/path/to/project
+  ```
+- Windows（命令提示符）：
+  ```cmd
+  set BASE_PATH=C:\path\to\project
+  ```
+
+##### **代码实现**
+在代码中读取环境变量：
+```python
+import os
+
+# 获取环境变量设置的 Base Path
+BASE_PATH = os.getenv("BASE_PATH", os.getcwd())
+
+# 示例：构造文件路径
+data_path = os.path.join(BASE_PATH, "data", "dataset.csv")
+print(data_path)
+```
+
+- **`os.getenv()`**：读取环境变量，第二个参数是默认值。
+- **优势**：适合不同环境配置（开发、测试、生产）。
+
+#### **(4) 使用配置文件指定 Base Path**
+通过配置文件集中管理路径信息，方便维护。
+
+##### **配置文件示例**
+`config.yaml`：
+```yaml
+base_path: "/path/to/project"
+```
+
+##### **代码实现**
+使用 `PyYAML` 读取配置文件：
+```python
+import os
+import yaml
+
+# 读取配置文件
+with open("config.yaml", "r") as f:
+    config = yaml.safe_load(f)
+BASE_PATH = config["base_path"]
+
+# 示例：构造文件路径
+log_path = os.path.join(BASE_PATH, "logs", "service.log")
+print(log_path)
+```
+
+- **优势**：路径配置集中化，易于管理。
+- **注意**：需要额外依赖 `PyYAML` 或其他配置解析工具。
+
+#### **(5) 使用路径管理模块**
+封装路径管理逻辑到单独模块，例如 `folder_paths.py`，便于多脚本共享。
+
+##### **`folder_paths.py` 示例**
+```python
+import os
+
+# 定义 Base Path
+BASE_PATH = os.path.dirname(os.path.abspath(__file__))
+
+# 目录路径
+models_dir = os.path.join(BASE_PATH, "models")
+data_dir = os.path.join(BASE_PATH, "data")
+logs_dir = os.path.join(BASE_PATH, "logs")
+
+# 获取完整路径
+def get_full_path(sub_dir, file_name):
+    return os.path.join(BASE_PATH, sub_dir, file_name)
+```
+
+##### **在其他脚本中使用**
+```python
+import folder_paths
+
+# 使用路径管理模块获取路径
+model_path = folder_paths.get_full_path("models", "model.pt")
+print(model_path)
+
+# 使用预定义的路径
+print(folder_paths.models_dir)
+```
+
+- **优势**：集中路径逻辑，减少重复代码。
+
+### **2. 选择 Base Path 的策略**
+
+#### **开发阶段**
+- 使用项目根目录作为 Base Path，便于在本地开发和调试。
+- 使用 `os.path.abspath(__file__)` 确保路径与代码结构一致。
+
+#### **部署阶段**
+- 推荐使用环境变量或配置文件管理 Base Path，支持灵活调整路径。
+- 确保环境变量和配置文件在不同环境中正确设置。
+
