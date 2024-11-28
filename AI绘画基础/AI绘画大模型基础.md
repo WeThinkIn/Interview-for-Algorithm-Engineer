@@ -47,6 +47,7 @@
 - [43.SD3-Turbo用的蒸馏方法是什么？](#43.SD3-Turbo用的蒸馏方法是什么？)
 - [44.介绍一下Stable Diffusion 3中的VAE模型](#44.介绍一下Stable-Diffusion-3中的VAE模型)
 - [45.介绍一下FLUX.1系列中的VAE模型](#45.介绍一下FLUX.1系列中的VAE模型)
+- [46.AIGC面试中必考的Stable Diffusion系列模型版本有哪些？](#46.AIGC面试中必考的Stable-Diffusion系列模型版本有哪些？)
 
 ## 第二章 Midjourney高频考点
 
@@ -1167,6 +1168,17 @@ def encode(self, x: Tensor) -> Tensor:
 ![FLUX.1-dev/schnell VAE完整结构图](./imgs/FLUX.1-dev/schnell-VAE完整结构图.png)
 
 **Rocky认为Stable Diffusion系列和FLUX.1系列中VAE模型的改进历程，为工业界、学术界、竞赛界以及应用界都带来了很多灵感，有很好的借鉴价值。Rocky也相信AI绘画中针对VAE的优化是学术界一个非常重要的论文录用点！**
+
+
+<h2 id="46.AIGC面试中必考的Stable-Diffusion系列模型版本有哪些？">46.AIGC面试中必考的Stable Diffusion系列模型版本有哪些？</h2>
+
+当前AIGC时代的AI算法面试中，Stable Diffusion系列模型是一个必考模型，Rocky在这里为大家梳理其中的必考版本，大家需要深入了解：
+
+1. Stable Diffusion 1.x版本，必考！
+2. Stable Diffusion 2.x版本，可能考
+3. Stable Diffusion XL版本，必考！
+4. Stable Diffusion 3.x版本，必考！
+5. FLUX.1版本，必考！
 
 ## 第二章 Midjourney高频考点正文
 
