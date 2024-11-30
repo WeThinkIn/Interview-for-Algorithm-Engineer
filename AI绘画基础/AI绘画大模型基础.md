@@ -67,13 +67,14 @@
 
 目前，几个主流的文生图大模型包括：
 
-1. Midjourney系列（V5-V6）
-2. Stable Diffusion系列（1.x、2.x、XL、3）
-3. DaLL·E系列（2-3）
-4. PixArt系列（α、Σ）
-5. Ideogram 1.0
-6. Playground v2.5
-7. Imagen系列（1、2）
+1. FLUX.1系列模型（pro、dev、schnell）
+2. Stable Diffusion系列（1.x、2.x、XL、3、3.5）
+3. Midjourney系列（V5-V6）
+4. Ideogram系列
+5. DaLL·E系列（2-3）
+6. PixArt系列（α、Σ）
+7. Playground系列（v2.5-v3）
+8. Imagen系列（1、2、3）
 
 
 <h2 id="2.SD模型训练时需要设置timesteps=1000，在推理时却只用几十步就可以生成图片？">2.SD模型训练时需要设置timesteps=1000，在推理时却只用几十步就可以生成图片？</h2>
