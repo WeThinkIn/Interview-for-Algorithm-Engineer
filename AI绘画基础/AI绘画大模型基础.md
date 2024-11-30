@@ -48,6 +48,7 @@
 - [44.介绍一下Stable Diffusion 3中的VAE模型](#44.介绍一下Stable-Diffusion-3中的VAE模型)
 - [45.介绍一下FLUX.1系列中的VAE模型](#45.介绍一下FLUX.1系列中的VAE模型)
 - [46.AIGC面试中必考的Stable Diffusion系列模型版本有哪些？](#46.AIGC面试中必考的Stable-Diffusion系列模型版本有哪些？)
+- [47.AIGC面试中必考的AI绘画技术框架脉络是什么样的？](#47.AIGC面试中必考的AI绘画技术框架脉络是什么样的？)
 
 ## 第二章 Midjourney高频考点
 
@@ -1180,6 +1181,29 @@ def encode(self, x: Tensor) -> Tensor:
 3. Stable Diffusion XL版本，必考！
 4. Stable Diffusion 3.x版本，必考！
 5. FLUX.1版本，必考！
+
+
+<h2 id="47.AIGC面试中必考的AI绘画技术框架脉络是什么样的？">47.AIGC面试中必考的AI绘画技术框架脉络是什么样的？</h2>
+
+在进入AIGC时代后，大家在面试AIGC算法工程师时，面试官对于AI绘画技术的考察是面试的重中之重，因此Rocky总结梳理了AI绘画技术在工业界、投资界、学术界、竞赛界以及应用界的核心框架脉络，让大家能够有目标的进行技术学习与面试准备：
+
+1. AI绘画核心大模型：以FLUX.1系列和Stable Diffusion系列模型的知识为主，再加上DaLL-E、Imagen、Playgrond等主流AI绘画大模型的考察。
+2. AI绘画中的LoRA模型：LoRA模型相关知识的考察，包括SD LoRA模型、FLUX.1 LoRA、Dreambooth LoRA、Textual Inversion等。
+3. AI绘画生成可控模型：ControlNet系列模型、IP-Adapter模型等。
+4. AI绘画框架：ComfyUI、Stable Diffusion WebUI、Fooocus等。
+5. AI绘画辅助模型：GAN、U-Net、SAM、Dino等。
+
+Rcoky也在撰写与沉淀AI绘画技术框架脉络的相关干货文章，力求给大家全网最详细的讲解与分析：
+
+[深入浅出完整解析Stable Diffusion 3（SD 3）和FLUX.1系列核心基础知识](https://zhuanlan.zhihu.com/p/684068402)
+[深入浅出完整解析Stable Diffusion XL（SDXL）核心基础知识](https://zhuanlan.zhihu.com/p/643420260)
+[深入浅出完整解析Stable Diffusion（SD）核心基础知识](https://zhuanlan.zhihu.com/p/632809634)
+[深入浅出完整解析Stable Diffusion中U-Net的前世今生与核心知识](https://zhuanlan.zhihu.com/p/642354007)
+[深入浅出完整解析LoRA（Low-Rank Adaptation）模型核心基础知识](https://zhuanlan.zhihu.com/p/639229126)
+[深入浅出完整解析ControlNet核心基础知识](https://zhuanlan.zhihu.com/p/660924126)
+[深入浅出完整解析主流AI绘画框架（Stable Diffusion WebUI、ComfyUI、Fooocus）核心基础知识](https://zhuanlan.zhihu.com/p/673439761)
+[深入浅出完整解析AIGC时代中GAN（Generative Adversarial Network）系列模型核心基础知识](https://zhuanlan.zhihu.com/p/663157306)
+
 
 ## 第二章 Midjourney高频考点正文
 
