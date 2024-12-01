@@ -47,6 +47,8 @@
 - [43.SD3-Turbo用的蒸馏方法是什么？](#43.SD3-Turbo用的蒸馏方法是什么？)
 - [44.介绍一下Stable Diffusion 3中的VAE模型](#44.介绍一下Stable-Diffusion-3中的VAE模型)
 - [45.介绍一下FLUX.1系列中的VAE模型](#45.介绍一下FLUX.1系列中的VAE模型)
+- [46.AIGC面试中必考的Stable Diffusion系列模型版本有哪些？](#46.AIGC面试中必考的Stable-Diffusion系列模型版本有哪些？)
+- [47.AIGC面试中必考的AI绘画技术框架脉络是什么样的？](#47.AIGC面试中必考的AI绘画技术框架脉络是什么样的？)
 
 ## 第二章 Midjourney高频考点
 
@@ -66,13 +68,14 @@
 
 目前，几个主流的文生图大模型包括：
 
-1. Midjourney系列（V5-V6）
-2. Stable Diffusion系列（1.x、2.x、XL、3）
-3. DaLL·E系列（2-3）
-4. PixArt系列（α、Σ）
-5. Ideogram 1.0
-6. Playground v2.5
-7. Imagen系列（1、2）
+1. FLUX.1系列模型（pro、dev、schnell）
+2. Stable Diffusion系列（1.x、2.x、XL、3、3.5）
+3. Midjourney系列（V5-V6）
+4. Ideogram系列
+5. DaLL·E系列（2-3）
+6. PixArt系列（α、Σ）
+7. Playground系列（v2.5-v3）
+8. Imagen系列（1、2、3）
 
 
 <h2 id="2.SD模型训练时需要设置timesteps=1000，在推理时却只用几十步就可以生成图片？">2.SD模型训练时需要设置timesteps=1000，在推理时却只用几十步就可以生成图片？</h2>
@@ -1167,6 +1170,47 @@ def encode(self, x: Tensor) -> Tensor:
 ![FLUX.1-dev/schnell VAE完整结构图](./imgs/FLUX.1-dev/schnell-VAE完整结构图.png)
 
 **Rocky认为Stable Diffusion系列和FLUX.1系列中VAE模型的改进历程，为工业界、学术界、竞赛界以及应用界都带来了很多灵感，有很好的借鉴价值。Rocky也相信AI绘画中针对VAE的优化是学术界一个非常重要的论文录用点！**
+
+
+<h2 id="46.AIGC面试中必考的Stable-Diffusion系列模型版本有哪些？">46.AIGC面试中必考的Stable Diffusion系列模型版本有哪些？</h2>
+
+当前AIGC时代的AI算法面试中，Stable Diffusion系列模型是一个必考模型，Rocky在这里为大家梳理其中的必考版本，大家需要深入了解：
+
+1. Stable Diffusion 1.x版本，必考！
+2. Stable Diffusion 2.x版本，可能考
+3. Stable Diffusion XL版本，必考！
+4. Stable Diffusion 3.x版本，必考！
+5. FLUX.1版本，必考！
+
+
+<h2 id="47.AIGC面试中必考的AI绘画技术框架脉络是什么样的？">47.AIGC面试中必考的AI绘画技术框架脉络是什么样的？</h2>
+
+在进入AIGC时代后，大家在面试AIGC算法工程师时，面试官对于AI绘画技术的考察是面试的重中之重，因此Rocky总结梳理了AI绘画技术在工业界、投资界、学术界、竞赛界以及应用界的核心框架脉络，让大家能够有目标的进行技术学习与面试准备：
+
+1. AI绘画核心大模型：以FLUX.1系列和Stable Diffusion系列模型的知识为主，再加上DaLL-E、Imagen、Playgrond等主流AI绘画大模型的考察。
+2. AI绘画中的LoRA模型：LoRA模型相关知识的考察，包括SD LoRA模型、FLUX.1 LoRA、Dreambooth LoRA、Textual Inversion等。
+3. AI绘画生成可控模型：ControlNet系列模型、IP-Adapter模型等。
+4. AI绘画框架：ComfyUI、Stable Diffusion WebUI、Fooocus等。
+5. AI绘画辅助模型：GAN、U-Net、SAM、Dino等。
+
+Rcoky也在撰写与沉淀AI绘画技术框架脉络的相关干货文章，力求给大家全网最详细的讲解与分析：
+
+[深入浅出完整解析Stable Diffusion 3（SD 3）和FLUX.1系列核心基础知识](https://zhuanlan.zhihu.com/p/684068402)
+
+[深入浅出完整解析Stable Diffusion XL（SDXL）核心基础知识](https://zhuanlan.zhihu.com/p/643420260)
+
+[深入浅出完整解析Stable Diffusion（SD）核心基础知识](https://zhuanlan.zhihu.com/p/632809634)
+
+[深入浅出完整解析Stable Diffusion中U-Net的前世今生与核心知识](https://zhuanlan.zhihu.com/p/642354007)
+
+[深入浅出完整解析LoRA（Low-Rank Adaptation）模型核心基础知识](https://zhuanlan.zhihu.com/p/639229126)
+
+[深入浅出完整解析ControlNet核心基础知识](https://zhuanlan.zhihu.com/p/660924126)
+
+[深入浅出完整解析主流AI绘画框架（Stable Diffusion WebUI、ComfyUI、Fooocus）核心基础知识](https://zhuanlan.zhihu.com/p/673439761)
+
+[深入浅出完整解析AIGC时代中GAN（Generative Adversarial Network）系列模型核心基础知识](https://zhuanlan.zhihu.com/p/663157306)
+
 
 ## 第二章 Midjourney高频考点正文
 
