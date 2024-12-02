@@ -20,6 +20,10 @@ Rocky Ding，AIGCmagic社区创始人，知乎AI领域知名博主（同名Rocky
 
 猫先生，公众号“魔方AI空间”主理人，资深AIGC算法专家，具有丰富AI模型部署及落地经验，多次参加赛事取得冠军成绩，专注于AIGC技术探索与商业案例应用。
 
+徐晨轩 副主编
+
+徐晨轩，"AI+"博士，传统工科与人工智能的跨界博士研究生。致力于将AI技术融入打灰工程，探索交叉学科的创新边界。
+
 ## AI行业技术交流群
 
 <img src="imgs/AI绘画交流群.jpg" alt="AIGCmagic社区-AI绘画交流群" width="300"/><img src="imgs/AI多模态交流群.jpg" alt="AIGCmagic社区-AI多模态交流群" width="300"/>
