@@ -50,6 +50,7 @@
 - [46.AIGC面试中必考的Stable Diffusion系列模型版本有哪些？](#46.AIGC面试中必考的Stable-Diffusion系列模型版本有哪些？)
 - [47.AIGC面试中必考的AI绘画技术框架脉络是什么样的？](#47.AIGC面试中必考的AI绘画技术框架脉络是什么样的？)
 - [48.介绍一下OFT(Orthogonal Finetuning)微调技术](#48.介绍一下OFT(Orthogonal-Finetuning)微调技术)
+- [49.Stable Diffusion 3的Text Encoder有哪些改进？](#49.Stable-Diffusion-3的Text-Encoder有哪些改进？)
 
 ## 第二章 Midjourney高频考点
 
@@ -1333,6 +1334,35 @@ $$
 
 3. **对大规模任务的扩展性**：
    - 在特别大的模型（如 GPT-4）或任务中，如何高效地应用 OFT 是一个研究方向。
+
+
+<h2 id="49.Stable-Diffusion-3的Text-Encoder有哪些改进？">49.Stable Diffusion 3的Text Encoder有哪些改进？</h2>
+
+作为当前最强的AI绘画大模型之一，Stable Diffusion 3模型都是AIGC算法岗面试中的必考内容。接下来，Rocky将带着大家深入浅出讲解Stable Diffusion 3模型的Text Encoder部分是如何改进的。
+
+Stable Diffusion 3的文字渲染能力很强，同时遵循文本Prompts的图像生成一致性也非常好，**这些能力主要得益于SD 3采用了三个Text Encoder模型**，它们分别是：
+
+1. CLIP ViT-L（参数量约124M）
+2. OpenCLIP ViT-bigG（参数量约695M）
+3. T5-XXL Encoder（参数量约4.76B）
+
+在SD系列模型的版本迭代中，Text Encoder部分一直在优化增强。一开始SD 1.x系列的Text Encoder部分使用了CLIP ViT-L，在SD 2.x系列中换成了OpenCLIP ViT-H，到了SDXL则使用CLIP ViT-L + OpenCLIP ViT-bigG的组合作为Text Encoder。有了之前的优化经验，SD 3更进一步增加Text Encoder的数量，加入了一个参数量更大的T5-XXL Encoder模型。
+
+与SD模型的结合其实不是T5-XXL与AI绘画领域第一次结缘，早在2022年谷歌发布Imagen时，就使用了T5-XXL Encoder作为Imagen模型的Text Encoder，**并证明了预训练好的纯文本大模型能够给AI绘画大模型提供更优良的文本特征**。接着OpenAI发布的DALL-E 3也采用了T5-XXL Encoder来提取文本（Prompts）的特征信息，足以说明T5-XXL Encoder模型在AI绘画领域已经久经考验。
+
+**这次SD 3加入T5-XXL Encoder也是其在文本理解能力和文字渲染能力大幅提升的关键一招**。Rocky认为在AIGC时代，随着各细分领域大模型技术的持续繁荣，很多灵感创新都可以在AI绘画领域中迁移借鉴与应用，从而推动AI绘画大模型的持续发展与升级！
+
+总的来说，**SD 3一共需要提取输入文本的全局语义和文本细粒度两个层面的信息特征**。
+
+首先需要**提取CLIP ViT-L和OpenCLIP ViT-bigG的Pooled Text Embeddings，它们代表了输入文本的全局语义特征**，维度大小分别是768和1280，两个embeddings拼接（concat操作）得到2048的embeddings，然后经过一个MLP网络并和Timestep Embeddings相加（add操作）。
+
+接着我们需要**提取输入文本的细粒度特征**。这里首先分别提取CLIP ViT-L和OpenCLIP ViT-bigG的倒数第二层的特征，拼接在一起得到77x2048维度的CLIP Text Embeddings；再从T5-XXL Encoder中提取最后一层的T5 Text Embeddings特征，维度大小是77x4096（这里也限制token长度为77）。紧接着对CLIP Text Embeddings使用zero-padding得到和T5 Text Embeddings相同维度的编码特征。最后，将padding后的CLIP Text Embeddings和T5 Text Embeddings在token维度上拼接在一起，得到154x4096维度的混合Text Embeddings。这个混合Text Embeddings将通过一个linear层映射到与图像Latent的Patch Embeddings特征相同的维度大小，最终和Patch Embeddings拼接在一起送入MM-DiT中。具体流程如下图所示：
+
+![SD 3中Text Encoder注入和融合文本特征的示意图](./imgs/SD3中TextEncoder注入和融合文本特征的示意图.png)
+
+虽然SD 3采用CLIP ViT-L + OpenCLIP ViT-bigG + T5-XXL Encoder的组合带来了文字渲染和文本一致性等方面的效果增益，但是也限制了T5-XXL Encoder的能力。因为CLIP ViT-L和OpenCLIP ViT-bigG都只能默认编码77 tokens长度的文本，这让原本能够编码512 tokens的T5-XXL Encoder在SD 3中也只能处理77 tokens长度的文本。而SD系列的“友商”模型DALL-E 3由于只使用了T5-XXL Encoder一个语言模型作为Text Encoder模块，所以可以输入512 tokens的文本，从而发挥T5-XXL Encoder的全部能力。
+
+更多详细内容，大家可以查阅：[深入浅出完整解析Stable Diffusion 3（SD 3）和FLUX.1系列核心基础知识](https://zhuanlan.zhihu.com/p/684068402)
 
 
 ## 第二章 Midjourney高频考点正文
