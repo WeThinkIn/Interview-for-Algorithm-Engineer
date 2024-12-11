@@ -9,6 +9,7 @@
 - [8.python中RGBA图像和灰度图如何相互转化？](#8.python中RGBA图像和灰度图如何相互转化？)
 - [9.在AI服务中如何设置项目的base路径？](#9.在AI服务中如何设置项目的base路径？)
 - [10.AI服务的Python代码用PyTorch框架重写优化的过程中，有哪些方法论和注意点？](#10.AI服务的Python代码用PyTorch框架重写优化的过程中，有哪些方法论和注意点？)
+- [11.在Python中，图像格式在Pytorch的Tensor格式、Numpy格式、OpenCV格式、PIL格式之间如何互相转换？](#11.在Python中，图像格式在Pytorch的Tensor格式、Numpy格式、OpenCV格式、PIL格式之间如何互相转换？)
 
 <h2 id='1.多进程multiprocessing基本使用代码段'>1.多进程multiprocessing基本使用代码段</h2>
 
@@ -1245,4 +1246,122 @@ print(folder_paths.models_dir)
   - PyTorch Lightning：提供简化的训练循环管理。
   - Hydra：便于管理复杂配置。
   - Hugging Face Transformers：用于自然语言处理领域的预训练模型。
+
+
+<h2 id="11.在Python中，图像格式在Pytorch的Tensor格式、Numpy格式、OpenCV格式、PIL格式之间如何互相转换？">11.在Python中，图像格式在Pytorch的Tensor格式、Numpy格式、OpenCV格式、PIL格式之间如何互相转换？</h2>
+
+在Python中，图像格式在 PyTorch 的 Tensor 格式、Numpy 数组格式、OpenCV 格式以及 PIL 图像格式之间的转换是AI行业的常见任务。下面是Rocky总结的这些格式之间转换的具体方法：
+
+### **1. 格式概览**
+- **PyTorch Tensor**: PyTorch 的张量格式，形状通常为 $(C, H, W)$ ，通道在最前（Channel-First）。
+- **Numpy 数组**: 一种通用的多维数组格式，形状通常为 $(H, W, C)$ ，通道在最后（Channel-Last）。
+- **OpenCV 格式**: 一种常用于计算机视觉的图像格式，通常以 Numpy 数组存储，颜色通道顺序为 BGR。
+- **PIL 图像格式**: Python 的图像库，格式为 `PIL.Image` 对象，支持 RGB 格式。
+
+- **通道顺序：** 注意 OpenCV 使用 BGR，而 PyTorch 和 PIL 使用 RGB。
+- **形状差异：** PyTorch 使用 $(C, H, W)$ ，其他通常使用 $(H, W, C)$ 。
+- **归一化：** Tensor 格式通常使用归一化范围 $[0, 1]$ ，而 Numpy 和 OpenCV 通常为整数范围 $[0, 255]$ 。
+
+### **2. 转换方法**
+
+#### **2.1. PyTorch Tensor <-> Numpy**
+- **Tensor 转 Numpy：**
+  ```python
+  import torch
+
+  tensor_image = torch.rand(3, 224, 224)  # 假设形状为 (C, H, W)
+  numpy_image = tensor_image.permute(1, 2, 0).numpy()  # 转为 (H, W, C)
+  ```
+
+- **Numpy 转 Tensor：**
+  ```python
+  import numpy as np
+
+  numpy_image = np.random.rand(224, 224, 3)  # 假设形状为 (H, W, C)
+  tensor_image = torch.from_numpy(numpy_image).permute(2, 0, 1)  # 转为 (C, H, W)
+  ```
+
+#### **2.2. Numpy <-> OpenCV**
+- **Numpy 转 OpenCV（不需要额外处理）：**
+  Numpy 格式和 OpenCV 格式本质相同，只需要确认通道顺序为 BGR。
+  ```python
+  numpy_image = np.random.rand(224, 224, 3)  # 假设为 RGB 格式
+  opencv_image = numpy_image[..., ::-1]  # 转为 BGR 格式
+  ```
+
+- **OpenCV 转 Numpy：**
+  ```python
+  opencv_image = np.random.rand(224, 224, 3)  # 假设为 BGR 格式
+  numpy_image = opencv_image[..., ::-1]  # 转为 RGB 格式
+  ```
+
+#### **2.3. PIL <-> Numpy**
+- **PIL 转 Numpy：**
+  ```python
+  from PIL import Image
+  import numpy as np
+
+  pil_image = Image.open('example.jpg')  # 打开图像
+  numpy_image = np.array(pil_image)  # 直接转换为 Numpy 数组
+  ```
+
+- **Numpy 转 PIL：**
+  ```python
+  numpy_image = np.random.randint(0, 255, (224, 224, 3), dtype=np.uint8)  # 假设为 RGB 格式
+  pil_image = Image.fromarray(numpy_image)
+  ```
+
+#### **2.4. OpenCV <-> PIL**
+- **OpenCV 转 PIL：**
+  ```python
+  from PIL import Image
+  import cv2
+
+  opencv_image = cv2.imread('example.jpg')  # BGR 格式
+  rgb_image = cv2.cvtColor(opencv_image, cv2.COLOR_BGR2RGB)  # 转为 RGB 格式
+  pil_image = Image.fromarray(rgb_image)
+  ```
+
+- **PIL 转 OpenCV：**
+  ```python
+  pil_image = Image.open('example.jpg')  # PIL 格式
+  numpy_image = np.array(pil_image)  # 转为 Numpy 格式
+  opencv_image = cv2.cvtColor(numpy_image, cv2.COLOR_RGB2BGR)  # 转为 BGR 格式
+  ```
+
+#### **2.5. PyTorch Tensor <-> PIL**
+- **Tensor 转 PIL：**
+  ```python
+  from torchvision.transforms import ToPILImage
+
+  tensor_image = torch.rand(3, 224, 224)  # (C, H, W)
+  pil_image = ToPILImage()(tensor_image)
+  ```
+
+- **PIL 转 Tensor：**
+  ```python
+  from torchvision.transforms import ToTensor
+
+  pil_image = Image.open('example.jpg')
+  tensor_image = ToTensor()(pil_image)  # 转为 (C, H, W)
+  ```
+
+#### **2.6. PyTorch Tensor <-> OpenCV**
+- **Tensor 转 OpenCV：**
+  ```python
+  import torch
+  import numpy as np
+  import cv2
+
+  tensor_image = torch.rand(3, 224, 224)  # (C, H, W)
+  numpy_image = tensor_image.permute(1, 2, 0).numpy()  # 转为 (H, W, C)
+  opencv_image = cv2.cvtColor((numpy_image * 255).astype(np.uint8), cv2.COLOR_RGB2BGR)
+  ```
+
+- **OpenCV 转 Tensor：**
+  ```python
+  opencv_image = cv2.imread('example.jpg')  # BGR 格式
+  rgb_image = cv2.cvtColor(opencv_image, cv2.COLOR_BGR2RGB)
+  tensor_image = torch.from_numpy(rgb_image).permute(2, 0, 1) / 255.0  # 转为 (C, H, W)
+  ```
 
