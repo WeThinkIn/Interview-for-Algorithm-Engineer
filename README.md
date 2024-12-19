@@ -12,7 +12,7 @@ Rocky Ding 主编
 
 Rocky Ding，AIGCmagic社区创始人，知乎AI领域知名博主（同名Rocky Ding），公众号《WeThinkIn》主理人，资深AIGC算法专家，全网文章阅读量200万+，专注于AIGC产品与AI算法解决方案的商业应用。在互联网大厂、AI独角兽、传统科技公司以及国企研究院有丰富的工作经验与创业经验。多次带队获得CVPR、AAAI、Kaggle等AI领域顶级竞赛的冠军成绩。发表多篇AI领域论文和专利。
 
-Rocky最新撰写AI绘画干货文章：[深入浅出完整解析Stable Diffusion 3（SD 3）和FLUX.1系列核心基础知识](https://zhuanlan.zhihu.com/p/684068402)
+Rocky最新撰写Stable Diffusion 3和FLUX.1系列模型全网最详细讲解文章：[深入浅出完整解析Stable Diffusion 3（SD 3）和FLUX.1系列核心基础知识](https://zhuanlan.zhihu.com/p/684068402)
 
 张一凡 副主编
 
