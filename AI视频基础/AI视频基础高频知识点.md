@@ -23,7 +23,8 @@
 - [21.AI视频大模型的生成质量指标有哪些？](#21.AI视频大模型的生成质量指标有哪些？)
 - [22.Sora的最新功能有哪些？](#22.Sora的最新功能有哪些？)
 - [23.Sora支持哪几种多模态输入？](#23.Sora支持哪几种多模态输入？)
-
+- [24.介绍一下HunyuanVideo模型的架构](#24.介绍一下HunyuanVideo模型的架构)
+- [25.HunyuanVideo模型有哪些特点？](#25.HunyuanVideo模型有哪些特点？)
 
 
 <h2 id="1.目前主流的AI视频技术框架有哪几种？">1.目前主流的AI视频技术框架有哪几种？</h2>
@@ -331,4 +332,51 @@ Sora的扩散模型架构大概率参考了 Scalable Diffusion Models with Trans
 1. 文本到视频（Text-to-Video）模式：这是Sora的核心功能之一，它允许用户仅通过输入文本描述就能生成完整的视频内容。依托于先进的自然语言处理技术和生成模型，Sora能够准确把握文字的精髓，将其转化为生动的视觉画面。无论是制作简短的短视频还是构建情节丰富的叙事视频，这一模式都能帮助创作者轻松实现他们的创意构想。
 2. 文本+图像到视频（Text+Image-to-Video）模式：在这一模式下，用户不仅可以提供文本描述，还能上传图像来辅助视频的生成过程。通过结合文本和图像，Sora能够更精确地理解并展现创作者的创意意图，制作出更符合视觉预期的视频内容。这一功能特别适合需要在视频中融入特定图像元素的场景，如广告制作、产品展示等，为创作者提供了更多的创意空间。
 3. 文本+视频到视频（Text+Video-to-Video）模式：Sora还提供了视频编辑和转换的功能，用户可以上传已有的视频素材，并结合文本描述进行修改或扩展。这一模式让用户能够在现有视频的基础上，添加新的情节、细节，甚至创作出全新的版本或完全不同的内容。例如，用户可以对现有的广告视频进行重新编辑，加入新的对话、场景或动画效果，从而提升视频的吸引力和表现力。
+
+
+<h2 id="24.介绍一下HunyuanVideo模型的架构">24.介绍一下HunyuanVideo模型的架构</h2>
+
+HunyuanVideo是一个基于Latent空间的AI视频扩散模型。它设计了一个3D VAE架构，用于在训练中压缩时间维度和空间维度的特征。同时通过一个大语言模型来对文本Prompts进行编码，作为额外条件输入模型中，来引导模型通过对高斯噪声的多步去噪，输出一个AI视频的Latent空间表示。最后，在HunyuanVideo推理时通过3D VAE解码器将Latent空间表示解码为AI视频。
+
+下面是HunyuanVideo模型架构的示意图：
+
+![HunyuanVideo模型架构的示意图](./imgs/HunyuanVideo模型架构的示意图.png)
+
+
+<h2 id="25.HunyuanVideo模型有哪些特点？">25.HunyuanVideo模型有哪些特点？</h2>
+
+### 单-双流TransFormer架构
+
+HunyuanVideo模型采用了Transformer架构，设计了一个“双流到单流”的混合模型用于视频生成。在双流阶段，视频特征和文本token通过并行的Transformer Block独立处理，使得每个模态可以学习适合自己的调制机制而不会相互干扰。在单流阶段，再将视频特征和文本token连接起来并将它们输入到后续的Transformer Block中进行有效的多模态信息融合。**这种设计和FLUX.1这个AI绘画大模型有异曲同工之妙，捕捉了视觉和语义信息之间的复杂交互，增强了整体模型性能**。
+
+下面是HunyuanVideo模型的单-双流TransFormer架构示意图：
+
+![HunyuanVideo模型的单-双流TransFormer架构示意图](./imgs/HunyuanVideo模型的单-双流TransFormer架构示意图.png)
+
+### 使用MLLM文本编码器
+
+之前的AI视频大模型通常使用预训练的CLIP和T5-XXL作为文本编码器。而HunyuanVideo则是使用了一个预训练的Multimodal Large Language Model (MLLM)作为文本编码器，其具有以下优势：
+
+1. 与T5-XXL相比，MLLM模型基于图文数据指令微调后在特征空间中具有更好的图像-文本对齐能力，这就减轻了扩散模型中的图文特征对齐的难度。
+2. 与CLIP相比，MLLM模型在图像的细节描述和复杂推理方面表现出更强的能力。
+3. MLLM模型可以通过遵循系统指令实现零样本生成，从而帮助文本特征更多地关注关键信息。
+4. 由于MLL模型是基于Causal Attention机制的，而T5-XXL使用了Bidirectional Attention机制为扩散模型提供更好的文本引导。因此，HunyuanVideo引入了一个额外的token优化器来增强文本特征的引导。
+
+下面是HunyuanVideo模型中MLLM文本编码器的示意图：
+
+![HunyuanVideo模型中MLLM文本编码器的示意图](./imgs/HunyuanVideo模型中MLLM文本编码器的示意图.png)
+
+### 设计了3D VAE
+
+HunyuanVideo的VAE部分采用了CausalConv3D作为AI视频的编码器和解码器，用于压缩视频的时间维度和空间维度，其中时间维度压缩 4 倍，空间维度压缩 8 倍，压缩为 16 channels。这样可以显著减少后续 Transformer 模型的 token 数量，使我们能够在原始分辨率和帧率下训练AI视频大模型。
+
+下面是HunyuanVideo的3D VAE部分的示意图：
+
+![HunyuanVideo的3D VAE部分的示意图](./imgs/HunyuanVideo的3DVAE部分的示意图.png)
+
+### 对输入Prompt进行改写
+
+为了解决用户输入文本提示的多样性和不一致性的困难，官方微调了Hunyuan-Large model模型作为HunyuanVideo的prompt改写模型，将用户输入的提示词改写为更适合HunyuanVideo模型偏好的写法。
+
+Hunyuan-Large model模型提供了两个改写模式：正常模式和导演模式。正常模式旨在增强视频生成模型对用户意图的理解，从而更准确地解释提供的指令。导演模式增强了诸如构图、光照和摄像机移动等方面的描述，倾向于生成视觉质量更高的视频。注意，这种增强有时可能会导致一些语义细节的丢失。
 
