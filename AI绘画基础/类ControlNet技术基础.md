@@ -17,15 +17,17 @@
 - [13.InstanceDiffusion的模型结构和原理](#13.InstanceDiffusion的模型结构和原理)
 - [14.BeyondScene的模型结构和原理](#14.BeyondScene的模型结构和原理)
 - [15.HiCo的模型结构和原理](#15.HiCo的模型结构和原理)
-- [16.LayoutDM的模型结构和原理（LayoutDM: Transformer-based Diffusion Model for Layout Generation）2023](#16.LayoutDM的模型结构和原理（LayoutDM: Transformer-based Diffusion Model for Layout Generation）)
+- [16.LayoutDM的模型结构和原理（LayoutDM: Transformer-based Diffusion Model for Layout Generation）](#16.LayoutDM的模型结构和原理（LayoutDM: Transformer-based Diffusion Model for Layout Generation）)
 - [17.LayoutDIffusion的模型结构和原理](#[17.LayoutDIffusion的模型结构和原理]())
 - [18.LayoutDiffuse的模型结构和原理](#18.LayoutDiffuse的模型结构和原理)
 - [19.LayoutDM的模型结构和原理（LayoutDM:Precision Multi-Scale Diffusion for Layout-to-Image）2024](#19.LayoutDM的模型结构和原理（LayoutDM:Precision Multi-Scale Diffusion for Layout-to-Image）2024)
 - [20.AnyScene的模型结构和原理](#20.AnyScene的模型结构和原理)
 - [21.MIGC的模型框架和原理](#21.MIGC的模型框架和原理)
-- [22.Training-free Composite Scene Generation for Layout-to-Image Synthesis(ECCV2024)](#Training-free Composite Scene Generation for Layout-to-Image Synthesis(ECCV2024))
+- [22.Training-free Composite Scene Generation for Layout-to-Image Synthesis(ECCV2024)](#22.Training-free Composite Scene Generation for Layout-to-Image Synthesis(ECCV2024))
 - [23.Isolated Diffusion的框架和原理](#23.Isolated Diffusion的框架和原理)
 - [24.MIGC++的框架和原理](#24.MIGC++的框架和原理)
+- [25.DynamicControl的框架和原理](#25.DynamicControl的框架和原理)
+- [26.MaxFusion的框架和原理](#26.MaxFusion的框架和原理)
 
 
 <h2 id="1.Ip-adapter的模型结构与原理">1.Ip-adapter的模型结构与原理 </h2>
@@ -91,11 +93,13 @@ ControlNet：InstantID还使用了ControlNet来增强面部特征提取，进一
 
 ![img](./imgs/controlnet++_reward_loss.jpg)
 
+
+
 ![img](./imgs/controlnet++框架.jpg) 
 
 同时提出了一种通过添加噪声扰乱训练图像的一致性，并使用单步去噪图像进行奖励微调的新策略。相比从随机噪声开始多步采样，此方法显著减少了时间和内存成本，同时保持了高效的奖励微调,最终提高了生成图像与输入条件的一致性。
 
-![img](./imgs/Controlnet++_reward.dat)
+![img](./imgs/Controlnet++_reward.jpg)
 
 <h2 id="7.Controlnext的模型结构和原理">7.Controlnext的模型结构和原理</h2>
 
@@ -304,7 +308,7 @@ HiCo模型采用了**层次化可控扩散模型**（Hierarchical Controllable D
 - **控制条件的引入**：HiCo受到ControlNet和IP-Adapter的启发，在分支中引入了外部条件，通过**边路结构**来引导生成过程。这些条件包括文本描述（caption）和边界框（bounding box）等。
 - **融合模块（Fuse Net）**：多分支网络生成的各区域特征最终在Fuse Net中融合。Fuse Net支持多种融合方式，包括加和、平均、掩码（mask）等。默认使用的是掩码方式，通过在生成过程中对不同区域进行掩码处理，实现不同前景和背景区域的解耦。
 
-![image-20241104172029684](./imgs/HiCo)
+![image-20241104172029684](./imgs/HiCo.jpg)
 
 
 
@@ -330,7 +334,7 @@ HiCo支持多种概念扩展，允许在生成过程中加入多个LoRA插件，
 
 
 
-<h2 id="16.LayoutDM的模型结构和原理（LayoutDM: Transformer-based Diffusion Model for Layout Generation）">16.LayoutDM的模型结构和原理（LayoutDM: Transformer-based Diffusion Model for Layout Generation）2023</h2>
+<h2 id="16.LayoutDM的模型结构和原理（LayoutDM: Transformer-based Diffusion Model for Layout Generation）">16.LayoutDM的模型结构和原理（LayoutDM: Transformer-based Diffusion Model for Layout Generation）</h2>
 
 论文链接：[[2305.02567\] LayoutDM: Transformer-based Diffusion Model for Layout Generation](https://arxiv.org/abs/2305.02567)
 
@@ -438,7 +442,7 @@ LayoutDM 的主要结构如下：
 
 
 
-![image-20241216181530973](./imgs/anyscene_model)
+![image-20241216181530973](./imgs/anyscene_model.jpg)
 
 
 
@@ -456,7 +460,7 @@ LayoutDM 的主要结构如下：
 
 示例如下：
 
-![image-20241216181955566](./imgs/anyscene_example)
+![image-20241216181955566](./imgs/anyscene_example.jpg)
 
 这个框架的优势在于能够保持前景细节的准确性，同时生成与之和谐的背景场景，实现自然的视觉效果。
 
@@ -468,7 +472,7 @@ LayoutDM 的主要结构如下：
 
 MIGC的总体框架遵循"分而治之"的方法论，将复杂的多实例生成任务分解为若干个简单的单实例特征渲染子任务。这一框架包含三个核心部分：分解（Divide）、处理（Conquer）和组合（Combine），每个部分都针对特定的技术挑战提供了创新的解决方案。
 
-![image-20241216182814233](./imgs/MIGC_框架)
+![image-20241216182814233](./imgs/MIGC_框架.jpg)
 
 分解（Divide）部分专注于任务的合理拆分。模型在Cross-Attention层将多实例生成任务分解为多个单实例特征渲染子任务，每个子任务负责在指定区域生成具有特定属性的实例。这种分解方式不仅提高了处理效率，还能确保最终生成结果的整体和谐性。
 
@@ -492,17 +496,17 @@ MIGC的总体框架遵循"分而治之"的方法论，将复杂的多实例生�
 
 示例如下：
 
-![image-20241216183035714](./imgs/MICG_example)
+![image-20241216183035714](./imgs/MICG_example.jpg)
 
 
 
-<h2 id="22.Training-free Composite Scene Generation for Layout-to-Image Synthesis(ECCV2024)">22.Training-free Composite Scene Generation for Layout-to-Image Synthesis</h2>
+<h2 id="22.Training-free Composite Scene Generation for Layout-to-Image Synthesis(ECCV2024)">22.Training-free Composite Scene Generation for Layout-to-Image Synthesis(ECCV2024)</h2>
 
 论文链接：[2407.13609](https://arxiv.org/pdf/2407.13609)
 
 这篇文章提出的CSG(Composite Scene Generation)的训练无关框架，主要用于解决布局引导的图像生成任务。该框架的核心创新点在于如何在不需要额外训练的情况下，通过精细控制扩散模型中的注意力机制来实现准确的布局控制和高质量的图像生成。
 
-![image-20241216200127090](./imgs/csg_model)
+![image-20241216200127090](./imgs/csg_model.jpg)
 
 框架的基本架构包含三个关键组件：**选择性采样机制、交叉注意力约束和自注意力增强。**
 
@@ -518,7 +522,7 @@ MIGC的总体框架遵循"分而治之"的方法论，将复杂的多实例生�
 
 示例如下：
 
-![image-20241216200159483](./imgs/csg_example)
+![image-20241216200159483](./imgs/csg_example.jpg)
 
 
 
@@ -534,7 +538,7 @@ Isolated Diffusion旨在解决文本到图像生成中"概念混淆"问题的无
 
 第三部分 - **多主体处理流程（**底部黄色区域）： 这部分展示了如何处理多个主体的生成过程。以"一只狗在一只猫旁边"为例，系统首先使用 YOLO 进行目标检测，然后使用 SAM 模型生成精确的蒙版。在时间步骤 Tlay 处，系统通过替换其他主体区域的方式独立生成每个主体，最后通过特殊的掩码组合方式将它们整合在一起。图中的数学表达式展示了这个过程中的具体计算方法。
 
-![image-20241216201602167](./imgs/Isolated Diffusion_model)
+![image-20241216201602167](./imgs/Isolated Diffusion_model.png)
 
 Isolated Diffusion 能够有效解决文本到图像生成中的概念混淆问题，同时保持了较高的图像质量和文本-图像一致性。
 
@@ -550,7 +554,7 @@ Isolated Diffusion 能够有效解决文本到图像生成中的概念混淆问�
 
 MIGC和MIGC++的区别：
 
-![image-20241216202545895](./imgs/MIGC++difference)
+![image-20241216202545895](./imgs/MIGC++difference.jpg)
 
 核心架构设计差异： MIGC采用较为基础的架构，主要在U-net的中间块和深层上采样块中使用Instance Shader来控制位置和粗略属性。相比之下，MIGC++引入了更复杂的架构，不仅保留了Instance Shader，还引入了免训练的Refined Shader来替代原有的Cross-Attention层，从而实现更精细的细节控制。
 
@@ -558,22 +562,88 @@ MIGC和MIGC++的区别：
 
 **主要创新：**
 
-![image-20241216203143006](./imgs/MIGC++)
+![image-20241216203143006](./imgs/MIGC++.jpg)
 
 属性泄露防止机制： 论文设计了Instance Shader(实例着色器)作为核心组件，包含三个关键模块：**Enhance Attention**(增强注意力)负责单实例的精确着色，防止属性混淆；**Layout Attention**(布局注意力)创建模板来桥接各个实例，保持空间关系；**Shading Aggregation Controller**(着色聚合控制器)动态整合各个实例结果和模板，生成连贯的最终图像。
 
 **Enhance Attention**:
 
-![image-20241216203515667](./imgs/Enhance Attention_migc++)
+![image-20241216203515667](./imgs/Enhance Attention_migc++.jpg)
 
 **Layout Attention:**
 
-![image-20241216203534496](./imgs/Layout Attention_migc++)
+![image-20241216203534496](./imgs/Layout Attention_migc++.jpg)
 
 **Shading Aggregation Controller:**
 
-![image-20241216203544325](./imgs/Shading Aggregation Controller MIGC++)
+![image-20241216203544325](./imgs/Shading Aggregation Controller MIGC++.jpg)
 
 示例如下：
 
-![image-20241216202617256](./imgs/MIGC++_example)
+![image-20241216202617256](./imgs/MIGC++_example.jpg)
+
+<h2 id="25.DynamicControl的框架和原理">25.DynamicControl的框架和原理</h2>
+
+论文链接：[arxiv.org/pdf/2412.03255](https://arxiv.org/pdf/2412.03255)
+
+
+模型pipeline：
+
+![image-20241230185724431](./imgs/DynamicControl.png)
+
+Double-Cycle Controller:
+
+这个组件通过两个一致性评分来评估条件的重要性：条件一致性和图像一致性。它首先使用预训练的条件生成模型为每个条件生成图像，然后通过判别模型提取对应的反向条件，评估输入条件与提取条件的相似度，以及生成图像与源图像的像素级相似度。这种双重检查机制确保了条件选择的准确性。
+
+![image-20241230195829740](D:\Interview-for-Algorithm-Engineer\AI绘画基础\imgs\DCC.png)
+
+Condition Evaluator:
+
+这是一个基于多模态大语言模型(如LLaVA)的评估系统，用于高效地对多个输入条件进行排序和评估。它通过扩展模型词汇表来处理不同类型的条件信息，并在双循环控制器的监督下学习如何最优地组合这些条件。其创新之处在于避免了生成中间图像的开销，同时不依赖源图像就能在推理阶段做出准确的条件选择。
+
+![image-20241230193642091](./imgs/Condition Evaluator.png)
+
+Multi-Control Adapter:
+
+这是一个创新的并行处理架构，专门设计用来处理动态数量的控制条件。它采用混合专家系统(MoE)来并行提取不同视觉条件的特征，通过交叉注意力机制整合这些特征，最终调制ControlNet来实现更精确的图像生成控制。它的独特之处在于可以自适应地选择和组合不同数量和类型的条件，避免了固定条件数量的限制。
+
+![image-20241230195843025](./imgs/Multi_Control_Adapter.png)
+
+
+
+
+
+示例：
+
+![image-20241230200422953](./imgs/DynamicControl-example.png)
+
+<h2 id="26.MaxFusion的框架和原理">26.MaxFusion的框架和原理</h2>
+
+论文链接：[05506.pdf](https://www.ecva.net/papers/eccv_2024/papers_ECCV/papers/05506.pdf)
+
+框架如下：
+
+![image-20241230204451355](./imgs/MaxFusion.png)
+
+核心发现:
+
+![image-20241230204919620](./imgs/MaxFusion_hexin.jpg)
+
+- 发现扩散模型中间特征图的方差图(variance maps)能够捕捉条件信息的强度
+- 可以利用这个特性来融合不同模态的特征
+
+
+
+**MaxFusion（最大融合）：** 
+
+核心融合算法，基于特征相关性（correlation）做决策：当相关性高于阈值时进行加权平均，低于阈值时选择方差最大的特征，并引入相对标准差来确保不同模态间的公平性。
+
+优势:
+
+- 无需重训练,可即插即用
+- 可以处理互补条件(同一物体的不同特征)和矛盾条件(不同物体的特征)
+- 易于扩展到多个条件模态
+
+示例：
+
+![image-20241230205141743](./imgs/MaxFusion_example.png)
