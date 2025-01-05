@@ -54,9 +54,9 @@ AIGCmagic社区的宗旨是找到更多志同道合的伙伴，在星球居民�
 
 ## AI行业技术交流群
 
-<img src="imgs/AI绘画交流群.jpg" alt="AIGCmagic社区-AI绘画交流群" width="300"/><img src="imgs/AI视频交流群.jpg" alt="AIGCmagic社区-AI视频交流群" width="300"/><img src="imgs/大模型交流群.jpg" alt="AIGCmagic社区-大模型交流群" width="300"/>
+<img src="imgs/AI绘画交流群.jpg" alt="AIGCmagic社区-AI绘画交流群" width="200"/><img src="imgs/AI视频交流群.jpg" alt="AIGCmagic社区-AI视频交流群" width="200"/><img src="imgs/大模型交流群.jpg" alt="AIGCmagic社区-大模型交流群" width="200"/>
 
-<img src="imgs/AI多模态交流群.jpg" alt="AIGCmagic社区-AI多模态交流群" width="300"/><img src="imgs/传统深度学习交流群.jpg" alt="AIGCmagic社区-传统深度学习交流群" width="300"/><img src="imgs/自动驾驶交流群.jpg" alt="AIGCmagic社区-自动驾驶交流群" width="300"/>
+<img src="imgs/AI多模态交流群.jpg" alt="AIGCmagic社区-AI多模态交流群" width="200"/><img src="imgs/传统深度学习交流群.jpg" alt="AIGCmagic社区-传统深度学习交流群" width="200"/><img src="imgs/自动驾驶交流群.jpg" alt="AIGCmagic社区-自动驾驶交流群" width="200"/>
 
 
 
