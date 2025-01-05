@@ -30,14 +30,6 @@ Rocky最新撰写Stable Diffusion 3和FLUX.1系列模型全网最详细讲解文
 
 刘一手，资深高级算法工程师，先后就职于AI教育领域的独角兽企业和百亿规模的私募金融机构，擅长AI算法的工程研发。目前专注于计算机视觉算法的深度探索和多模态大模型在教育与金融两大场景中的创新应用与实践落地。
 
-## AI行业技术交流群
-
-<img src="imgs/AI绘画交流群.jpg" alt="AIGCmagic社区-AI绘画交流群" width="300"/><img src="imgs/AI多模态交流群.jpg" alt="AIGCmagic社区-AI多模态交流群" width="300"/>
-
-<img src="imgs/大模型交流群.jpg" alt="AIGCmagic社区-大模型交流群" width="300"/><img src="imgs/AI视频交流群.jpg" alt="AIGCmagic社区-AI视频交流群" width="300"/>
-
-<img src="imgs/传统深度学习交流群.jpg" alt="AIGCmagic社区-传统深度学习交流群" width="300"/><img src="imgs/自动驾驶交流群.jpg" alt="AIGCmagic社区-自动驾驶交流群" width="300"/>
-
 ## AIGCmagic社区与知识星球
 
 AIGCmagic社区持续分享探讨AIGC、传统深度学习、自动驾驶、机器学习、计算机视觉、自然语言处理、具身智能、元宇宙、SLAM等AI行业的干货知识与前沿技术资讯。
@@ -59,3 +51,12 @@ AIGCmagic社区的宗旨是找到更多志同道合的伙伴，在星球居民�
 </div>
 
 加入AIGCmagic社区后，我们也建立了专门的知识星球-VIP交流学习群，欢迎大家加入并进行深度的AI行业资源拓展与链接！（请添加小助手微信Jarvis8866，备注**知识星球里的个人昵称+城市+从事方向/研究方向+公司/学校**）
+
+## AI行业技术交流群
+
+<img src="imgs/AI绘画交流群.jpg" alt="AIGCmagic社区-AI绘画交流群" width="300"/><img src="imgs/AI视频交流群.jpg" alt="AIGCmagic社区-AI视频交流群" width="300"/><img src="imgs/大模型交流群.jpg" alt="AIGCmagic社区-大模型交流群" width="300"/>
+
+<img src="imgs/AI多模态交流群.jpg" alt="AIGCmagic社区-AI多模态交流群" width="300"/><img src="imgs/传统深度学习交流群.jpg" alt="AIGCmagic社区-传统深度学习交流群" width="300"/><img src="imgs/自动驾驶交流群.jpg" alt="AIGCmagic社区-自动驾驶交流群" width="300"/>
+
+
+
