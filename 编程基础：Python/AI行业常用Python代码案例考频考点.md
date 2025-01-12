@@ -10,6 +10,9 @@
 - [9.在AI服务中如何设置项目的base路径？](#9.在AI服务中如何设置项目的base路径？)
 - [10.AI服务的Python代码用PyTorch框架重写优化的过程中，有哪些方法论和注意点？](#10.AI服务的Python代码用PyTorch框架重写优化的过程中，有哪些方法论和注意点？)
 - [11.在Python中，图像格式在Pytorch的Tensor格式、Numpy格式、OpenCV格式、PIL格式之间如何互相转换？](#11.在Python中，图像格式在Pytorch的Tensor格式、Numpy格式、OpenCV格式、PIL格式之间如何互相转换？)
+- [12.在AI服务中，python如何加载我们想要指定的库？](#12.在AI服务中，python如何加载我们想要指定的库？)
+- [13.Python中对SVG文件的读写操作大全](#13.Python中对SVG文件的读写操作大全)
+- [14.Python中对psd文件的读写操作大全](#14.Python中对psd文件的读写操作大全)
 
 <h2 id='1.多进程multiprocessing基本使用代码段'>1.多进程multiprocessing基本使用代码段</h2>
 
@@ -1364,4 +1367,392 @@ print(folder_paths.models_dir)
   rgb_image = cv2.cvtColor(opencv_image, cv2.COLOR_BGR2RGB)
   tensor_image = torch.from_numpy(rgb_image).permute(2, 0, 1) / 255.0  # 转为 (C, H, W)
   ```
+
+
+<h2 id="12.在AI服务中，python如何加载我们想要指定的库？">12.在AI服务中，python如何加载我们想要指定的库？</h2>
+
+在 AI 服务中，有时需要动态加载指定路径下的库或模块，特别是当需要使用自定义库或者避免与其他版本的库冲突时。Python 提供了多种方法来实现这一目标。
+
+## **1. 使用 `sys.path` 动态添加路径**
+
+通过将目标库的路径添加到 `sys.path`，Python 可以在该路径下搜索库并加载。
+
+### **代码示例**
+```python
+import sys
+import os
+
+# 指定库所在的路径
+custom_library_path = "/path/to/your/library"
+
+# 将路径加入到 sys.path
+if custom_library_path not in sys.path:
+    sys.path.insert(0, custom_library_path)  # 插入到 sys.path 的最前面
+
+# 导入目标库
+import your_library
+
+# 使用库中的功能
+your_library.some_function()
+```
+
+### **注意事项**
+1. 如果路径中已经存在版本冲突的库，Python 会优先加载 `sys.path` 中靠前的路径。
+2. 使用 `os.path.abspath()` 确保提供的是绝对路径。
+
+## **2. 使用 `importlib` 动态加载模块**
+
+`importlib` 是 Python 提供的模块，用于动态加载库或模块。
+
+### **代码示例**
+```python
+import importlib.util
+
+# 指定库文件路径
+library_path = "/path/to/your/library/your_library.py"
+
+# 加载模块
+spec = importlib.util.spec_from_file_location("your_library", library_path)
+your_library = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(your_library)
+
+# 使用库中的功能
+your_library.some_function()
+```
+
+### **适用场景**
+- 当库是一个单独的 Python 文件时，可以使用 `importlib` 动态加载该文件。
+
+## **3. 设置环境变量 `PYTHONPATH`**
+
+通过设置 `PYTHONPATH` 环境变量，可以让 Python 自动搜索指定路径下的库。
+
+### **方法 1：在脚本中动态设置**
+```python
+import os
+import sys
+
+# 指定路径
+custom_library_path = "/path/to/your/library"
+
+# 动态设置 PYTHONPATH 环境变量
+os.environ["PYTHONPATH"] = os.environ.get("PYTHONPATH", "") + ":" + custom_library_path
+
+# 添加到 sys.path
+if custom_library_path not in sys.path:
+    sys.path.append(custom_library_path)
+
+# 导入库
+import your_library
+```
+
+### **方法 2：通过命令行设置**
+```bash
+export PYTHONPATH=$PYTHONPATH:/path/to/your/library
+python your_script.py
+```
+
+### **适用场景**
+- 当需要全局添加路径时，`PYTHONPATH` 是更方便的方式。
+
+## **4. 使用 `.pth` 文件**
+
+在 Python 的 `site-packages` 目录中创建一个 `.pth` 文件，指定库路径。Python 启动时会自动加载该路径。
+
+### **步骤**
+1. 找到 `site-packages` 目录：
+   ```bash
+   python -m site
+   ```
+2. 创建 `.pth` 文件：
+   ```bash
+   echo "/path/to/your/library" > /path/to/site-packages/custom_library.pth
+   ```
+
+### **注意**
+- `.pth` 文件适合用来加载多个库路径，适用于环境配置管理。
+
+## **5. 加载本地开发库（开发模式安装）**
+
+如果需要加载本地开发的库，可以使用 `pip install -e` 安装为开发模式。
+
+### **步骤**
+1. 将库代码放到一个目录，例如 `/path/to/your/library`。
+2. 进入该目录，运行以下命令：
+   ```bash
+   pip install -e .
+   ```
+3. Python 会将该库路径注册到系统中，以后可以直接通过 `import` 使用该库。
+
+## **总结**
+
+| 方法                       | 适用场景                            | 灵活性 | 推荐程度 |
+|----------------------------|-------------------------------------|--------|----------|
+| **`sys.path` 动态加载**      | 临时加载单个路径                      | 高     | 高       |
+| **`importlib` 动态加载**     | 动态加载单个模块文件                  | 中     | 高       |
+| **`PYTHONPATH` 环境变量**    | 全局路径管理                        | 中     | 中       |
+| **`.pth` 文件**             | 多路径永久加载                      | 中     | 高       |
+| **开发模式安装**             | 开发环境的库调试或动态加载             | 高     | 高       |
+
+
+<h2 id="13.Python中对SVG文件的读写操作大全">13.Python中对SVG文件的读写操作大全</h2>
+
+SVG（Scalable Vector Graphics）是一种基于 XML 的矢量图形格式，广泛用于AIGC、传统深度学习以及自动驾驶领域。Python 提供了多种库来读写和操作 SVG 文件。
+
+### 1. **使用 `svgwrite` 库创建和写入 SVG 文件**
+`svgwrite` 是一个专门用于创建 SVG 文件的库，适合从头生成 SVG 文件。
+
+#### 示例：创建一个简单的 SVG 文件
+```python
+import svgwrite
+
+# 创建一个 SVG 画布
+dwg = svgwrite.Drawing('example.svg', size=('200px', '200px'))
+
+# 添加一个矩形
+dwg.add(dwg.rect(insert=(10, 10), size=('50px', '50px'), fill='blue'))
+
+# 添加一个圆形
+dwg.add(dwg.circle(center=(100, 100), r=30, fill='red'))
+
+# 添加文本
+dwg.add(dwg.text('Hello SVG', insert=(10, 180), fill='black'))
+
+# 保存 SVG 文件
+dwg.save()
+```
+
+### 说明
+- `svgwrite.Drawing`：创建一个 SVG 画布。
+- `dwg.add`：向画布中添加图形或文本。
+- `dwg.save()`：保存 SVG 文件。
+
+### 2. **使用 `xml.etree.ElementTree` 解析和修改 SVG 文件**
+SVG 文件本质上是 XML 文件，因此可以使用 Python 的 `xml.etree.ElementTree` 模块来解析和修改 SVG 文件。
+
+#### 示例：读取和修改 SVG 文件
+```python
+import xml.etree.ElementTree as ET
+
+# 解析 SVG 文件
+tree = ET.parse('example.svg')
+root = tree.getroot()
+
+# 遍历所有元素
+for elem in root.iter():
+    print(elem.tag, elem.attrib)
+
+# 修改某个元素的属性
+for elem in root.iter('{http://www.w3.org/2000/svg}rect'):
+    elem.set('fill', 'green')  # 将矩形填充颜色改为绿色
+
+# 保存修改后的 SVG 文件
+tree.write('modified_example.svg')
+```
+
+#### 说明
+- `ET.parse`：解析 SVG 文件。
+- `root.iter()`：遍历 SVG 文件中的所有元素。
+- `elem.set`：修改元素的属性。
+- `tree.write`：保存修改后的 SVG 文件。
+
+### 3. **使用 `svglib` 和 `reportlab` 将 SVG 转换为 PDF**
+`svglib` 可以将 SVG 文件转换为 `reportlab` 的图形对象，进而生成 PDF 文件。
+
+#### 示例：将 SVG 转换为 PDF
+```python
+from svglib.svglib import svg2rlg
+from reportlab.graphics import renderPDF
+
+# 加载 SVG 文件
+drawing = svg2rlg('example.svg')
+
+# 将 SVG 渲染为 PDF
+renderPDF.drawToFile(drawing, 'output.pdf')
+```
+
+#### 说明
+- `svg2rlg`：将 SVG 文件转换为 `reportlab` 的图形对象。
+- `renderPDF.drawToFile`：将图形对象渲染为 PDF 文件。
+
+### 4. **使用 `cairosvg` 将 SVG 转换为 PNG**
+`cairosvg` 可以将 SVG 文件转换为 PNG 或其他图像格式。
+
+#### 示例：将 SVG 转换为 PNG
+```python
+import cairosvg
+
+# 将 SVG 文件转换为 PNG
+cairosvg.svg2png(url='example.svg', write_to='output.png')
+```
+
+#### 说明
+- `cairosvg.svg2png`：将 SVG 文件转换为 PNG 图像。
+
+### 5. **使用 `svgpathtools` 操作 SVG 路径**
+`svgpathtools` 是一个专门用于操作 SVG 路径的库，适合对 SVG 中的路径进行高级操作。
+
+#### 示例：读取和操作 SVG 路径
+```python
+from svgpathtools import svg2paths
+
+# 读取 SVG 文件中的路径
+paths, attributes = svg2paths('example.svg')
+
+# 打印路径信息
+for path in paths:
+    print(path)
+
+# 修改路径（例如平移）
+translated_paths = [path.translated(10, 10) for path in paths]
+
+# 保存修改后的路径到新的 SVG 文件
+from svgpathtools import wsvg
+wsvg(translated_paths, attributes=attributes, filename='translated_example.svg')
+```
+
+#### 说明
+- `svg2paths`：读取 SVG 文件中的路径。
+- `path.translated`：对路径进行平移操作。
+- `wsvg`：将路径保存为新的 SVG 文件。
+
+### 6. **总结**
+| **库名**           | **功能**                     | **适用场景**                     |
+|--------------------|------------------------------|----------------------------------|
+| `svgwrite`         | 创建和写入 SVG 文件           | 从头生成 SVG 文件                |
+| `xml.etree.ElementTree` | 解析和修改 SVG 文件       | 读取和修改现有的 SVG 文件        |
+| `svglib` + `reportlab` | 将 SVG 转换为 PDF         | 生成 PDF 文件                    |
+| `cairosvg`         | 将 SVG 转换为 PNG             | 生成图像文件                     |
+| `svgpathtools`     | 操作 SVG 路径                 | 对 SVG 路径进行高级操作          |
+
+根据我们的需求选择合适的工具库，可以高效地读写和操作 SVG 文件。
+
+
+<h2 id="14.Python中对psd文件的读写操作大全">14.Python中对psd文件的读写操作大全</h2>
+
+PSD（Photoshop Document）是 Adobe Photoshop 的专用文件格式，包含图层、通道、路径等复杂信息。PSD文件在AIGC、传统深度学习以及自动驾驶领域都广泛应用。Python 中提供了多种库来读写和操作 PSD 文件。
+
+### 1. **使用 `psd-tools` 库读写 PSD 文件**
+`psd-tools` 是一个专门用于读取和操作 PSD 文件的库，支持提取图层、图像数据和元数据。
+
+
+#### 示例 1：读取 PSD 文件并提取图层信息
+```python
+from psd_tools import PSDImage
+
+# 加载 PSD 文件
+psd = PSDImage.open('example.psd')
+
+# 打印 PSD 文件的基本信息
+print(f"文件大小: {psd.width}x{psd.height}")
+print(f"图层数量: {len(psd.layers)}")
+
+# 遍历所有图层
+for layer in psd.layers:
+    print(f"图层名称: {layer.name}")
+    print(f"图层大小: {layer.width}x{layer.height}")
+    print(f"图层可见性: {layer.is_visible()}")
+    print("------")
+```
+
+#### 示例 2：提取图层图像并保存为 PNG
+```python
+from psd_tools import PSDImage
+
+# 加载 PSD 文件
+psd = PSDImage.open('example.psd')
+
+# 提取第一个图层并保存为 PNG
+layer = psd.layers[0]
+if layer.is_visible():
+    image = layer.composite()  # 获取图层的合成图像
+    image.save('layer_0.png')
+```
+
+#### 示例 3：修改图层并保存为新的 PSD 文件
+```python
+from psd_tools import PSDImage
+from PIL import ImageOps
+
+# 加载 PSD 文件
+psd = PSDImage.open('example.psd')
+
+# 修改第一个图层（例如反色）
+layer = psd.layers[0]
+if layer.is_visible():
+    image = layer.composite()
+    inverted_image = ImageOps.invert(image.convert('RGB'))  # 反色处理
+    layer.paste(inverted_image)  # 将修改后的图像粘贴回图层
+
+# 保存修改后的 PSD 文件
+psd.save('modified_example.psd')
+```
+
+### 2. **使用 `Pillow` 读取 PSD 文件**
+`Pillow` 是一个强大的图像处理库，支持读取 PSD 文件（但功能有限，仅支持读取合并后的图像）。
+
+#### 示例：读取 PSD 文件并保存为 PNG
+```python
+from PIL import Image
+
+# 打开 PSD 文件
+psd_image = Image.open('example.psd')
+
+# 保存为 PNG
+psd_image.save('output.png')
+```
+
+#### 说明
+- `Pillow` 只能读取 PSD 文件的合并图像，无法访问图层信息。
+
+### 3. **使用 `psdparse` 解析 PSD 文件**
+`psdparse` 是一个轻量级的 PSD 文件解析库，适合需要直接解析 PSD 文件结构的场景。
+
+#### 示例：解析 PSD 文件
+```python
+import psdparse
+
+# 加载 PSD 文件
+with open('example.psd', 'rb') as f:
+    psd = psdparse.PSD.parse(f)
+
+# 打印 PSD 文件的基本信息
+print(f"文件大小: {psd.header.width}x{psd.header.height}")
+print(f"图层数量: {len(psd.layers)}")
+
+# 遍历所有图层
+for layer in psd.layers:
+    print(f"图层名称: {layer.name}")
+    print(f"图层大小: {layer.width}x{layer.height}")
+    print("------")
+```
+
+### 4. **使用 `pypsd` 读写 PSD 文件**
+`pypsd` 是一个功能较全的 PSD 文件操作库，支持读写 PSD 文件。
+
+#### 示例：读取和修改 PSD 文件
+```python
+from pypsd import PSD
+
+# 加载 PSD 文件
+psd = PSD.read('example.psd')
+
+# 打印 PSD 文件的基本信息
+print(f"文件大小: {psd.width}x{psd.height}")
+print(f"图层数量: {len(psd.layers)}")
+
+# 修改第一个图层的名称
+psd.layers[0].name = "New Layer Name"
+
+# 保存修改后的 PSD 文件
+psd.write('modified_example.psd')
+```
+
+### 5. **总结**
+| **库名**       | **功能**                     | **适用场景**                     |
+|----------------|------------------------------|----------------------------------|
+| `psd-tools`    | 读取和操作 PSD 文件           | 提取图层、图像数据和元数据       |
+| `Pillow`       | 读取 PSD 文件（仅合并图像）   | 快速读取 PSD 文件的合并图像      |
+| `psdparse`     | 解析 PSD 文件结构             | 直接解析 PSD 文件结构            |
+| `pypsd`        | 读写 PSD 文件                 | 读写和修改 PSD 文件              |
 

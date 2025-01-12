@@ -51,6 +51,7 @@
 - [47.AIGC面试中必考的AI绘画技术框架脉络是什么样的？](#47.AIGC面试中必考的AI绘画技术框架脉络是什么样的？)
 - [48.介绍一下OFT(Orthogonal Finetuning)微调技术](#48.介绍一下OFT(Orthogonal-Finetuning)微调技术)
 - [49.Stable Diffusion 3的Text Encoder有哪些改进？](#49.Stable-Diffusion-3的Text-Encoder有哪些改进？)
+- [50.Stable Diffusion 3的图像特征和文本特征在训练前缓存策略有哪些优缺点？](#50.Stable-Diffusion-3的图像特征和文本特征在训练前缓存策略有哪些优缺点？)
 
 ## 第二章 Midjourney高频考点
 
@@ -1062,7 +1063,7 @@ ADD 模型的结构包括三个核心组件：
 2. **判别器 (Discriminator)**：用来区分生成的样本和真实图像，通过对抗性训练来提升生成图像的真实感。
 3. **DM 教师模型 (Teacher Model)**：这是一个冻结权重的扩散模型，作为知识的教师，为学生模型提供目标图像来实现知识蒸馏。
 
-![image-20241104175829951](./imgs/SD-Turbo)
+![image-20241104175829951](./imgs/SD-Turbo.jpg)
 
 ### 核心原理
 
@@ -1091,7 +1092,7 @@ ADD 模型具有以下优势：
 2. **学生模型（Student Model）**：学习生成器在潜在空间中的分布，以实现快速生成。
 3. **判别器（Discriminator）**：用于区分学生模型生成的图像和真实图像的潜在表示，通过对抗训练优化学生模型。
 
-![image-20241104182109003](./imgs/SD3Turbo)
+![image-20241104182109003](./imgs/SD3Turbo.jpg)
 
 LADD（潜在对抗扩散蒸馏）与ADD（对抗扩散蒸馏）有几个关键区别，主要体现在训练方式、判别器的使用以及生成流程的简化上：
 
@@ -1263,7 +1264,7 @@ $$
 
 3. **模型训练**：
    - 在标准的优化过程中加入正交性约束，通常表现为损失函数中的一个额外项：
-  
+    
      $$
      \mathcal{L}_{\text{OFT}} = \mathcal{L}_{\text{task}} + \alpha \cdot \| R^T R - I \|_F^2
      $$
@@ -1363,6 +1364,19 @@ Stable Diffusion 3的文字渲染能力很强，同时遵循文本Prompts的图�
 虽然SD 3采用CLIP ViT-L + OpenCLIP ViT-bigG + T5-XXL Encoder的组合带来了文字渲染和文本一致性等方面的效果增益，但是也限制了T5-XXL Encoder的能力。因为CLIP ViT-L和OpenCLIP ViT-bigG都只能默认编码77 tokens长度的文本，这让原本能够编码512 tokens的T5-XXL Encoder在SD 3中也只能处理77 tokens长度的文本。而SD系列的“友商”模型DALL-E 3由于只使用了T5-XXL Encoder一个语言模型作为Text Encoder模块，所以可以输入512 tokens的文本，从而发挥T5-XXL Encoder的全部能力。
 
 更多详细内容，大家可以查阅：[深入浅出完整解析Stable Diffusion 3（SD 3）和FLUX.1系列核心基础知识](https://zhuanlan.zhihu.com/p/684068402)
+
+
+<h2 id="50.Stable-Diffusion-3的图像特征和文本特征在训练前缓存策略有哪些优缺点？">50.Stable Diffusion 3的图像特征和文本特征在训练前缓存策略有哪些优缺点？</h2>
+
+SD 3与之前的版本相比，整体的参数量级大幅增加，这无疑也增加了训练成本，所以官方的技术报告中也**对SD 3训练时冻结（frozen）部分进行了分析**，主要评估了VAE、CLIP-L、CLIP-G以及T5-XXL的显存占用（Mem）、推理耗时（FP）、存储成本（Storage）、训练成本（Delta），如下图所示，T5-XXL的整体成本是最大的：
+
+![SD 3各个结构的整体成本](./imgs/SD3各个结构的整体成本.png)
+
+**为了减少训练过程中SD 3所需显存和特征处理耗时，SD 3设计了图像特征和文本特征的预计算策略**：由于VAE、CLIP-L、CLIP-G、T5-XXL都是预训练好且在SD 3微调过程中权重被冻结的结构，所以**在训练前可以将整个数据集预计算一次图像的Latent特征和文本的Text Embeddings，并将这些特征缓存下来**，这样在整个SD 3的训练过程中就无需再次计算。同时上述冻结的模型参数也无需加载到显卡中，可以节省约20GB的显存占用。
+
+但是根据机器学习领域经典的“没有免费的午餐”定理，**预计算策略虽然为我们大幅减少了SD 3的训练成本，但是也存在其他方面的代价**。第一点是训练数据不能在训练过程中做数据增强了，所有的数据增强操作都要在训练前预处理好。第二点是预处理好的图像特征和文本特征需要一定的存储空间。第三点是训练时加载这些预处理好的特征需要一定的时间。
+
+整体上看，**其实SD 3的预计算策略是一个空间换时间的技术**。
 
 
 ## 第二章 Midjourney高频考点正文
