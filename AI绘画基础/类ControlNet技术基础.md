@@ -28,6 +28,9 @@
 - [24.MIGC++的框架和原理](#24.MIGC++的框架和原理)
 - [25.DynamicControl的框架和原理](#25.DynamicControl的框架和原理)
 - [26.MaxFusion的框架和原理](#26.MaxFusion的框架和原理)
+- [27.CreatiLayout的框架和原理](#27.CreatiLayout的框架和原理)
+- [28.Ctrl-X的框架和原理](#28.Ctrl-X的框架和原理)
+- [29.OMNIBOOTH的框架和原理](#29.OMNIBOOTH的框架和原理)
 
 
 <h2 id="1.Ip-adapter的模型结构与原理">1.Ip-adapter的模型结构与原理 </h2>
@@ -647,3 +650,109 @@ Multi-Control Adapter:
 示例：
 
 ![image-20241230205141743](./imgs/MaxFusion_example.png)
+
+<h2 id="27.CreatiLayout的框架和原理">27.CreatiLayout的框架和原理</h2>
+
+论文链接：[[2412.03859\] CreatiLayout: Siamese Multimodal Diffusion Transformer for Creative Layout-to-Image Generation](https://arxiv.org/abs/2412.03859)
+
+![image-20250113201544960](./imgs/siamLayout.png)
+
+1. 整体架构
+
+- 基于多模态扩散变换器(MM-DiT)设计
+- 将布局作为与图像和文本同等重要的独立模态
+- 采用孪生(Siamese)分支结构处理不同模态间的交互
+
+2.主要创新点：SiamLayout架构 
+
+这个架构通过两个关键设计解决了模态竞争问题：
+
+a) 独立模态处理：
+
+- 使用单独的transformer参数处理布局信息
+- 使布局与图像和文本具有同等地位
+
+b) 孪生分支结构：
+
+- 将三模态交互解耦为两个平行分支:
+
+  - 图像-文本分支
+  - 图像-布局分支
+
+- 后期再融合两个分支的输出
+
+- 这种设计避免了模态间的直接竞争
+
+- 作者还对比了其他两种架构变体：
+
+  - Layout Adapter：通过cross-attention引入布局信息
+  - M³-Attention：直接将三个模态放在一起做attention
+
+  但实验表明SiamLayout的效果最好，主要原因是它避免了模态间的直接竞争，让每个模态都能充分发挥作用。
+
+  示例：
+
+![image-20250113201809122](./imgs/creatiLayout_示例.png)
+
+
+
+<h2 id="28.Ctrl-X的框架和原理">28.Ctrl-X的框架和原理</h2>
+
+论文链接：[2406.07540](https://arxiv.org/pdf/2406.07540
+
+Ctrl-X 是一个训练无关、指导无关的框架，通过操控预训练的 T2I 扩散模型的特征层，提供对生成图像结构（Structure）和外观（Appearance）的控制。
+
+![image-20250113203140236](./imgs/ctrl-x.png)
+
+该框架 **Ctrl-X** 的核心流程可概括为以下几个关键步骤：
+
+1. **结构与外观特征提取**：通过前向扩散过程分别对输入的结构图像 (x^s_t) 和外观图像 (x^a_t) 添加噪声后，将其输入到预训练的扩散模型中，提取卷积特征和自注意力特征。
+2. **特征注入与迁移**：
+   - **特征注入**：将结构图像的卷积特征和注意力特征注入到目标图像 (x^o_t) 的生成过程中，确保生成图像的结构与输入对齐。
+   - **外观迁移**：利用输入外观图像和目标图像的自注意力对应关系，计算加权的均值 (M) 和标准差 (S)，用于对目标图像的特征进行归一化，实现空间感知的外观迁移。
+3. **生成过程**：在每一步生成中，将上述注入的结构和外观特征结合，逐步生成符合目标结构与外观的图像。
+
+**优势**：
+
+- 无需额外训练，直接在预训练扩散模型上运行。
+- 支持任意类型的结构和外观输入，具有高度的灵活性和高效性。
+
+
+
+示例：
+
+![image-20250113203422258](./imgs/ctrl-x-示例.png)
+
+<h2 id="29.OMNIBOOTH的框架和原理">29.OMNIBOOTH的框架和原理</h2>
+
+论文链接：[2410.04932](https://arxiv.org/pdf/2410.04932)
+
+![image-20250113202957539](./imgs/OmniBooth.png)
+
+
+
+核心架构分为三部分：
+
+1.双路输入处理：
+
+- 文本路径：Instance Prompt → Text Encoder → 文本嵌入
+- 图像路径：Image references → DINO v2 → Spatial Warping → 图像嵌入
+
+2.潜在控制信号(Latent Control Signal)：
+
+- 维度为C×H'×W'的特征空间
+- 通过Paint操作融合文本嵌入
+- 通过Spatial Warping融合图像特征
+- 作为统一的控制信号输入到生成网络
+
+3.生成网络：
+
+- Feature Alignment进行特征对齐
+- Diffusion UNet生成最终图像
+- 同时接收Global Prompt作为全局引导
+
+
+
+示例：
+
+![image-20250113203056301](./imgs/omnibooth_示例.png)
