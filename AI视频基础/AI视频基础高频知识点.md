@@ -25,6 +25,7 @@
 - [23.Sora支持哪几种多模态输入？](#23.Sora支持哪几种多模态输入？)
 - [24.介绍一下HunyuanVideo模型的架构](#24.介绍一下HunyuanVideo模型的架构)
 - [25.HunyuanVideo模型有哪些特点？](#25.HunyuanVideo模型有哪些特点？)
+- [26.可灵AI视频大模型的架构是什么样的？](#26.可灵AI视频大模型的架构是什么样的？)
 
 
 <h2 id="1.目前主流的AI视频技术框架有哪几种？">1.目前主流的AI视频技术框架有哪几种？</h2>
@@ -380,3 +381,14 @@ HunyuanVideo的VAE部分采用了CausalConv3D作为AI视频的编码器和解码
 
 Hunyuan-Large model模型提供了两个改写模式：正常模式和导演模式。正常模式旨在增强视频生成模型对用户意图的理解，从而更准确地解释提供的指令。导演模式增强了诸如构图、光照和摄像机移动等方面的描述，倾向于生成视觉质量更高的视频。注意，这种增强有时可能会导致一些语义细节的丢失。
 
+
+<h2 id="26.可灵AI视频大模型的架构是什么样的？">26.可灵AI视频大模型的架构是什么样的？</h2>
+
+我们从快手可灵团队发布的多主体视频生成技术方案ConceptMaster中可以窥探可灵AI视频大模型的架构：
+1. 包含一个3D VAE架构，用于将视频转到Latent空间。
+2. 扩散模型使用了DiT Diffusion架构，这里的transformer不是采用SD 3中的MM-DiT，而是每个transformer的block包括2D spatial self-attention，3D spatial-temporal self-attention，text cross-attention，以及feed-forward network (FFN)。
+3. 包含文本编码器T5-XXL来提取文本特征。
+4. 采样方法使用Flow Matching方法。
+
+可灵AI视频大模型的架构的详细图解如下：
+![ConceptMaster模型架构](./imgs/ConceptMaster模型架构.png)
