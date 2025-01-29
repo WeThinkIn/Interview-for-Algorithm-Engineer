@@ -1,6 +1,6 @@
 # 🔥【三年面试五年模拟】AI算法工程师的求职面试秘籍
 
-## 💥 目录
+## 目录
 
 【Three Years of Interviews, Five Years of Practice】The Ultimate Guide to AI Algorithm Engineer Job Interviews
 
