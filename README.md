@@ -37,15 +37,15 @@
 Rocky Ding 主编
 
 <a href="https://www.zhihu.com/people/bei-jing-de-wen-zhou-ren"><img src="https://img.shields.io/badge/Rocky Ding-知乎-blue"></a>
-<a href="https://www.zhihu.com/people/bei-jing-de-wen-zhou-ren"><img src="https://img.shields.io/badge/Rocky Ding-公众号-brightgreen"></a>
+<a href="imgs/WeThinkIn公众号.jpg"><img src="https://img.shields.io/badge/Rocky Ding-公众号-brightgreen"></a>
 
-Rocky Ding，AIGCmagic社区创始人，知乎AI领域知名博主（同名Rocky Ding），公众号《WeThinkIn》主理人，资深AIGC算法专家，全网文章阅读量200万+，专注于AIGC产品与AI算法解决方案的商业应用。在互联网大厂、AI独角兽、传统科技公司以及国企研究院有丰富的工作经验与创业经验。多次带队获得CVPR、AAAI、Kaggle等AI领域顶级竞赛的冠军成绩。发表多篇AI领域论文和专利。
+Rocky Ding，AIGCmagic社区创始人，知乎AI领域知名博主（同名Rocky Ding），公众号《WeThinkIn》主理人，全网文章阅读量300万+。资深AIGC算法专家，专注于AIGC产品与AI算法解决方案的商业应用。在互联网大厂、AI独角兽、传统科技公司以及国企研究院有丰富的工作经验与创业经验。多次带队获得CVPR、AAAI、Kaggle等AI领域顶级竞赛的冠军成绩。发表多篇AI领域论文和专利。
 
-Rocky最新撰写Stable Diffusion 3和FLUX.1系列模型全网最详细讲解文章：[深入浅出完整解析Stable Diffusion 3（SD 3）和FLUX.1系列核心基础知识](https://zhuanlan.zhihu.com/p/684068402)
+Rocky最新撰写完成10万字的Stable Diffusion 3和FLUX.1系列模型全网最详细讲解文章：[深入浅出完整解析Stable Diffusion 3（SD 3）和FLUX.1系列核心基础知识](https://zhuanlan.zhihu.com/p/684068402)
 
 张一凡 副主编
 
-张一凡，资深AIGC算法专家，曾就职于国内某top安防公司，专注于AIGC算法实现与落地部署，目前在国内某研究所主要从事AI大模型相关的研究。
+张一凡，资深AIGC算法专家，曾就职于国内top安防公司，专注于AIGC算法实现与落地部署，目前在国内某研究所主要从事AI大模型相关的研究。
 
 猫先生 副主编   
 
@@ -57,7 +57,7 @@ Rocky最新撰写Stable Diffusion 3和FLUX.1系列模型全网最详细讲解文
 
 刘一手 副主编
 
-刘一手，资深高级算法工程师，先后就职于AI教育独角兽企业和百亿规模的私募金融机构，擅长AI算法的工程研发。目前专注于计算机视觉算法的深度探索和多模态大模型在教育与金融两大场景中的创新应用与实践落地。
+刘一手，资深高级算法工程师，先后就职于AI教育独角兽企业和百亿规模的私募金融机构，擅长AI算法的工程研发。目前专注于计算机视觉算法和多模态大模型在教育与金融两大场景中的创新应用与实践落地。
 
 ## AIGCmagic社区与知识星球
 
