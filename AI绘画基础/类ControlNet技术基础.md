@@ -15,14 +15,14 @@
 - [13.InstanceDiffusion的模型结构和原理](#13.InstanceDiffusion的模型结构和原理)
 - [14.BeyondScene的模型结构和原理](#14.BeyondScene的模型结构和原理)
 - [15.HiCo的模型结构和原理](#15.HiCo的模型结构和原理)
-- [16.LayoutDM的模型结构和原理（LayoutDM: Transformer-based Diffusion Model for Layout Generation）](#16.LayoutDM的模型结构和原理（LayoutDM: Transformer-based Diffusion Model for Layout Generation）)
+- [16.LayoutDM的模型结构和原理](#16.LayoutDM的模型结构和原理)
 - [17.LayoutDIffusion的模型结构和原理](#[17.LayoutDIffusion的模型结构和原理]())
 - [18.LayoutDiffuse的模型结构和原理](#18.LayoutDiffuse的模型结构和原理)
-- [19.LayoutDM的模型结构和原理（LayoutDM:Precision Multi-Scale Diffusion for Layout-to-Image）2024](#19.LayoutDM的模型结构和原理（LayoutDM:Precision Multi-Scale Diffusion for Layout-to-Image）2024)
+- [19.LayoutDM的模型结构和原理](#19.LayoutDM的模型结构和原理)
 - [20.AnyScene的模型结构和原理](#20.AnyScene的模型结构和原理)
 - [21.MIGC的模型框架和原理](#21.MIGC的模型框架和原理)
-- [22.Training-free Composite Scene Generation for Layout-to-Image Synthesis(ECCV2024)](#22.Training-free Composite Scene Generation for Layout-to-Image Synthesis(ECCV2024))
-- [23.Isolated Diffusion的框架和原理](#23.Isolated Diffusion的框架和原理)
+- [22.介绍一下Training-free Composite Scene Generation for Layout-to-Image Synthesis](#22.介绍一下Training-free-Composite-Scene-Generation-for-Layout-to-Image-Synthesis)
+- [23.Isolated Diffusion的框架和原理](#23.Isolated-Diffusion的框架和原理)
 - [24.MIGC++的框架和原理](#24.MIGC++的框架和原理)
 - [25.DynamicControl的框架和原理](#25.DynamicControl的框架和原理)
 - [26.MaxFusion的框架和原理](#26.MaxFusion的框架和原理)
@@ -43,6 +43,7 @@ IP-Adapter 采用了一种解耦的交叉注意力机制，将文本特征和图
 
 适配模块：IP-Adapter 包含一个图像编码器和包含解耦交叉注意力机制的适配器。这个适配器允许模型在生成图像时，同时考虑文本提示和图像提示，生成与文本描述相匹配的图像。
 
+
 <h2 id="2.Controlnet的模型结构与原理">2.Controlnet的模型结构与原理 </h2>
 
 ![](./imgs/Controlnet.png)
@@ -54,6 +55,7 @@ IP-Adapter 采用了一种解耦的交叉注意力机制，将文本特征和图
 特征融合：ControlNet 通过零卷积层将额外的条件信息融合到神经网络的深层特征中。这些条件可以是姿势、线条结构、颜色分布等，它们作为输入调节图像，引导图像生成过程。
 
 灵活性和扩展性：ControlNet 允许用户根据需求选择不同的模型和预处理器进行组合使用，以实现更精准的图像控制和风格化。例如，可以结合线稿提取、颜色控制、背景替换等多种功能，创造出丰富的视觉效果。
+
 
 <h2 id="3.人物一致性模型PhotoMaker原理">3.人物一致性模型PhotoMaker原理 </h2>
 
@@ -67,6 +69,7 @@ ID导向的数据构建流程（ID-Oriented Human Data Construction）：为了�
 
 ![](./imgs/Photomaker.png)
 
+
 <h2 id="4.人物一致性模型InstantID原理">4.人物一致性模型InstantID原理 </h2>
 ID Embedding：InstantID利用预训练的人脸模型（如insightface库中的模型）来提取面部特征的语义信息，这些特征被称为ID Embedding。与使用CLIP模型相比，这种方法能够更精准和丰富地捕获人物面部表情的特征。
 
@@ -76,6 +79,7 @@ IdentityNet：为了在粗粒度上改进图像生成并更精确地控制人物
 
 ControlNet：InstantID还使用了ControlNet来增强面部特征提取，进一步提高图像生成的质量和准确性。
 ![](./imgs/InstantID.png)
+
 
 <h2 id="5.单ID图像为什么InstantID人物一致性比Photomaker效果好">5.单ID图像为什么InstantID人物一致性比Photomaker效果好</h2>
 
@@ -96,13 +100,12 @@ ControlNet：InstantID还使用了ControlNet来增强面部特征提取，进一
 
 ![img](./imgs/controlnet++_reward_loss.jpg)
 
-
-
 ![img](./imgs/controlnet++框架.jpg) 
 
 同时提出了一种通过添加噪声扰乱训练图像的一致性，并使用单步去噪图像进行奖励微调的新策略。相比从随机噪声开始多步采样，此方法显著减少了时间和内存成本，同时保持了高效的奖励微调,最终提高了生成图像与输入条件的一致性。
 
 ![img](./imgs/Controlnet++_reward.jpg)
+
 
 <h2 id="7.Controlnext的模型结构和原理">7.Controlnext的模型结构和原理</h2>
 
@@ -121,7 +124,6 @@ ControlNet：InstantID还使用了ControlNet来增强面部特征提取，进一
 ![image-20240902204404683](./imgs/Controlnext.png)
 
 ControlNeXt 采用精简的架构，消除了繁重的辅助组件，从而最大限度地减少延迟开销并减少可训练参数。这种轻量级设计使其能够充当具有强大鲁棒性和兼容性的即插即用模块，进一步允许与其他 LoRA 权重集成以改变生成样式，而无需额外训练。提出的交叉归一化，用新引入的参数对预训练的大型模型进行微调，从而促进更快、更稳定的训练收敛。
-
 
 
 <h2 id="8.ODGEN的模型结构和原理">8.ODGEN的模型结构和原理 </h2>
@@ -183,13 +185,16 @@ ODGEN不仅是一个生成模型，还设计了一套完整的数据集生成流
 
 ![ODGEN_data_pipeline](./imgs/ODGEN_data_pipeline.png)
 
+
 <h2 id="9.Controlnet如何处理条件图的？">9.Controlnet如何处理条件图的？</h2>
 
 我们知道在 sd 中，模型会使用 VAE-encoder 将图像映射到隐空间，512×512 的像素空间图像转换为更小的 64×64 的潜在图像。而 controlnet 为了将条件图与 VAE 解码过的特征向量进行相加，controlnet 使用了一个小型的卷积网络，其中包括一些普通的卷积层，搭配着 ReLU 激活函数来完成降维的功能。
 
+
 <h2 id="10.加入Controlnet训练后，训练时间和显存的变化？">10.加入Controlnet训练后，训练时间和显存的变化？</h2>
 
 在论文中，作者提到，与直接优化 sd 相比，优化 controlnet 只需要 23% 的显存，但是每一个 epoch 需要额外的 34% 的时间。可以方便理解的是，因为 controlnet 其实相当于只优化了unet-encoder，所以需要的显存较少，但是 controlnet 需要走两个网络，一个是原 sd 的 unet，另一个是复制的 unet-encoder，所以需要的时间会多一些。
+
 
 <h2 id="11.T2I-Adapter的模型结构和原理">11.T2I-Adapter的模型结构和原理</h2>
 
@@ -204,7 +209,6 @@ $$F_enc = \{F^1_enc, F^2_enc, F^3_enc, F^4_enc\}$$
 $$F^i_enc=F^i_enc+F^i_c, i∈\{1,2,3,4\}$$
 
 
-
 <h2 id="12.T2I-Adapter和ControlNet的异同点是什么？">12.T2I-Adapter和ControlNet的异同点是什么？</h2>
 
 - 如何将图片转化为隐变量：controlnet 和 T2I-Adapter 采用了不同的方法来将图片转化为隐向量。在 controlnet 中，作者是设计了一个小型的卷积网络，这其中包括了不同的卷积和激活函数，其中由 4x4 和 2x2 的卷积，来完成下采样的功能，而在 T2I-Adapter 中，作者是使用了Pixel-Unshuffle 的操作来完成该功能。
@@ -213,7 +217,6 @@ $$F^i_enc=F^i_enc+F^i_c, i∈\{1,2,3,4\}$$
 
 - 参数量和训练时间：前面我们提到了，controlnet 的 condition encoder 是 sd-encoder，这其中的参数数目比 T2I-Adapter 的参数要多的多，因此，controlnet 的训练时间也比 T2I-Adapter要长。
 
-  
 
 <h2 id="13.InstanceDiffusion的模型结构和原理">13.InstanceDiffusion的模型结构和原理</h2>
 
@@ -268,9 +271,6 @@ $$F^i_enc=F^i_enc+F^i_c, i∈\{1,2,3,4\}$$
   
     ![image-20241021160902698](./imgs/Multi-instance_Sampler.png)
   
-    
-
-
 
 <h2 id="14.BeyondScene的模型结构和原理">14.BeyondScene的模型结构和原理</h2>
 
@@ -298,7 +298,6 @@ $$F^i_enc=F^i_enc+F^i_c, i∈\{1,2,3,4\}$$
 ![image-20241021162056066](./imgs/High_frequency_injected_foward_diffusion.png)
 
 
-
 <h2 id="15.HiCo的模型结构和原理">15.HiCo的模型结构和原理</h2>
 
 论文链接：[2410.14324](https://arxiv.org/pdf/2410.14324)
@@ -312,8 +311,6 @@ HiCo模型采用了**层次化可控扩散模型**（Hierarchical Controllable D
 - **融合模块（Fuse Net）**：多分支网络生成的各区域特征最终在Fuse Net中融合。Fuse Net支持多种融合方式，包括加和、平均、掩码（mask）等。默认使用的是掩码方式，通过在生成过程中对不同区域进行掩码处理，实现不同前景和背景区域的解耦。
 
 ![image-20241104172029684](./imgs/HiCo.jpg)
-
-
 
 HiCo的工作原理基于以下步骤：
 
@@ -334,10 +331,7 @@ HiCo基于扩散模型（Diffusion Model）的原理，从随机噪声逐步生�
 HiCo支持多种概念扩展，允许在生成过程中加入多个LoRA插件，用于实现个性化、多语言生成等功能。此外，HiCo还支持快速生成插件（如LCM-LoRA），能够加速分辨率512x512和1024x1024的图像生成。
 
 
-
-
-
-<h2 id="16.LayoutDM的模型结构和原理（LayoutDM: Transformer-based Diffusion Model for Layout Generation）">16.LayoutDM的模型结构和原理（LayoutDM: Transformer-based Diffusion Model for Layout Generation）</h2>
+<h2 id="16.LayoutDM的模型结构和原理">16.LayoutDM的模型结构和原理</h2>
 
 论文链接：[[2305.02567\] LayoutDM: Transformer-based Diffusion Model for Layout Generation](https://arxiv.org/abs/2305.02567)
 
@@ -352,7 +346,6 @@ HiCo支持多种概念扩展，允许在生成过程中加入多个LoRA插件，
   - **元素嵌入（Element Embedding）**：融合几何、属性和时间信息，为 Transformer 提供输入。
 
 ![image-20241118202625628](./imgs/layoutdm-2023.png)
-
 
 
 <h2 id="17.LayoutDIffusion的模型结构和原理">17.LayoutDIffusion的模型结构和原理</h2>
@@ -376,7 +369,6 @@ LayoutDiffusion是一种用于布局到图像生成的扩散模型，旨在通�
      - **基于对象的交叉注意力（Object-aware Cross Attention, OaCA）**：同时关注对象的类别、位置和尺寸信息，实现对局部布局的精细控制。
 
 ![image-20241118201021782](./imgs/layoutdiffusion.png)
-
 
 
 <h2 id="18.LayoutDiffuse的模型结构和原理">18.LayoutDiffuse的模型结构和原理</h2>
@@ -407,10 +399,7 @@ LayoutDiffuse 基于 Latent Diffusion Model (LDM)，通过以下两个关键组�
 ![image-20241118201401444](./imgs/layoutdiffuse.png)
 
 
-
-
-
-<h2 id="19.LayoutDM的模型结构和原理（LayoutDM:Precision Multi-Scale Diffusion for Layout-to-Image）2024<">19.LayoutDM的模型结构和原理（LayoutDM:Precision Multi-Scale Diffusion for Layout-to-Image）2024</h2>
+<h2 id="19.LayoutDM的模型结构和原理<">19.LayoutDM的模型结构和原理</h2>
 
 论文链接：[LayoutDM: Precision Multi-Scale Diffusion for Layout-to-Image](https://www.computer.org/csdl/proceedings-article/icme/2024/10688052/20F0CkVbfHy)
 
@@ -438,16 +427,11 @@ LayoutDM 的主要结构如下：
   - 全局一致性：SCM 在生成后期（t < 200 时）通过语义信息调整图像整体质量。
 
 
-
 <h2 id="20.AnyScene的模型结构和原理">20.AnyScene的模型结构和原理</h2>
 
 论文链接:[AnyScene: Customized Image Synthesis with Composited Foreground | IEEE Conference Publication | IEEE Xplore](https://ieeexplore.ieee.org/document/10657089)
 
-
-
 ![image-20241216181530973](./imgs/anyscene_model.jpg)
-
-
 
 ### 1、获取合成前景
 
@@ -468,7 +452,6 @@ LayoutDM 的主要结构如下：
 这个框架的优势在于能够保持前景细节的准确性，同时生成与之和谐的背景场景，实现自然的视觉效果。
 
 
-
 <h2 id="21.MIGC的模型框架和原理">21.MIGC的模型框架和原理</h2>
 
 论文链接：[2402.05408](https://arxiv.org/pdf/2402.05408)
@@ -483,8 +466,6 @@ MIGC的总体框架遵循"分而治之"的方法论，将复杂的多实例生�
 
 组合（Combine）部分负责将各个部分的结果有效整合。这一过程首先通过Layout Attention获取整体着色模板，然后使用Shading Aggregation Controller动态融合所有结果。该控制器包含实例内部注意力和实例间注意力两个层次，通过softmax机制确保每个像素位置的权重分配合理，最终生成高质量的整体结果。
 
-
-
 ### 主要模块
 
 **Enhancement Attention Layer**（增强注意力层）是第一个关键模块。这个模块首先接收实例的位置信息（如"Blue Cat"的边界框坐标[0.10, 0.28, 0.48, 0.88]），通过Fourier编码和MLP进行位置特征提取。同时，将文本描述"Blue Cat"通过CLIP编码器处理。这两部分信息结合后进入Cross-Attention层，与图像特征进行交互。最后，该模块还使用实例mask来确保特征处理仅在指定区域进行。这样的设计有效地增强了每个实例的特征表示。
@@ -495,15 +476,12 @@ MIGC的总体框架遵循"分而治之"的方法论，将复杂的多实例生�
 
 这三个模块通过精心设计的联动机制共同工作，实现了对多实例生成任务的精确控制。它们的配合不仅确保了每个实例的特征质量，也保证了实例间的合理关系，最终生成高质量的整体结果。
 
-
-
 示例如下：
 
 ![image-20241216183035714](./imgs/MICG_example.jpg)
 
 
-
-<h2 id="22.Training-free Composite Scene Generation for Layout-to-Image Synthesis(ECCV2024)">22.Training-free Composite Scene Generation for Layout-to-Image Synthesis(ECCV2024)</h2>
+<h2 id="22.介绍一下Training-free-Composite-Scene-Generation-for-Layout-to-Image-Synthesis">22.介绍一下Training-free Composite Scene Generation for Layout-to-Image Synthesis</h2>
 
 论文链接：[2407.13609](https://arxiv.org/pdf/2407.13609)
 
@@ -528,8 +506,7 @@ MIGC的总体框架遵循"分而治之"的方法论，将复杂的多实例生�
 ![image-20241216200159483](./imgs/csg_example.jpg)
 
 
-
-<h2 id="23.Isolated Diffusion的框架和原理">23.Isolated Diffusion的框架和原理</h2>
+<h2 id="23.Isolated-Diffusion的框架和原理">23.Isolated Diffusion的框架和原理</h2>
 
 论文链接：[2403.16954](https://arxiv.org/pdf/2403.16954)
 
@@ -548,7 +525,6 @@ Isolated Diffusion 能够有效解决文本到图像生成中的概念混淆问�
 示例如下：
 
 ![image-20241216202635738](./imgs/Isolated Diffusion_example.png)
-
 
 
 <h2 id="24.MIGC++的框架和原理">24.MIGC++的框架和原理</h2>
@@ -585,10 +561,10 @@ MIGC和MIGC++的区别：
 
 ![image-20241216202617256](./imgs/MIGC++_example.jpg)
 
+
 <h2 id="25.DynamicControl的框架和原理">25.DynamicControl的框架和原理</h2>
 
 论文链接：[arxiv.org/pdf/2412.03255](https://arxiv.org/pdf/2412.03255)
-
 
 模型pipeline：
 
@@ -612,13 +588,10 @@ Multi-Control Adapter:
 
 ![image-20241230195843025](./imgs/Multi_Control_Adapter.png)
 
-
-
-
-
 示例：
 
 ![image-20241230200422953](./imgs/DynamicControl-example.png)
+
 
 <h2 id="26.MaxFusion的框架和原理">26.MaxFusion的框架和原理</h2>
 
@@ -635,8 +608,6 @@ Multi-Control Adapter:
 - 发现扩散模型中间特征图的方差图(variance maps)能够捕捉条件信息的强度
 - 可以利用这个特性来融合不同模态的特征
 
-
-
 **MaxFusion（最大融合）：** 
 
 核心融合算法，基于特征相关性（correlation）做决策：当相关性高于阈值时进行加权平均，低于阈值时选择方差最大的特征，并引入相对标准差来确保不同模态间的公平性。
@@ -650,6 +621,7 @@ Multi-Control Adapter:
 示例：
 
 ![image-20241230205141743](./imgs/MaxFusion_example.png)
+
 
 <h2 id="27.CreatiLayout的框架和原理">27.CreatiLayout的框架和原理</h2>
 
@@ -695,7 +667,6 @@ b) 孪生分支结构：
 ![image-20250113201809122](./imgs/creatiLayout_示例.png)
 
 
-
 <h2 id="28.Ctrl-X的框架和原理">28.Ctrl-X的框架和原理</h2>
 
 论文链接：[2406.07540](https://arxiv.org/pdf/2406.07540
@@ -717,19 +688,16 @@ Ctrl-X 是一个训练无关、指导无关的框架，通过操控预训练的 
 - 无需额外训练，直接在预训练扩散模型上运行。
 - 支持任意类型的结构和外观输入，具有高度的灵活性和高效性。
 
-
-
 示例：
 
 ![image-20250113203422258](./imgs/ctrl-x-示例.png)
+
 
 <h2 id="29.OMNIBOOTH的框架和原理">29.OMNIBOOTH的框架和原理</h2>
 
 论文链接：[2410.04932](https://arxiv.org/pdf/2410.04932)
 
 ![image-20250113202957539](./imgs/OmniBooth.png)
-
-
 
 核心架构分为三部分：
 
@@ -750,7 +718,6 @@ Ctrl-X 是一个训练无关、指导无关的框架，通过操控预训练的 
 - Feature Alignment进行特征对齐
 - Diffusion UNet生成最终图像
 - 同时接收Global Prompt作为全局引导
-
 
 示例：
 
@@ -817,4 +784,4 @@ FaceChain是一个功能上近似“秒鸭相机”的技术，我们只需要�
 
 ![FaceChain训练和推理流程图](./imgs/FaceChain训练和推理流程图.jpeg)
 
-
+---
