@@ -2,6 +2,24 @@
 
 ## 💥 目录
 
+- :star: [算法岗面试求职宝典](算法岗面试求职宝典)
+- :art: [AI绘画基础](AI绘画基础)
+- :clapper: [AI视频基础](AI视频基础)
+- :sparkler: [大模型基础](大模型基础)
+- :trident: [AI多模态基础](AI多模态基础)
+- :shipit: [数字人基础](数字人基础)
+- :closed_book: [深度学习基础](深度学习基础)
+- :blue_book: [机器学习基础](机器学习基础)
+- :european_castle: [模型部署基础](模型部署基础)
+- :stars: [经典模型](经典模型)
+- :snake: [编程基础：Python](编程基础：Python)
+- :bar_chart: [编程基础：C和C++](编程基础：C和C++)
+- :boom: [大厂高频算法题](大厂高频算法题)
+- :battery: [数据结构基础](数据结构基础)
+- :computer: [计算机基础](计算机基础)
+- :chart_with_upwards_trend: [开放性问题](开放性问题)
+- [2025年AI算法岗求职群&学习交流社区]([https://mp.weixin.qq.com/s/sK_oSU1PmbUJ5ZGeMmY27A](https://mp.weixin.qq.com/s/ssEJjHBoJDB4y5CfQIWYvw))
+
 ![【三年面试五年模拟】内容大纲](imgs/框架.png)
 
 ## 作者介绍
