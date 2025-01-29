@@ -18,7 +18,7 @@
 - :battery: [数据结构基础](数据结构基础)
 - :computer: [计算机基础](计算机基础)
 - :chart_with_upwards_trend: [开放性问题](开放性问题)
-- [2025年AI算法岗求职群&学习交流社区]([https://mp.weixin.qq.com/s/sK_oSU1PmbUJ5ZGeMmY27A](https://mp.weixin.qq.com/s/ssEJjHBoJDB4y5CfQIWYvw))
+- [2025年AI算法岗求职群&学习交流社区](https://mp.weixin.qq.com/s/ssEJjHBoJDB4y5CfQIWYvw)
 
 ![【三年面试五年模拟】内容大纲](imgs/框架.png)
 
