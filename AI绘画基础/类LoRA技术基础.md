@@ -1,14 +1,14 @@
 # 目录
 
-- [1.使用lora微调Stable_Diffusion模型](#1.使用lora微调Stable_Diffusion模型)
+- [1.使用lora微调Stable Diffusion模型](#1.使用lora微调Stable_Diffusion模型)
 - [2.用于图像生成的多lora组合](#2.用于图像生成的多lora组合)
 - [3.Hypernetwork是什么？](#3.Hypernetwork是什么？)
-- [4.HyperDreamBooth是什么？](#4.HyperDreamBooth是什么？（2023年7月发布）)
-- [5.DiffLoRA是什么？](#5.DiffLoRA是什么？(2024年8月发布))
+- [4.HyperDreamBooth是什么？](#4.HyperDreamBooth是什么？)
+- [5.DiffLoRA是什么？](#5.DiffLoRA是什么？)
 - [6.AutoLoRA是什么？](#6.AutoLoRA是什么？)
 
 
-<h2 id="1.使用lora微调Stable_Diffusion模型">1.使用lora微调Stable_Diffusion模型</h2>
+<h2 id="1.使用lora微调Stable Diffusion模型">1.使用lora微调Stable_Diffusion模型</h2>
 
 [LoRA: Low-Rank Adaptation of Large Language Models](https://arxiv.org/abs/2106.09685) 是微软研究员引入的一项新技术，主要用于处理大模型微调的问题。目前超过数十亿以上参数的具有强能力的大模型 (例如 GPT-3) 通常在为了适应其下游任务的微调中会呈现出巨大开销。LoRA 建议冻结预训练模型的权重并在每个 Transformer 块中注入可训练层 (*秩-分解矩阵*)。因为不需要为大多数模型权重计算梯度，所以大大减少了需要训练参数的数量并且降低了 GPU 的内存要求。研究人员发现，通过聚焦大模型的 Transformer 注意力块，使用 LoRA 进行的微调质量与全模型微调相当，同时速度更快且需要更少的计算。
 
@@ -46,6 +46,7 @@ LoRA也是一种微调 Stable Diffusion 模型的技术，其可用于对关键�
 
 ![image-20240611202719934](./imgs/多lora生成.png)
 
+
 <h2 id="3.Hypernetwork是什么？">3.Hypernetwork是什么？</h2>
 
 Hypernetwork，也被称为“超网络”，是一种附加到 Stable Diffusion 模型的小型神经网络。它的主要作用是通过插入到噪声预测器 UNet 的交叉注意力模块中，从而改变模型的风格表现。
@@ -73,8 +74,7 @@ Hypernetwork，也被称为“超网络”，是一种附加到 Stable Diffusion
 - **效果有限**：虽然 Hypernetwork 的文件体积较大，但其效果往往不如更小的 Embeddings 文件，而这些效果可以通过其他方式实现，例如使用 Embeddings 或 LoRA 模型。
 
 
-
-<h2 id="4.HyperDreamBooth是什么？">4.HyperDreamBooth是什么？(2023年7月发布)</h2>
+<h2 id="4.HyperDreamBooth是什么？">4.HyperDreamBooth是什么？</h2>
 
 论文链接：https://arxiv.org/pdf/2307.06949
 
@@ -105,8 +105,7 @@ Lightweight DreamBooth结构如下：
 HyperDreamBooth 实现了快速、轻量级和高质量的文本到图像模型个性化,为创意应用开辟了新的可能性。
 
 
-
-<h2 id="5.DiffLoRA是什么？">5.DiffLoRA是什么？(2024年8月发布)</h2>
+<h2 id="5.DiffLoRA是什么？">5.DiffLoRA是什么？</h2>
 
 论文链接：https://arxiv.org/pdf/2408.06740
 
@@ -125,8 +124,7 @@ MIF结构图:
 
 ![MIF](./imgs/MIF.png)
 
-这是一种利用扩散模型作为超网络来根据参考图像预测个性化低秩适应（LoRA）权重的方法。通过将这些 LoRA 权重集成到文本到图像模型中，DiffLoRA 无需进一步训练即可在推理过程中实现个性化。这是第一个利用扩散模型来生成面向身份的 LoRA 权重的模型
-
+这是一种利用扩散模型作为超网络来根据参考图像预测个性化低秩适应（LoRA）权重的方法。通过将这些 LoRA 权重集成到文本到图像模型中，DiffLoRA 无需进一步训练即可在推理过程中实现个性化。这是第一个利用扩散模型来生成面向身份的 LoRA 权重的模型。
 
 
 <h2 id="6.AutoLoRA是什么？">6.AutoLoRA是什么？(2024年10月发布)</h2>
@@ -159,3 +157,5 @@ AutoLoRA 结合了这两者的思路，通过让基础模型与 LoRA 微调模�
 - **多样性与一致性的平衡**：通过结合基础和微调模型的输出，AutoLoRA 能在保留特定风格一致性的同时引入更多多样性。这解决了 LoRA 模型因小数据集训练导致的过拟合问题。
 - **双重指导**：单独为基础和微调模型应用 CFG，有助于增加生成图像的细节和质量，同时维持对输入提示的良好响应。
 - **探索与利用**：AutoLoRA 的设计类似于在探索（生成多样性）和利用（保持风格一致性）之间寻找最优点，使得生成的图像既符合预期风格，又能展示丰富的细节变化。
+
+---
