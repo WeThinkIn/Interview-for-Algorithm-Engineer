@@ -2,6 +2,8 @@
 
 ## 💥 目录
 
+【Three Years of Interviews, Five Years of Practice】The Ultimate Guide to AI Algorithm Engineer Job Interviews
+
 - :star: [算法岗面试求职宝典](算法岗面试求职宝典)
 - :art: [AI绘画基础](AI绘画基础)
 - :clapper: [AI视频基础](AI视频基础)
