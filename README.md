@@ -1,6 +1,34 @@
-# 🔥【三年面试五年模拟】AI算法工程师的求职面试秘籍
+# 【三年面试五年模拟】AI算法工程师的求职面试秘籍
 
-## 💥【三年面试五年模拟】内容大纲
+**AI算法岗求职面试秘籍：** 涵盖大厂内推、面试经验分享、AIGC公司指南、AIGC公司辛秘、校招时间表、面试准备、AIGC薪资、刷题指南、求职答疑等资料。
+
+**AI算法岗方向：** 涵盖AIGC、传统深度学习、自动驾驶、机器学习、计算机视觉、自然语言处理、强化学习、具身智能、元宇宙、AGI等。
+
+**开发岗方向：** 涵盖Python、Java、C/C++、Go、嵌入式、前端、后端、测试、运维等。
+
+**本项目在持续更新中，欢迎大家分享求职经历、工作经验、招聘内推、工作机会等信息，欢迎共同建设完善本项目，祝大家求职顺利、工作顺利！**
+
+## 目录
+
+【Three Years of Interviews, Five Years of Practice】The Ultimate Guide to AI Algorithm Engineer Job Interviews
+
+- :star: [算法岗面试求职宝典](算法岗面试求职宝典)
+- :art: [AI绘画基础](AI绘画基础)
+- :clapper: [AI视频基础](AI视频基础)
+- :sparkler: [大模型基础](大模型基础)
+- :trident: [AI多模态基础](AI多模态基础)
+- :shipit: [数字人基础](数字人基础)
+- :closed_book: [深度学习基础](深度学习基础)
+- :blue_book: [机器学习基础](机器学习基础)
+- :european_castle: [模型部署基础](模型部署基础)
+- :stars: [经典模型](经典模型)
+- :snake: [编程基础：Python](编程基础：Python)
+- :bar_chart: [编程基础：C和C++](编程基础：C和C++)
+- :boom: [大厂高频算法题](大厂高频算法题)
+- :battery: [数据结构基础](数据结构基础)
+- :computer: [计算机基础](计算机基础)
+- :chart_with_upwards_trend: [开放性问题](开放性问题)
+- [2025年AI算法岗求职群&学习交流社区](https://mp.weixin.qq.com/s/ssEJjHBoJDB4y5CfQIWYvw)
 
 ![【三年面试五年模拟】内容大纲](imgs/框架.png)
 
@@ -8,15 +36,17 @@
 
 Rocky Ding 主编
 
-<a href="https://www.zhihu.com/people/bei-jing-de-wen-zhou-ren"><img src="https://img.shields.io/badge/Rocky Ding-知乎-blue"></a> 
+<a href="https://www.zhihu.com/people/bei-jing-de-wen-zhou-ren"><img src="https://img.shields.io/badge/Rocky Ding-知乎-blue"></a>
+<a href="imgs/WeThinkIn公众号.jpg"><img src="https://img.shields.io/badge/WeThinkIn-公众号-brightgreen"></a>
+<a href="https://rockyding.blog.csdn.net"><img src="https://img.shields.io/badge/Rocky Ding-CSDN-red"></a>
 
-Rocky Ding，AIGCmagic社区创始人，知乎AI领域知名博主（同名Rocky Ding），公众号《WeThinkIn》主理人，资深AIGC算法专家，全网文章阅读量200万+，专注于AIGC产品与AI算法解决方案的商业应用。在互联网大厂、AI独角兽、传统科技公司以及国企研究院有丰富的工作经验与创业经验。多次带队获得CVPR、AAAI、Kaggle等AI领域顶级竞赛的冠军成绩。发表多篇AI领域论文和专利。
+Rocky Ding，AIGCmagic社区创始人，知乎AI领域知名博主（同名Rocky Ding），公众号《WeThinkIn》主理人，全网文章阅读量300万+。资深AIGC算法专家，专注于AIGC产品与AI算法解决方案的商业应用。在互联网大厂、AI独角兽、传统科技公司以及国企研究院有丰富的工作经验与创业经验。多次带队获得CVPR、AAAI、Kaggle等AI领域顶级竞赛的冠军成绩。发表多篇AI领域论文和专利。
 
-Rocky最新撰写Stable Diffusion 3和FLUX.1系列模型全网最详细讲解文章：[深入浅出完整解析Stable Diffusion 3（SD 3）和FLUX.1系列核心基础知识](https://zhuanlan.zhihu.com/p/684068402)
+Rocky最新撰写完成10万字的Stable Diffusion 3和FLUX.1系列模型全网最详细讲解文章：[深入浅出完整解析Stable Diffusion 3（SD 3）和FLUX.1系列核心基础知识](https://zhuanlan.zhihu.com/p/684068402)
 
 张一凡 副主编
 
-张一凡，资深AIGC算法专家，曾就职于国内某top安防公司，专注于AIGC算法实现与落地部署，目前在国内某研究所主要从事AI大模型相关的研究。
+张一凡，资深AIGC算法专家，曾就职于国内top安防公司，专注于AIGC算法实现与落地部署，目前在国内某研究所主要从事AI大模型相关的研究。
 
 猫先生 副主编   
 
@@ -28,11 +58,11 @@ Rocky最新撰写Stable Diffusion 3和FLUX.1系列模型全网最详细讲解文
 
 刘一手 副主编
 
-刘一手，资深高级算法工程师，先后就职于AI教育独角兽企业和百亿规模的私募金融机构，擅长AI算法的工程研发。目前专注于计算机视觉算法的深度探索和多模态大模型在教育与金融两大场景中的创新应用与实践落地。
+刘一手，资深高级算法工程师，先后就职于AI教育独角兽企业和百亿规模的私募金融机构，擅长AI算法的工程研发。目前专注于计算机视觉算法和多模态大模型在教育与金融两大场景中的创新应用与实践落地。
 
 ## AIGCmagic社区与知识星球
 
-AIGCmagic社区持续分享探讨AIGC、传统深度学习、自动驾驶、机器学习、计算机视觉、自然语言处理、具身智能、元宇宙、SLAM等AI行业的干货知识与前沿技术资讯。
+《三年面试五年模拟》项目是AIGCmagic社区的主打项目之一，AIGCmagic社区持续分享探讨AIGC、传统深度学习、自动驾驶、机器学习、计算机视觉、自然语言处理、具身智能、元宇宙、SLAM等AI行业的干货知识与前沿技术资讯。
 
 AIGCmagic社区的宗旨是找到更多志同道合的伙伴，在星球居民们都能有成长、有进步、能提升个人基本面的基础上，一起推动AI行业的发展与繁荣。
 
@@ -62,4 +92,12 @@ AIGCmagic社区的宗旨是找到更多志同道合的伙伴，在星球居民�
 <img src="imgs/AI多模态交流群.jpg" alt="AIGCmagic社区-AI多模态交流群" width="200"/><img src="imgs/传统深度学习交流群.jpg" alt="AIGCmagic社区-传统深度学习交流群" width="200"/><img src="imgs/自动驾驶交流群.jpg" alt="AIGCmagic社区-自动驾驶交流群" width="200"/>
 </div>
 
+## 合作&共建
 
+**经验分享**：如果您已经有AIGC领域的求职经验和从业经验，欢迎您分享笔试经验、面试经验、工作经验、岗位需求等相关经验，可直接通过PR和Issue等方式提交！
+
+**参与共建**：您可以通过下面几种方向参与项目共建：
+1. 直接参与建设、维护本项目。
+2. 加入AIGCmagic社区参与更多项目共建。
+
+**岗位招聘**：若贵司有AIGC相关招聘、内推信息，欢迎在本项目中发布！
