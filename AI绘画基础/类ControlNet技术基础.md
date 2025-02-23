@@ -31,6 +31,8 @@
 - [29.OMNIBOOTH的框架和原理](#29.OMNIBOOTH的框架和原理)
 - [30.EasyPhoto的训练和推理流程是什么样的？](#30.EasyPhoto的训练和推理流程是什么样的？)
 - [31.FaceChain的训练和推理流程是什么样的？](#31.FaceChain的训练和推理流程是什么样的？)
+- [32.ReCo的框架和原理](#32.ReCo的框架和原理)
+- [33.Be Yourself（Bounded Attention for Multi-Subject Text-to-Image Generation）的框架和原理](#33.Be Yourself（Bounded Attention for Multi-Subject Text-to-Image Generation）的框架和原理)
 
 
 <h2 id="1.Ip-adapter的模型结构与原理">1.Ip-adapter的模型结构与原理 </h2>
@@ -782,6 +784,65 @@ FaceChain是一个功能上近似“秒鸭相机”的技术，我们只需要�
 5. 使用人脸融合模型进一步改善上述写真图像的人脸细节，其中用于融合的模板人脸通过人脸质量评估模型在训练图像中挑选。
 6. 使用人脸识别模型计算生成的写真图像与模板人脸的相似度，以此对写真图像进行排序，并输出排名靠前的个人写真图像作为最终输出结果。
 
-![FaceChain训练和推理流程图](./imgs/FaceChain训练和推理流程图.jpeg)
+32.ReCo的框架和原理![FaceChain训练和推理流程图](./imgs/FaceChain训练和推理流程图.jpeg)
 
----
+
+
+<h2 id="32.ReCo的框架和原理">32.ReCo的框架和原理</h2>
+
+论文链接：[[2211.15518\] ReCo: Region-Controlled Text-to-Image Generation](https://arxiv.org/abs/2211.15518)
+
+#### 框架架构
+
+1. ReCo基于Stable Diffusion（SD）模型改进，主要包含以下模块：
+   1. **双模态输入序列**：在传统文本令牌（Text Tokens）的基础上，引入**位置令牌（Position Tokens）**。这些位置标记通过坐标编码（如边界框的归一化坐标）生成，允许用户在输入查询中混合自由文本描述和区域位置信息。
+      - 示例输入格式：
+        `"a kitchen with <576> <553> <791> <979> stainless steel appliances and a counter"`
+   2. **扩展的文本编码器**：沿用CLIP ViT-L/14文本编码器，但额外支持位置标记的嵌入，联合文本和位置标记生成条件嵌入向量。
+   3. **扩散模型架构**：保持SD的U-Net架构，但通过微调使其能结合位置信息进行去噪。位置标记与文本标记通过交叉注意力机制共同指导图像生成。
+
+![image-20250223194247270](./imgs/reco.png)
+
+#### **关键原理**
+
+1. **区域指令的可控性**：
+    ReCo通过位置标记直接指定目标区域（如物体位置或范围），降低生成过程中的空间歧义。例如，用户可精确描述"沙发在画面左侧（区域<0, 0, 0.5, 1>）"，从而避免模型对布局的随机猜测。
+2. **训练数据构建**：
+   - 使用自动标注工具（如GIT captioning模型）为图像中的裁剪区域生成区域描述。
+   - 对位置标记进行随机化裁剪与坐标编码，增强模型对多样化区域指令的泛化能力。
+3. **保留预训练能力**：
+    ReCo仅微调SD模型的文本编码器和交叉注意力层，最大限度保留原有生成质量，并适应区域控制任务。
+
+下面是示例：
+
+![image-20250223194333168](./imgs/reco_example.png)
+
+
+
+<h2 id="33.Be Yourself（Bounded Attention for Multi-Subject Text-to-Image Generation）的框架和原理">33.Be Yourself（Bounded Attention for Multi-Subject Text-to-Image Generation）的框架和原理</h2>
+
+论文链接：[[2403.16990\] Be Yourself: Bounded Attention for Multi-Subject Text-to-Image Generation](https://arxiv.org/abs/2403.16990)
+
+#### **核心问题**
+
+现有文本到图像扩散模型（如Stable Diffusion）在生成包含多个语义相似主体的复杂场景时，常出现**语义泄漏**（Semantic Leakage）问题，导致主体特征混淆（例如，“3只姜黄色小猫和2只灰色小猫”可能混合颜色或形态）。
+
+![image-20250223200119401](./imgs/beyourself_example_for_issue.png)
+
+论文提出**Bounded Attention**（有界注意力）机制，通过约束交叉注意力和自注意力层的相互作用，分割不同主体的生成流程，主要包含以下模块：
+
+1. **Bounded Guidance**
+   - **功能**：在去噪过程的早期阶段，通过用户提供的布局（如bounding boxes）生成粗略的语义分割掩模，引导各主体区域的空间定位。
+   - **原理**：限制不同区域的注意力交互，抑制跨区域语义干扰（如避免“姜黄色小猫”的特征泄漏到“灰色小猫”区域）。
+2. **Bounded Denoising**
+   - **功能**：在去噪后期，细化各主体的细节特征，确保其与文本描述严格对齐（如颜色、纹理等）。
+   - **原理**：通过修改自注意力层中的查询（Query）和键（Key）的相似性，强制不同主体的特征独立性。
+3. **Mask Refinement**
+   - **功能**：动态优化分割掩模，提升主体边界清晰度。
+   - **原理**：结合去噪过程中的隐变量特征，迭代更新掩模，避免区域重叠导致的特征混合。
+
+![image-20250223195927919](./imgs/beyouself.png)
+
+下面是示例：
+
+![image-20250223200443289](./imgs/BA_example.png)
