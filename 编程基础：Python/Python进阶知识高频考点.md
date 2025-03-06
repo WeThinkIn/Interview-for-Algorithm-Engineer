@@ -21,6 +21,7 @@
 - [19.介绍一下Python中的多态（Polymorphism）思想](#19.介绍一下Python中的多态（Polymorphism）思想)
 - [20.介绍一下Python的自省特性](#20.介绍一下Python的自省特性)
 - [21.介绍一下Python中的sequence和mapping代表的数据结构](#21.介绍一下Python中的sequence和mapping代表的数据结构)
+- [22.Python中使用async def定义函数有什么作用？](#22.Python中使用async-def定义函数有什么作用？)
 
 
 <h2 id="1.python中迭代器的概念？">1.Python中迭代器的概念？</h2>
@@ -2488,4 +2489,119 @@ print(my_dict.keys())                        # 返回所有键
 | 示例类型                 | `list`, `tuple`, `str`           | `dict`, `defaultdict`, `OrderedDict`|
 
 ---
+
+
+<h2 id="22.Python中使用async-def定义函数有什么作用？">22.Python中使用async def定义函数有什么作用？</h2>
+
+### 一、`async def` 的作用
+`async def` 是 Python 中定义**异步函数**的关键字，用于声明一个协程（coroutine）。它的核心作用是：
+- **非阻塞并发**：允许在等待 I/O 操作（如网络请求、文件读写）时释放 CPU，让其他任务运行。
+- **提升效率**：适合高延迟、低计算的场景（如 Web 服务器处理请求），通过事件循环（Event Loop）管理多个任务的切换。
+
+与同步函数的区别：
+- 同步函数遇到 I/O 时会“卡住”整个线程，直到操作完成。
+- 异步函数遇到 `await` 时会暂停，让事件循环执行其他任务，直到 I/O 完成再恢复。
+
+通过合理使用 `async def`，可以在不增加硬件成本的情况下显著提升AI系统吞吐量和响应速度。
+
+### 二、生动例子：餐厅服务员点餐
+假设一个餐厅有 **1 个服务员**和 **3 个顾客**：
+- **同步场景**：服务员依次为每个顾客点餐，必须等当前顾客完全点完才能服务下一个。
+- **异步场景**：服务员在顾客看菜单时（等待时间）去服务其他顾客，最终总时间更短。
+
+**代码实现**：
+```python
+import asyncio
+
+async def order_customer(name):
+    print(f"顾客 {name} 开始看菜单...")
+    await asyncio.sleep(2)  # 模拟看菜单的等待时间
+    print(f"顾客 {name} 点餐完成！")
+
+async def main():
+    await asyncio.gather(
+        order_customer("Alice"),
+        order_customer("Bob"),
+        order_customer("Charlie"),
+    )
+
+asyncio.run(main())
+```
+**输出**：
+```
+顾客 Alice 开始看菜单...
+顾客 Bob 开始看菜单...
+顾客 Charlie 开始看菜单...
+（等待2秒）
+顾客 Alice 点餐完成！
+顾客 Bob 点餐完成！
+顾客 Charlie 点餐完成！
+```
+
+### 三、在 AIGC 中的应用
+**场景**：同时处理多个用户的文本生成请求。  
+**案例**：使用异步框架（如 FastAPI）处理 GPT 请求，当一个请求等待模型生成时，处理另一个请求。
+```python
+from fastapi import FastAPI
+import asyncio
+
+app = FastAPI()
+
+async def generate_text(prompt):
+    # 模拟调用大模型生成文本（假设有延迟）
+    await asyncio.sleep(1)
+    return f"Generated text for: {prompt}"
+
+@app.post("/generate")
+async def handle_request(prompt: str):
+    result = await generate_text(prompt)
+    return {"result": result}
+
+# 启动服务后，多个用户请求可以并发处理
+```
+
+### 四、在传统深度学习中的应用
+**场景**：异步加载和预处理数据，减少训练时的等待时间。  
+**案例**：使用 `aiofiles` 异步读取文件，同时用多进程进行数据增强。
+```python
+import aiofiles
+import asyncio
+
+async def async_load_data(file_path):
+    async with aiofiles.open(file_path, 'r') as f:
+        data = await f.read()
+    # 异步预处理（如解码图像）
+    return preprocess(data)
+
+async def data_pipeline(file_paths):
+    tasks = [async_load_data(path) for path in file_paths]
+    return await asyncio.gather(*tasks)
+
+# 在训练循环外异步预加载下一批数据
+```
+
+### 五、在自动驾驶中的应用
+**场景**：实时处理多传感器（摄像头、雷达、LiDAR）的输入数据。  
+**案例**：异步接收传感器数据并并行处理。
+```python
+async def process_camera(frame):
+    await asyncio.sleep(0.1)  # 模拟图像处理耗时
+    return detect_objects(frame)
+
+async def process_lidar(point_cloud):
+    await asyncio.sleep(0.05)  # 模拟点云处理耗时
+    return cluster_points(point_cloud)
+
+async def main_loop():
+    while True:
+        camera_data = get_camera_frame()
+        lidar_data = get_lidar_points()
+        # 并行处理传感器数据
+        objects, clusters = await asyncio.gather(
+            process_camera(camera_data),
+            process_lidar(lidar_data)
+        )
+        make_decision(objects, clusters)
+```
+
 
