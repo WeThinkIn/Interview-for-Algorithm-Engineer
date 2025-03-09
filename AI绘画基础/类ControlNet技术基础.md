@@ -33,6 +33,9 @@
 - [31.FaceChain的训练和推理流程是什么样的？](#31.FaceChain的训练和推理流程是什么样的？)
 - [32.ReCo的框架和原理](#32.ReCo的框架和原理)
 - [33.Be Yourself（Bounded Attention for Multi-Subject Text-to-Image Generation）的框架和原理](#33.Be Yourself（Bounded Attention for Multi-Subject Text-to-Image Generation）的框架和原理)
+- [34.IFadapter的框架和原理](#34.IFadapter的框架和原理)
+- [35.LAW-Diffusion的框架和原理](#35.LAW-Diffusion的框架和原理)
+- [36.Check, Locate, Rectify（A Training-Free Layout Calibration System for Text-to-Image Generation）的框架和原理](#36.Check, Locate, Rectify（A Training-Free Layout Calibration System for Text-to-Image Generation）的框架和原理)
 
 
 <h2 id="1.Ip-adapter的模型结构与原理">1.Ip-adapter的模型结构与原理 </h2>
@@ -846,3 +849,127 @@ FaceChain是一个功能上近似“秒鸭相机”的技术，我们只需要�
 下面是示例：
 
 ![image-20250223200443289](./imgs/BA_example.png)
+
+<h2 id="34.IFadapter的框架和原理">34.IFadapter的框架和原理</h2>
+
+### 研究背景
+
+- 当前的文本到图像（Text-to-Image, T2I）扩散模型在生成单个实例的高质量图像方面表现出色，但在处理多个实例的精确位置和特征生成时存在局限性。
+- 布局到图像（Layout-to-Image, L2I）任务通过引入边界框作为空间控制信号解决了位置问题，但在生成精确的实例特征方面仍有不足。
+
+论文提出了一个更具挑战性的任务：**实例特征生成（Instance Feature Generation, IFG）**，旨在同时确保生成内容的位置准确性和特征忠实度。
+
+
+
+### IFAdapter框架
+
+IFAdapter（实例特征适配器）是为解决IFG任务而设计的模型，主要包含两个核心组件：
+
+#### 1. 外观令牌（Appearance Tokens）
+
+- 解决问题：现有模型主要使用单一上下文化令牌（EoT令牌）来指导实例特征生成，无法捕捉高频细节特征
+- 原理：引入可学习的外观查询，从实例描述中提取特定特征信息，形成外观令牌，与EoT令牌一起工作
+- 优势：能够更精确地控制实例特征的生成，特别是复杂的纹理、混合颜色等细节
+
+#### 2. 实例语义图（Instance Semantic Map）
+
+- 解决问题：现有序列到2D定位条件无法提供足够强的空间先验
+- 原理：构建2D语义图将实例特征与指定空间位置关联起来，提供增强的空间引导
+- 特点：在多个实例重叠的区域，采用门控语义融合机制解决特征混淆问题
+- 实现：仅在扩散模型的部分交叉注意力层中集成语义图，实现松散耦合
+
+<img src="./imgs/ifadapter.png" alt="image-20250309161515489" style="zoom:67%;" />
+
+效果如下：
+
+![image-20250309161925832](./imgs/ifadapter_example.png)
+
+IFAdapter的即插即用设计使其能够无缝赋能各种社区模型，应用于图形设计和艺术设计等需要局部高级细节的场景。
+
+这项研究为解决文本到图像生成中的精细控制问题提供了一种有效的方法，在保持位置准确性的同时提高了特征表现力，推动了可控图像生成技术的发展。
+
+<h2 id="35.LAW-Diffusion的框架和原理">35.LAW-Diffusion的框架和原理</h2>
+
+LAW-Diffusion是一种语义可控的布局感知扩散模型，其核心思想是解析对象之间的空间依赖关系，生成具有协调一致对象关系的复杂场景图像。该框架主要包含以下组件：
+
+### 1. 空间依赖关系解析器（Spatial Dependency Parser）
+
+不同于之前仅探索类别感知关系的方法，LAW-Diffusion引入了空间依赖关系解析器，用于编码对象之间的位置感知语义连贯性：
+
+- **对象区域图（Object Region Maps）**：为每个对象实例化区域语义表示，将类别嵌入填充到其边界框指定的区域
+- 位置感知跨对象注意力（Location-aware Cross-object Attention）：
+  - 将对象区域图分割成区域片段
+  - 对相同位置的区域片段执行多头注意力操作
+  - 使用可学习的聚合令牌捕获位置感知的组合语义
+  - 重新组合聚合片段得到布局嵌入（Layout Embedding）
+
+这种方式同时捕获了类别感知和位置感知的依赖关系，确保在生成图像的局部片段时，能够准确指定对象在特定位置的可能重叠情况。
+
+![image-20250309164931421](./imgs/Spatial Dependency Parser.png)
+
+### 2. 自适应引导调度（Adaptive Guidance Schedule）
+
+为了平衡区域语义对齐与对象纹理保真度之间的权衡，LAW-Diffusion提出了自适应引导调度策略：
+
+- 在采样阶段使用余弦形式的引导幅度衰减函数
+- 从初始较大的引导比例逐渐衰减到较小值
+- 早期阶段强调语义控制，后期阶段注重纹理细节
+
+这种策略类似于人类绘图时先构思整体语义，再细化细节的直觉过程。
+
+![image-20250309165104833](./imgs/Adaptive Guidance Schedule.png)
+
+### 3. 布局感知潜在嫁接（Layout-aware Latent Grafting）
+
+LAW-Diffusion还支持实例级别的重构能力，包括添加/移除/重新设计生成场景中的实例：
+
+- 从已生成图像的扩散潜在表示中，提取边界框外的区域
+- 在相同噪声级别下，将该区域嫁接到由新布局引导的目标潜在表示上
+- 通过交替重组局部区域语义和去噪这些嫁接的潜在表示，实现实例重构
+
+![image-20250309165119951](./imgs/Layout-aware Latent Grafting.png)
+
+示例如下：
+
+![image-20250309165333162](./imgs/LAW-Diffusion.png)
+
+LAW-Diffusion通过引入空间依赖关系解析、自适应引导调度和布局感知潜在嫁接等创新技术，显著提升了布局到图像生成的效果，特别是在保持复杂场景中对象之间合理和协调的关系方面。该方法为控制复杂场景生成提供了新的思路，具有重要的理论和应用价值。
+
+<h2 id="36.Check, Locate, Rectify（A Training-Free Layout Calibration System for Text-to-Image Generation）的框架和原理">36.Check, Locate, Rectify（A Training-Free Layout Calibration System for Text-to-Image Generation）的框架和原理</h2>
+
+本研究论文介绍了SimM，这是一种新颖的系统，旨在解决文本到图像生成中的一个常见挑战：准确实现文本提示中的空间布局指令。
+
+### SimM方法
+
+SimM采用“检查-定位-纠正”流程，无需额外训练即可干预生成过程：
+
+1. **检查**：
+   - 使用预定义词汇确定提示是否包含布局要求
+   - 使用依赖解析和启发式规则生成对象的目标布局
+   - 评估当前生成是否可能偏离这些要求
+2. **定位**：
+   - 在早期去噪步骤中识别对象当前被放置的位置
+   - 使用注意力图找到每个对象的激活区域
+3. **纠正**：
+   - 将激活从错误位置转移到目标位置
+   - 增强目标区域的激活并抑制其他区域的激活
+   - 防止不同对象之间的激活重叠
+
+![image-20250309163901844](./imgs/SimM.png)
+
+
+
+示例如下：
+
+![image-20250309163945734](./imgs/SimM_example.png)
+
+### 关键创新
+
+1. **无需训练的实现**：可与现有的预训练模型配合使用，无需微调
+2. **处理两种空间关系**:
+   - 相对关系（例如，“一只狗在猫的左边”）
+   - 最高级关系（例如，“左边的一朵花”）
+3. **高效的布局生成**：自动从文本中推导出目标布局，无需手动输入
+4. **最小的计算开销**：直接修改注意力图，无需复杂的优化
+
+该技术可以改善创意应用中的用户控制，允许在文本到图像生成中更精确地指定布局，而无需具备布局技术知识或额外训练。
