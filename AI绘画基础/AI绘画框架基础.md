@@ -4,6 +4,8 @@
 - [2.Stable Diffusion WebUI中Variation seed如何工作的？](#2.Stable-Diffusion-WebUI中Variation-seed如何工作的？)
 - [3.介绍一下Stable Diffusion WebUI中不同采样器（比如Euler、DPM++2M等）的原理与使用说明](#3.介绍一下Stable-Diffusion-WebUI中不同采样器（比如Euler、DPM++2M等）的原理与使用说明)
 - [4.热门AI绘画插件UltimateSDUpscale的工作原理是什么样的？](#4.热门AI绘画插件UltimateSDUpscale的工作原理是什么样的？)
+- [5.热门AI绘画插件Tiled VAE的工作原理是什么样的？](#5.热门AI绘画插件Tiled-VAE的工作原理是什么样的？)
+- [6.热门AI绘画插件Tiled Diffusion的工作原理是什么样的？](#6.热门AI绘画插件Tiled-Diffusion的工作原理是什么样的？)
 
 
 <h2 id="1.目前主流的AI绘画框架有哪些？">1.目前主流的AI绘画框架有哪些？</h2>
@@ -283,4 +285,43 @@ UltimateSDUpscale 是一种基于 **Stable Diffusion（SD）和GAN** 框架的�
 **操作**：  
 1. **Seams fix技术**：沿着拼接缝隙，进行二次的生成修复。  
 2. **频域滤波**：对图像进行小波变换，抑制高频噪声（如色带效应），保留真实细节。   
+
+
+<h2 id="5.热门AI绘画插件Tiled-VAE的工作原理是什么样的？">5.热门AI绘画插件Tiled VAE的工作原理是什么样的？</h2>
+
+**Tiled VAE的核心目标是通过分块处理大图像，解决显存不足的问题，同时保持生成图像中的子分块图像的边缘无缝连接**。使用到的核心技术是通过估计GroupNorm的参数来实现无缝生成。下面是Tiled VAE的具体流程：
+1. 将大图像分割成多个小块（tiles）。
+2. 在编码器（encoder）和解码器（decoder）中，每个小块会分别进行填充（padding），通常为11/32像素。
+3. 将原始的VAE前向传播过程被分解为一个任务队列和一个任务处理器。任务处理器开始处理每个小块。当需要GroupNorm时，任务处理器会暂停，存储当前的GroupNorm的均值和方差，并将数据发送到RAM（Random Access Memory，随机存取存储器），然后转向处理下一个小块。
+4. 在所有GroupNorm的均值和方差被汇总后，任务处理器会对每个小块应用GroupNorm并继续处理。同时使用Zigzag执行顺序（如从左到右，再从右到左）处理这些小块，可以减少数据在 RAM 和 VRAM 之间的传输次数。这种顺序避免了频繁切换数据块，从而提高了处理效率。
+
+
+<h2 id="6.热门AI绘画插件Tiled-Diffusion的工作原理是什么样的？">6.热门AI绘画插件Tiled Diffusion的工作原理是什么样的？</h2>
+
+**Tiled Diffusion能够在低显存（6GB及一下）情况下，对图像进行超分辨率重建、生成2k-8k分辨率的高质量高清大图以及图像子区域的编辑生成。**
+
+我们要知道的是，Tiled Diffusion的底层思想来源于MultiDiffusion。一般来说，我们进行图像的Tiled处理时，会将输入的噪声图像划分成不同的区块，针对每一个区块分别进行特定的图像特征生成。但是这样处理会引入一个问题，那就是不同的区块之间会出现明显的边缘不连贯问题。针对这个问题，MultiDiffusion中提出将不同区块的不连续部分进行融合，然后再进行全局去噪过程，这样能保证最终生成图像的特征一致性与边缘平滑。
+
+![Tiled Diffusion分块逻辑](./imgs/Tiled-Diffusion分块逻辑.png)
+
+下面是Tiled Diffusion的完整流程：
+1. 将Latent特征进行分块处理。
+2. Stable Diffusion预测每个分块图像的噪声，并进行去噪操作。
+3. 将去噪后的分块图像加在一起，同时每个像素的值会被除以它
+4. 将所有的分块图像拼接在一起，同时重叠的像素会取平均值或者使用融合后的噪声对整个图像进行一步去噪。
+5. 重复上述1-4步骤，直到所有采样时间步完成。
+
+Tiled Diffusion还可以帮助Dtable Diffusion模型在有限的显存中生成超大分辨率（2k~8k）的图像，并且无需任何后处理即可生成无缝输出。但是与之相对应的，生成速度显著慢于常规的生成方法。
+
+![Tiled Diffusion生成高分辨率图像例子](./imgs/Tiled-Diffusion生成高分辨率图像例子.jpeg)
+
+总的来说，Tiled Diffusion功能本质上是对图像的局部Tile区块和整体图像区块的重绘过程。
+
+Tiled Diffusion还可以对图像进行超分辨率重建和超分辨率重绘。这是我们需要选择一个超分模型，先将图像进行超分辨率重建，然后再按照上述讲到的Tiled Diffusion处理流程，对超分后的图像进行切片重绘和融合。
+
+![Tiled Diffusion超分辨率重建例子](./imgs/Tiled-Diffusion超分辨率重建例子.png)
+
+最后，Tiled Diffusion还能够对图像子区域进行编辑生成。我们首先需要创建一个文生图画布，然后接着在这个画布中启动我们的编辑区域，我们可以选择多个编辑区域，每个编辑区域我们都可以拖动鼠标进行移动和调整区域大小。
+
+![Tiled Diffusion图像区域编辑生成例子](./imgs/Tiled-Diffusion图像区域编辑生成例子.png)
 
