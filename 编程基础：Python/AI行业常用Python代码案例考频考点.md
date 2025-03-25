@@ -16,6 +16,7 @@
 - [15.Python中对图像进行上采样时如何抗锯齿？](#15.Python中对图像进行上采样时如何抗锯齿？)
 - [16.Python中如何对图像在不同颜色空间之间互相转换？](#16.Python中如何对图像在不同颜色空间之间互相转换？)
 - [17.在基于Python的AI服务中，如何规范API请求和数据交互的格式？](#17.在基于Python的AI服务中，如何规范API请求和数据交互的格式？)
+- [18.Python中处理GLB文件的操作大全](#18.Python中处理GLB文件的操作大全)
 
 <h2 id='1.多进程multiprocessing基本使用代码段'>1.多进程multiprocessing基本使用代码段</h2>
 
@@ -2088,6 +2089,146 @@ connect_sensor(config.ip_address, config.frequency)
 | **协作成本** | 前后端需要口头约定格式       | Swagger文档自动同步         |
 | **安全性**  | 可能接收非法参数导致崩溃     | 输入过滤防止注入攻击         |
 | **扩展性**  | 添加新字段需要多处修改       | 只需修改模型类定义          |
+
+
+<h2 id="18.Python中处理GLB文件的操作大全">18.Python中处理GLB文件的操作大全</h2>
+
+以下是Rocky总结的Python中处理 GLB 文件的完整操作指南，涵盖 **读取、写入、编辑、转换、可视化** 等核心功能，结合常用库（如 `trimesh`、`pygltf`、`pyrender`）并提供代码示例。
+
+### 一、GLB 文件基础
+**GLB 文件** 是 glTF 格式的二进制封装版本，包含 3D 模型的网格、材质、纹理、动画等数据。其结构包括：
+- **JSON 头**：描述场景结构、材质、动画等元数据
+- **二进制缓冲区**：存储顶点、索引、纹理等二进制数据
+
+### 二、环境准备
+安装所需库：
+```bash
+pip install trimesh pygltf pyrender numpy pillow
+```
+
+### 三、核心操作详解
+
+#### 1. **读取 GLB 文件**
+```python
+import trimesh
+
+# 加载 GLB 文件
+scene = trimesh.load("model.glb")
+
+# 提取网格数据
+for name, mesh in scene.geometry.items():
+    print(f"Mesh: {name}")
+    print(f"Vertices: {mesh.vertices.shape}")  # 顶点坐标 (N, 3)
+    print(f"Faces: {mesh.faces.shape}")        # 面索引 (M, 3)
+    print(f"UVs: {mesh.visual.uv}")           # 纹理坐标 (N, 2)
+```
+
+#### 2. **写入 GLB 文件**
+```python
+# 创建新网格
+box = trimesh.creation.box(extents=[1, 1, 1])
+
+# 导出为 GLB
+box.export("new_model.glb", file_type="glb")
+```
+
+#### 3. **编辑 GLB 内容**
+##### 修改几何体
+```python
+# 平移所有顶点
+mesh.vertices += [0.5, 0, 0]  # X 方向平移0.5
+
+# 缩放模型
+mesh.apply_scale(0.5)  # 缩小到50%
+```
+
+##### 修改材质
+```python
+from PIL import Image
+
+# 替换纹理
+new_texture = Image.open("new_texture.png")
+mesh.visual.material.baseColorTexture = new_texture
+
+# 修改颜色（RGBA）
+mesh.visual.material.baseColorFactor = [1.0, 0.0, 0.0, 1.0]  # 红色
+```
+
+##### 添加动画
+```python
+import numpy as np
+from pygltf import GLTF2
+
+# 加载 GLB 并添加旋转动画
+gltf = GLTF2().load("model.glb")
+
+# 创建旋转动画数据
+animation = gltf.create_animation()
+channel = animation.create_channel(
+    target_node=0,  # 目标节点索引
+    sampler=animation.create_sampler(
+        input=[0, 1, 2],  # 时间关键帧
+        output=np.array([[0, 0, 0, 1], [0, 0, np.pi/2, 1], [0, 0, np.pi, 1]])  # 四元数旋转
+    )
+)
+
+gltf.save("animated_model.glb")
+```
+
+#### 4. **格式转换**
+##### GLB → OBJ
+```python
+scene = trimesh.load("model.glb")
+scene.export("model.obj")
+```
+
+#### 5. **可视化渲染**
+##### 使用 PyRender
+```python
+import pyrender
+
+# 创建渲染场景
+scene = pyrender.Scene()
+for name, mesh in scene.geometry.items():
+    scene.add(pyrender.Mesh.from_trimesh(mesh))
+
+# 启动交互式查看器
+pyrender.Viewer(scene, use_raymond_lighting=True)
+```
+
+##### 使用 Matplotlib
+```python
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
+fig = plt.figure()
+ax = fig.add_subplot(111, projection="3d")
+ax.plot_trisurf(
+    mesh.vertices[:,0], 
+    mesh.vertices[:,1], 
+    mesh.vertices[:,2],
+    triangles=mesh.faces
+)
+plt.show()
+```
+
+#### 6. **优化 GLB 文件**
+```python
+from pygltf import GLTF2
+
+gltf = GLTF2().load("model.glb")
+
+# 压缩纹理
+for texture in gltf.textures:
+    texture.source.compression = "WEBP"  # 转换为WebP格式
+
+# 简化网格
+for mesh in gltf.meshes:
+    for primitive in mesh.primitives:
+        primitive.attributes.POSITION.quantization = "FLOAT"  # 降低精度
+
+gltf.save("optimized_model.glb")
+```
 
 
 
