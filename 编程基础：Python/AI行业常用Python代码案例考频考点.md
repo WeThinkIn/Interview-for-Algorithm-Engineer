@@ -17,6 +17,7 @@
 - [16.Python中如何对图像在不同颜色空间之间互相转换？](#16.Python中如何对图像在不同颜色空间之间互相转换？)
 - [17.在基于Python的AI服务中，如何规范API请求和数据交互的格式？](#17.在基于Python的AI服务中，如何规范API请求和数据交互的格式？)
 - [18.Python中处理GLB文件的操作大全](#18.Python中处理GLB文件的操作大全)
+- [19.Python中处理OBJ文件的操作大全](#19.Python中处理OBJ文件的操作大全)
 
 <h2 id='1.多进程multiprocessing基本使用代码段'>1.多进程multiprocessing基本使用代码段</h2>
 
@@ -2231,4 +2232,129 @@ gltf.save("optimized_model.glb")
 ```
 
 
+<h2 id="19.Python中处理OBJ文件的操作大全">19.Python中处理OBJ文件的操作大全</h2>
 
+下面是Rocky总结的Python处理OBJ文件的完整操作指南，涵盖 **读取、编辑、转换、可视化、优化** 等核心功能。
+
+### 一、OBJ 文件基础
+**OBJ 文件** 是 Wavefront 3D 模型格式，包含以下主要元素：
+- **顶点数据**：`v`（顶点坐标）、`vt`（纹理坐标）、`vn`（法线）
+- **面定义**：`f`（面索引，支持顶点/纹理/法线组合）
+- **材质引用**：`mtllib`（材质库文件）、`usemtl`（使用材质）
+
+### 二、环境准备
+安装所需库：
+```bash
+pip install trimesh numpy pywavefront matplotlib pyrender
+```
+
+### 三、核心操作详解
+
+#### 1. **读取 OBJ 文件**
+##### 使用 `trimesh`（推荐）
+```python
+import trimesh
+
+# 加载 OBJ 文件（自动处理关联的 MTL 材质文件）
+mesh = trimesh.load("model.obj", force="mesh")
+
+# 提取基本信息
+print(f"顶点数: {mesh.vertices.shape}")  # (N, 3)
+print(f"面数: {mesh.faces.shape}")       # (M, 3)
+print(f"纹理坐标: {mesh.visual.uv}")    # (N, 2)
+print(f"材质信息: {mesh.visual.material}")
+```
+
+##### 使用 `pywavefront`
+```python
+from pywavefront import Wavefront
+
+obj = Wavefront("model.obj", collect_faces=True)
+for name, material in obj.materials.items():
+    print(f"材质名称: {name}")
+    print(f"贴图路径: {material.texture}")
+    print(f"顶点数据: {material.vertices}")
+```
+
+#### 2. **编辑 OBJ 内容**
+##### 修改几何体
+```python
+# 平移所有顶点
+mesh.vertices += [0.5, 0, 0]  # X 方向平移0.5
+
+# 缩放模型
+mesh.apply_scale(0.5)  # 缩小到50%
+
+# 旋转模型
+mesh.apply_transform(trimesh.transformations.rotation_matrix(np.pi/2, [0, 1, 0]))
+```
+
+##### 修改材质
+```python
+from PIL import Image
+
+# 替换纹理
+new_texture = Image.open("new_texture.jpg")
+mesh.visual.material.image = new_texture
+
+# 修改颜色（RGB）
+mesh.visual.material.diffuse = [0.8, 0.2, 0.2, 1.0]  # 红色
+```
+
+##### 合并多个模型
+```python
+mesh1 = trimesh.load("model1.obj")
+mesh2 = trimesh.load("model2.obj")
+combined = trimesh.util.concatenate([mesh1, mesh2])
+combined.export("combined.obj")
+```
+
+#### 3. **导出 OBJ 文件**
+```python
+# 创建新网格（立方体）
+box = trimesh.creation.box(extents=[1, 1, 1])
+
+# 导出 OBJ（包含材质）
+box.export(
+    "new_model.obj",
+    file_type="obj",
+    include_texture=True,
+    mtl_name="material.mtl"
+)
+```
+
+#### 4. **格式转换**
+##### OBJ → GLB
+```python
+mesh = trimesh.load("model.obj")
+mesh.export("model.glb", file_type="glb")
+```
+
+#### 5. **可视化渲染**
+##### 使用 PyRender（3D 交互）
+```python
+import pyrender
+
+# 创建渲染场景
+scene = pyrender.Scene()
+scene.add(pyrender.Mesh.from_trimesh(mesh))
+
+# 启动交互式查看器
+pyrender.Viewer(scene, use_raymond_lighting=True)
+```
+
+##### 使用 Matplotlib（2D 投影）
+```python
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
+fig = plt.figure()
+ax = fig.add_subplot(111, projection="3d")
+ax.plot_trisurf(
+    mesh.vertices[:,0], 
+    mesh.vertices[:,1], 
+    mesh.vertices[:,2],
+    triangles=mesh.faces
+)
+plt.show()
+```
