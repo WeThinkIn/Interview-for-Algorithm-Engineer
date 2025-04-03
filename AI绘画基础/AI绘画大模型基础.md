@@ -37,7 +37,7 @@
 - [33.AIGC面试中必考的AI绘画技术框架脉络是什么样的？](#33.AIGC面试中必考的AI绘画技术框架脉络是什么样的？)
 - [34.Stable Diffusion 3的Text Encoder有哪些改进？](#34.Stable-Diffusion-3的Text-Encoder有哪些改进？)
 - [35.Stable Diffusion 3的图像特征和文本特征在训练前缓存策略有哪些优缺点？](#35.Stable-Diffusion-3的图像特征和文本特征在训练前缓存策略有哪些优缺点？)
-- [36.Stable Diffusion 中的 Inpaint（局部修复）和 Outpaint（边界扩展）分别是什么？](#36.Stable Diffusion 中的 Inpaint（局部修复）和 Outpaint（边界扩展）分别是什么？)
+- [36.Stable Diffusion 中的 Inpaint（局部修复）和 Outpaint（边界扩展）分别是什么?](#36.Stable Diffusion 中的 Inpaint（局部修复）和 Outpaint（边界扩展）分别是什么?)
 - [37.扩散U-Net中的免费午餐（FreeU）是什么？](#37.扩散U-Net中的免费午餐（FreeU）是什么？)
 - [38.Stable Diffusion3.5的改进在哪里？](#38.Stable Diffusion3.5的改进在哪里？)
 - [39.介绍一下FasterDiT(DiT加速版本)](#39.介绍一下FasterDiT)
@@ -814,7 +814,7 @@ SD 3与之前的版本相比，整体的参数量级大幅增加，这无疑也�
 
 整体上看，**其实SD 3的预计算策略是一个空间换时间的技术**。
 
-<h2 id="36.Stable Diffusion 中的 Inpaint（局部修复）和 Outpaint（边界扩展）分别是什么？">36.Stable Diffusion 中的 Inpaint（局部修复）和 Outpaint（边界扩展）分别是什么？</h2>
+<h2 id="36.Stable Diffusion 中的 Inpaint（局部修复）和 Outpaint（边界扩展）分别是什么?">36.Stable Diffusion 中的 Inpaint（局部修复）和 Outpaint（边界扩展）分别是什么?</h2>
 
 - **Inpaint（局部修复）** 指对图像中指定区域进行内容修复或替换的技术。用户可通过遮罩（Mask）标记需修改的区域，并输入文本提示（如“草地”或“删除物体”），模型将根据上下文生成与周围环境协调的新内容。典型应用包括移除水印、修复破损图像或替换特定对象。
 - **Outpaint（边界扩展）** 则用于扩展图像边界，生成超出原图范围的合理内容。例如，将一幅风景画的左右两侧延伸，生成连贯的山脉或天空。其核心挑战在于保持扩展区域与原始图像在风格、光照和语义上的一致性。
