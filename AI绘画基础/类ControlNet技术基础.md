@@ -32,7 +32,7 @@
 - [30.EasyPhoto的训练和推理流程是什么样的？](#30.EasyPhoto的训练和推理流程是什么样的？)
 - [31.FaceChain的训练和推理流程是什么样的？](#31.FaceChain的训练和推理流程是什么样的？)
 - [32.ReCo的框架和原理](#32.ReCo的框架和原理)
-- [33.Be Yourself（Bounded Attention for Multi-Subject Text-to-Image Generation）的框架和原理](#33.BeYourself（Bounded Attention for Multi-Subject Text-to-Image Generation）的框架和原理)
+- [33.Be Yourself（Bounded Attention for Multi-Subject Text-to-Image Generation）的框架和原理](#33.BeYourself（Bounded-Attention-for-Multi-Subject-Text-to-Image-Generation）的框架和原理)
 - [34.IFadapter的框架和原理](#34.IFadapter的框架和原理)
 - [35.LAW-Diffusion的框架和原理](#35.LAW-Diffusion的框架和原理)
 - [36.Check, Locate, Rectify（A Training-Free Layout Calibration System for Text-to-Image Generation）的框架和原理](#36.Check,Locate,Rectify（A-Training-Free-Layout-Calibration-System-for-Text-to-Image-Generation）的框架和原理)
@@ -822,7 +822,7 @@ FaceChain是一个功能上近似“秒鸭相机”的技术，我们只需要�
 
 
 
-<h2 id="33.BeYourself（Bounded Attention for Multi-Subject Text-to-Image Generation）的框架和原理33.BeYourself（Bounded Attention for Multi-Subject Text-to-Image Generation）的框架和原理">33.Be Yourself（Bounded Attention for Multi-Subject Text-to-Image Generation）的框架和原理</h2>
+<h2 id="33.BeYourself（Bounded-Attention-for-Multi-Subject-Text-to-Image-Generation）的框架和原理33.BeYourself（Bounded-Attention-for-Multi-Subject-Text-to-Image-Generation">33.Be Yourself（Bounded Attention for Multi-Subject Text-to-Image Generation）的框架和原理</h2>
 
 论文链接：[[2403.16990\] Be Yourself: Bounded Attention for Multi-Subject Text-to-Image Generation](https://arxiv.org/abs/2403.16990)
 
