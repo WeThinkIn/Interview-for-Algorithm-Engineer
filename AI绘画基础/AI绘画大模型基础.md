@@ -43,7 +43,7 @@
 - [39.介绍一下FasterDiT(DiT加速版本)](#39.介绍一下FasterDiT)
 - [40.介绍一下SiT(DiT加速版本)](#40.介绍一下SiT)
 - [41.介绍一下LightningDiT(DiT加速版本)](#41.介绍一下LightningDiT)
-- [42.Stable Diffusion中的safety_checker是什么?](#42.Stable Diffusion中的safety_checker是什么?)
+- [42.Stable Diffusion中的safety_checker是什么?](#42.StableDiffusion中的safetychecker是什么?)
 - [43.什么是DALL-E 2及其主要功能？](#43.什么是DALL-E2及其主要功能？)
 - [44.什么是DALL-E 3及其主要功能？](#44.什么是DALL-E3及其主要功能？)
 - [45.关于GPT4O生成的看法（技术路线未公布）](#45.关于GPT4O生成的看法（技术路线未公布）)
@@ -921,7 +921,7 @@ SiT (Scalable Interpolant Transformers) 是一种新型生成模型框架，建�
 
 ![image-20250323204405144](./imgs/LightningDiT.png)
 
-<h2 id="42.StableDiffusion中的safety-checker是什么?">42.StableDiffusion中的safety-checker是什么?</h2>
+<h2 id="42.StableDiffusion中的safetychecker是什么?">42.StableDiffusion中的safety-checker是什么?</h2>
 
 Stable Diffusion中的safety_checker是一个开源的图像内容审核工具，主要用于识别和过滤不适宜的内容。这个组件是Stable Diffusion模型的重要部分，具有以下特点和功能：
 
@@ -935,7 +935,7 @@ Stable Diffusion中的safety_checker是一个开源的图像内容审核工具�
 
 ![image-20250407194807505](./imgs/safety_checker.png)
 
-<h2 id="43.什么是DALL-E2及其主要功能？">43.什么是DALL-E 2及其主要功能？</h2>
+<h2 id="43.什么是DALL-E2及其主要功能？43.什么是DALL-E2及其主要功能？">43.什么是DALL-E 2及其主要功能？</h2>
 
 论文链接：[dall-e-2.pdf](https://cdn.openai.com/papers/dall-e-2.pdf)
 
@@ -943,7 +943,7 @@ DALL-E 2是OpenAI于2022年4月推出的AI图像生成系统，它能将文字�
 
 
 
-<h2 id="44.什么是DALL-E3及其主要功能？">44.什么是DALL-E 3及其主要功能？</h2>
+<h2 id="44.什么是DALL-E3及其主要功能？44.什么是DALL-E3及其主要功能？">44.什么是DALL-E 3及其主要功能？</h2>
 
 技术报告链接：[dall-e-3.pdf](https://cdn.openai.com/papers/dall-e-3.pdf)
 
