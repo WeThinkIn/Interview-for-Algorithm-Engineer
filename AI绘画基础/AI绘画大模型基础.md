@@ -37,15 +37,15 @@
 - [33.AIGC面试中必考的AI绘画技术框架脉络是什么样的？](#33.AIGC面试中必考的AI绘画技术框架脉络是什么样的？)
 - [34.Stable Diffusion 3的Text Encoder有哪些改进？](#34.Stable-Diffusion-3的Text-Encoder有哪些改进？)
 - [35.Stable Diffusion 3的图像特征和文本特征在训练前缓存策略有哪些优缺点？](#35.Stable-Diffusion-3的图像特征和文本特征在训练前缓存策略有哪些优缺点？)
-- [36.Stable Diffusion 中的Inpaint和Outpaint分别是什么?](#36.Stable Diffusion 中的 Inpaint（局部修复）和 Outpaint（边界扩展）分别是什么？)
+- [36.StableDiffusion中的Inpaint和Outpaint分别是什么?](#36.StableDiffusion中的Inpaint（局部修复）和Outpaint（边界扩展）分别是什么？)
 - [37.扩散U-Net中的免费午餐（FreeU）是什么？](#37.扩散U-Net中的免费午餐（FreeU）是什么？)
-- [38.Stable Diffusion3.5的改进在哪里？](#38.Stable Diffusion3.5的改进在哪里？)
+- [38.StableDiffusion3.5的改进在哪里？](#38.StableDiffusion3.5的改进在哪里？)
 - [39.介绍一下FasterDiT(DiT加速版本)](#39.介绍一下FasterDiT)
 - [40.介绍一下SiT(DiT加速版本)](#40.介绍一下SiT)
 - [41.介绍一下LightningDiT(DiT加速版本)](#41.介绍一下LightningDiT)
 - [42.Stable Diffusion中的safety_checker是什么?](#42.Stable Diffusion中的safety_checker是什么?)
-- [43.什么是DALL-E 2及其主要功能？](#43.什么是DALL-E 2及其主要功能？)
-- [44.什么是DALL-E 3及其主要功能？](#44.什么是DALL-E 3及其主要功能？)
+- [43.什么是DALL-E 2及其主要功能？](#43.什么是DALL-E2及其主要功能？)
+- [44.什么是DALL-E 3及其主要功能？](#44.什么是DALL-E 及其主要功能？)
 - [45.关于GPT4O生成的看法（技术路线未公布）](#45.关于GPT4O生成的看法（技术路线未公布）)
 
 ## 第二章 Midjourney高频考点
@@ -861,7 +861,7 @@ FreeU (Free Lunch in Diffusion U-Net) 是一种针对扩散模型中U-Net架构�
 3. **兼容性设计**
     FreeU不修改模型参数，可直接集成至Stable Diffusion、ControlNet等主流框架，且在图像/视频生成、微调模型（如Dreambooth）中均有效，无额外计算开销。
 
-<h2 id="38.Stable Diffusion35的改进在哪里？">38.Stable Diffusion3.5的改进在哪里？</h2>
+<h2 id="38.StableDiffusion35的改进在哪里？">38.StableDiffusion3.5的改进在哪里？</h2>
 
 1、**引入 Query-Key 归一化（QK normalization）**：在训练大型 Transformer 模型时，QK 归一化已成为标准实践。SD3.5 也采用了这一技术，以增强模型训练的稳定性并简化后续的微调和开发。
 
@@ -921,7 +921,7 @@ SiT (Scalable Interpolant Transformers) 是一种新型生成模型框架，建�
 
 ![image-20250323204405144](./imgs/LightningDiT.png)
 
-<h2 id="42.Stable Diffusion中的safety_checker是什么?">42.Stable Diffusion中的safety_checker是什么?</h2>
+<h2 id="42.StableDiffusion中的safety_checker是什么?">42.StableDiffusion中的safety_checker是什么?</h2>
 
 Stable Diffusion中的safety_checker是一个开源的图像内容审核工具，主要用于识别和过滤不适宜的内容。这个组件是Stable Diffusion模型的重要部分，具有以下特点和功能：
 
@@ -935,7 +935,7 @@ Stable Diffusion中的safety_checker是一个开源的图像内容审核工具�
 
 ![image-20250407194807505](G:\Interview-for-Algorithm-Engineer\AI绘画基础\imgs\safety_checker.png)
 
-<h2 id="43.什么是DALL-E 2及其主要功能？">43.什么是DALL-E 2及其主要功能？</h2>
+<h2 id="43.什么是DALL-E2及其主要功能？">43.什么是DALL-E 2及其主要功能？</h2>
 
 论文链接：[dall-e-2.pdf](https://cdn.openai.com/papers/dall-e-2.pdf)
 
@@ -943,7 +943,7 @@ DALL-E 2是OpenAI于2022年4月推出的AI图像生成系统，它能将文字�
 
 
 
-<h2 id="44.什么是DALL-E 3及其主要功能？">44.什么是DALL-E 3及其主要功能？</h2>
+<h2 id="44.什么是DALL-E3及其主要功能？">44.什么是DALL-E 3及其主要功能？</h2>
 
 技术报告链接：[dall-e-3.pdf](https://cdn.openai.com/papers/dall-e-3.pdf)
 
