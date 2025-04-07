@@ -6,6 +6,7 @@
 - [4.热门AI绘画插件UltimateSDUpscale的工作原理是什么样的？](#4.热门AI绘画插件UltimateSDUpscale的工作原理是什么样的？)
 - [5.热门AI绘画插件Tiled VAE的工作原理是什么样的？](#5.热门AI绘画插件Tiled-VAE的工作原理是什么样的？)
 - [6.热门AI绘画插件Tiled Diffusion的工作原理是什么样的？](#6.热门AI绘画插件Tiled-Diffusion的工作原理是什么样的？)
+- [7.ComfyUI中节点（node）的设计架构是什么样的？](#7.ComfyUI中节点（node）的设计架构是什么样的？)
 
 
 <h2 id="1.目前主流的AI绘画框架有哪些？">1.目前主流的AI绘画框架有哪些？</h2>
@@ -324,4 +325,127 @@ Tiled Diffusion还可以对图像进行超分辨率重建和超分辨率重绘�
 最后，Tiled Diffusion还能够对图像子区域进行编辑生成。我们首先需要创建一个文生图画布，然后接着在这个画布中启动我们的编辑区域，我们可以选择多个编辑区域，每个编辑区域我们都可以拖动鼠标进行移动和调整区域大小。
 
 ![Tiled Diffusion图像区域编辑生成例子](./imgs/Tiled-Diffusion图像区域编辑生成例子.png)
+
+
+<h2 id="7.ComfyUI中节点（node）的设计架构是什么样的？">7.ComfyUI中节点（node）的设计架构是什么样的？</h2>
+
+### **1. ComfyUI中节点（node）的架构核心设计思想**
+
+ComfyUI的节点系统基于 **数据流编程（Dataflow Programming）** 范式，其核心思想是将复杂的算法流程拆解为独立的、可复用的功能单元（节点），通过连接节点之间的输入输出端口构建完整的工作流。这种设计模式具有以下特点：
+
+| 特性 | 描述 | 优势 |
+|------|------|------|
+| **模块化** | 每个节点封装独立功能（如加载模型、推理、后处理） | 功能解耦，便于维护和扩展 |
+| **可视化** | 节点以图形块呈现，连线表示数据流向 | 直观展示算法流程，降低使用门槛 |
+| **异步执行** | 节点根据数据依赖关系自动调度执行顺序 | 提升计算资源利用率 |
+| **动态组合** | 节点支持自由连接和参数配置 | 灵活适应不同场景需求 |
+
+### **2. 节点架构的四大核心组件**
+以下是一个典型节点的内部架构示意图：
+
+```python
+class CustomNode:
+    # --------------------------
+    # 1. 元数据定义
+    # --------------------------
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {"required": {"image": ("IMAGE",)}}
+    
+    RETURN_TYPES = ("IMAGE",)
+    FUNCTION = "process"
+    CATEGORY = "ImageProcessing"
+    
+    # --------------------------
+    # 2. 数据处理逻辑
+    # --------------------------
+    def process(self, image):
+        # 实现具体算法逻辑
+        processed = do_something(image)
+        return (processed,)
+    
+    # --------------------------
+    # 3. 可视化交互（可选）
+    # --------------------------
+    @staticmethod
+    def IS_CHANGED(image):
+        return hash(image.tobytes())
+    
+    # --------------------------
+    # 4. 硬件加速支持
+    # --------------------------
+    def to(self, device):
+        self.model = self.model.to(device)
+        return self
+```
+
+### **3. 实际案例：AIGC图像生成工作流**
+以下是一个典型的Stable Diffusion图像生成节点链示例：
+
+```mermaid
+graph LR
+    A[Load Checkpoint] --> B[CLIP Text Encode] 
+    B --> C[KSampler]
+    A --> C
+    C --> D[VAE Decode]
+    D --> E[Save Image]
+```
+
+**节点功能说明**：
+1. **Load Checkpoint**：加载SD模型权重（如SD1.5/XL）
+2. **CLIP Text Encode**：将文本提示转换为Embedding
+3. **KSampler**：执行扩散模型的迭代采样
+4. **VAE Decode**：将潜空间特征解码为像素图像
+5. **Save Image**：输出最终结果到文件系统
+
+**执行优化**：
+- 节点间通过Tensor传输避免内存拷贝
+- 使用CUDA Graph优化采样过程
+- 支持LoRA/LyCORIS等动态模型加载
+
+### **4. 三大领域应用解析**
+
+#### **AIGC领域应用**
+| 应用场景 | 典型节点组合 | 技术特性 |
+|---------|--------------|----------|
+| 文生视频 | TextEncoder → TemporalDiffusion → FrameSmoother | 时空一致性约束 |
+| 可控人像生成 | FaceLandmark → LatentInjection → StyleTransfer | 关键点驱动生成 |
+| 多模态创作 | Speech2Text → ImageGenerator → AudioSync | 跨模态对齐 |
+
+**案例**：互联网AI特效工具链使用类似架构，通过连接人脸关键点检测、风格迁移、背景生成等节点实现实时特效。
+
+#### **传统深度学习**
+```mermaid
+graph TD
+    A[DataLoader] --> B[Preprocessing]
+    B --> C[Model Inference]
+    C --> D[Metrics Calculator]
+    D --> E[Result Visualizer]
+```
+
+**关键优化**：
+- 支持ONNX/TensorRT等格式的混合部署
+- 提供AutoML节点实现超参搜索
+- 集成TensorBoard可视化监控
+
+**工业案例**：某医疗影像系统使用节点化设计，灵活组合不同模态（CT/MRI）的处理流程，AUC提升12%。
+
+
+#### **自动驾驶**
+**典型数据流**：
+```
+Camera Input → Object Detection → Trajectory Prediction → Control Signal
+                   ↑               ↑
+LiDAR Processing → Fusion Node
+```
+
+**关键特性**：
+- 时间同步节点处理多传感器对齐
+- 安全监控节点实时检测算法失效
+- 支持ROS2与Autoware的无缝集成
+
+**量产方案**：某L4级自动驾驶系统使用节点化架构，实现：
+- 处理延迟降低至23ms（提升40%）
+- 算法模块热替换，OTA更新效率提升5倍
+
 
