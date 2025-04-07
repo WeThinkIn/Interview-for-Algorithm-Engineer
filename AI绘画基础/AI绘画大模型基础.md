@@ -37,12 +37,16 @@
 - [33.AIGC面试中必考的AI绘画技术框架脉络是什么样的？](#33.AIGC面试中必考的AI绘画技术框架脉络是什么样的？)
 - [34.Stable Diffusion 3的Text Encoder有哪些改进？](#34.Stable-Diffusion-3的Text-Encoder有哪些改进？)
 - [35.Stable Diffusion 3的图像特征和文本特征在训练前缓存策略有哪些优缺点？](#35.Stable-Diffusion-3的图像特征和文本特征在训练前缓存策略有哪些优缺点？)
-- [36.Stable Diffusion 中的 Inpaint（局部修复）和 Outpaint（边界扩展）分别是什么？](#36.Stable Diffusion 中的 Inpaint（局部修复）和 Outpaint（边界扩展）分别是什么？)
+- [36.StableDiffusion中的Inpaint和Outpaint分别是什么?](#36.StableDiffusion中的Inpaint（局部修复）和Outpaint（边界扩展）分别是什么？)
 - [37.扩散U-Net中的免费午餐（FreeU）是什么？](#37.扩散U-Net中的免费午餐（FreeU）是什么？)
-- [38.Stable Diffusion3.5的改进在哪里？](#38.Stable Diffusion3.5的改进在哪里？)
+- [38.StableDiffusion3.5的改进在哪里？](#38.StableDiffusion3.5的改进在哪里？)
 - [39.介绍一下FasterDiT(DiT加速版本)](#39.介绍一下FasterDiT)
 - [40.介绍一下SiT(DiT加速版本)](#40.介绍一下SiT)
 - [41.介绍一下LightningDiT(DiT加速版本)](#41.介绍一下LightningDiT)
+- [42.Stable Diffusion中的safety_checker是什么?](#42.StableDiffusion中的safetychecker是什么?)
+- [43.什么是DALL-E 2及其主要功能？](#43.什么是DALL-E2及其主要功能？)
+- [44.什么是DALL-E 3及其主要功能？](#44.什么是DALL-E3及其主要功能？)
+- [45.关于GPT4O生成的看法（技术路线未公布）](#45.关于GPT4O生成的看法（技术路线未公布）)
 
 ## 第二章 Midjourney高频考点
 
@@ -772,7 +776,6 @@ Rcoky也在撰写与沉淀AI绘画技术框架脉络的相关干货文章，力�
 
 [深入浅出完整解析AIGC时代中GAN（Generative Adversarial Network）系列模型核心基础知识](https://zhuanlan.zhihu.com/p/663157306)
 
-
 <h2 id="34.Stable-Diffusion-3的Text-Encoder有哪些改进？">34.Stable Diffusion 3的Text Encoder有哪些改进？</h2>
 
 作为当前最强的AI绘画大模型之一，Stable Diffusion 3模型都是AIGC算法岗面试中的必考内容。接下来，Rocky将带着大家深入浅出讲解Stable Diffusion 3模型的Text Encoder部分是如何改进的。
@@ -814,7 +817,7 @@ SD 3与之前的版本相比，整体的参数量级大幅增加，这无疑也�
 
 整体上看，**其实SD 3的预计算策略是一个空间换时间的技术**。
 
-<h2 id="36.Stable Diffusion 中的 Inpaint（局部修复）和 Outpaint（边界扩展）分别是什么？">36.Stable Diffusion 中的 Inpaint（局部修复）和 Outpaint（边界扩展）分别是什么？</h2>
+<h2 id="36.StableDiffusion中的Inpaint（局部修复）和Outpaint（边界扩展）分别是什么？36.Stable Diffusion 中的Inpaint和Outpaint分别是什么?">36.Stable Diffusion 中的Inpaint和Outpaint分别是什么?</h2>
 
 - **Inpaint（局部修复）** 指对图像中指定区域进行内容修复或替换的技术。用户可通过遮罩（Mask）标记需修改的区域，并输入文本提示（如“草地”或“删除物体”），模型将根据上下文生成与周围环境协调的新内容。典型应用包括移除水印、修复破损图像或替换特定对象。
 - **Outpaint（边界扩展）** 则用于扩展图像边界，生成超出原图范围的合理内容。例如，将一幅风景画的左右两侧延伸，生成连贯的山脉或天空。其核心挑战在于保持扩展区域与原始图像在风格、光照和语义上的一致性。
@@ -857,7 +860,7 @@ FreeU (Free Lunch in Diffusion U-Net) 是一种针对扩散模型中U-Net架构�
 3. **兼容性设计**
     FreeU不修改模型参数，可直接集成至Stable Diffusion、ControlNet等主流框架，且在图像/视频生成、微调模型（如Dreambooth）中均有效，无额外计算开销。
 
-<h2 id="38.Stable Diffusion3.5的改进在哪里？">38.Stable Diffusion3.5的改进在哪里？</h2>
+<h2 id="38.StableDiffusion3.5的改进在哪里？">38.StableDiffusion3.5的改进在哪里？</h2>
 
 1、**引入 Query-Key 归一化（QK normalization）**：在训练大型 Transformer 模型时，QK 归一化已成为标准实践。SD3.5 也采用了这一技术，以增强模型训练的稳定性并简化后续的微调和开发。
 
@@ -917,9 +920,77 @@ SiT (Scalable Interpolant Transformers) 是一种新型生成模型框架，建�
 
 ![image-20250323204405144](./imgs/LightningDiT.png)
 
+<h2 id="42.StableDiffusion中的safetychecker是什么?">42.StableDiffusion中的safety-checker是什么?</h2>
+
+Stable Diffusion中的safety_checker是一个开源的图像内容审核工具，主要用于识别和过滤不适宜的内容。这个组件是Stable Diffusion模型的重要部分，具有以下特点和功能：
+
+安全检查器利用CLIP模型技术实现内容审核，专注于识别可能不适宜的图像内容。实际的概念嵌入来自与Stable Diffusion一起发布的safety checker模型检查点，这个模型可以在HuggingFace Hub上找到，路径为CompVis/stable-diffusion-safety-checker。
+
+除了图像过滤功能外，safety_checker还有助于研究计算机视觉模型的性能，并能揭示潜在的偏见问题。这一点很重要，因为研究表明语言模型（包括用于文本到图像生成的模型）可能包含有害的刻板印象，涉及受保护类别、身份特征以及敏感的社会和职业群体。
+
+需要注意的是，虽然safety_checker在某些分类任务中表现优异，但它仍存在局限性。因此，推荐将其主要应用于学术研究，在实际使用时需要谨慎评估相关风险。
+
+这个安全检查器是由CompVis、Stability AI和LAION共同开发的Stable Diffusion生态系统的一部分，旨在使文本到图像的生成过程更加安全可控。
+
+![image-20250407194807505](./imgs/safety_checker.png)
+
+<h2 id="43.什么是DALL-E2及其主要功能？43.什么是DALL-E2及其主要功能？">43.什么是DALL-E 2及其主要功能？</h2>
+
+论文链接：[dall-e-2.pdf](https://cdn.openai.com/papers/dall-e-2.pdf)
+
+DALL-E 2是OpenAI于2022年4月推出的AI图像生成系统，它能将文字描述转化为高质量图像。其三大核心功能包括：从文本创建原创逼真图像、编辑现有图像(添加或删除元素)、以及生成图像变体。它结合CLIP和扩散模型技术，使艺术家、设计师和内容创作者能快速将创意可视化。2022年9月向公众开放后，DALL-E 2已广泛应用于设计、营销和艺术创作领域，用户对生成的图像拥有完整版权。虽然2023年9月被DALL-E 3取代，但它在AI辅助视觉创作史上仍是重要里程碑
 
 
----
+
+<h2 id="44.什么是DALL-E3及其主要功能？44.什么是DALL-E3及其主要功能？">44.什么是DALL-E 3及其主要功能？</h2>
+
+技术报告链接：[dall-e-3.pdf](https://cdn.openai.com/papers/dall-e-3.pdf)
+
+ DALL-E 3是OpenAI于2023年9月推出的革命性AI图像生成系统，代表了文本到图像转换技术的重大飞跃。与DALL-E 2相比，它具有更强大的自然语言理解能力，能精确解读复杂、微妙的文本描述，包括抽象概念和多层次指令。生成的图像质量显著提升，呈现出更高分辨率、更丰富细节和更自然的光影效果。DALL-E 3彻底解决了前代产品处理文字的局限性，能在图像中准确呈现各种字体和文本布局。其与ChatGPT的创新集成使用户能通过对话式体验逐步完善创意，获得提示词优化建议。在艺术表现方面，它能更精准地模拟从古典油画到现代数字艺术的各种风格和媒介。安全性也得到加强，内置更严格的保护机制防止生成不当内容。用户可通过ChatGPT Plus订阅、OpenAI API或Microsoft的Bing Image Creator和Designer工具使用DALL-E 3，已广泛应用于广告、出版、产品设计、游戏开发和建筑可视化等专业领域，为创意工作流程带来前所未有的效率和可能性。
+
+不同文本对比：
+
+![image-20250407193948936](./imgs/dalle-3.png)
+
+
+
+<h2 id="45.关于GPT4O生成的看法（技术路线未公布）">45.关于GPT4O生成的看法（技术路线未公布）</h2>
+
+根据OpenAI的报告，GPT-4o模型现在集成了图像生成功能。这是一项重要的技术进步，但我们也应该保持客观的认识。
+
+技术报告地址：[Introducing 4o Image Generation | OpenAI](https://openai.com/index/introducing-4o-image-generation/)
+
+## 主要特点与功能
+
+GPT-4o的图像生成功能有几个值得注意的特点：
+
+1. **文本渲染能力**：模型能够在图像中准确呈现文本，这解决了之前AI生成图像中文字常常模糊不清的问题。
+2. **多轮对话生成**：用户可以通过自然对话方式逐步调整图像，使创作过程更加灵活。
+3. **指令遵循能力**：能够处理较为复杂的提示，按照用户要求生成包含多个元素的图像。
+4. **上下文学习能力**：能分析用户上传的图片，并将这些元素整合到新生成的图像中。
+5. **知识整合**：将文本理解和图像生成能力结合起来，例如能够将代码可视化或创建基于配方的图示。
+
+## 实际局限性
+
+然而，这项技术仍有局限性：
+
+1. **裁剪问题**：长图像容易被过度裁剪，特别是底部部分。
+2. **幻觉现象**：在低上下文提示时仍会生成虚构内容。
+3. **复杂度限制**：处理超过10-20个概念的复杂图像时容易出错。
+4. **非拉丁文字渲染不稳定**：多语言文本渲染存在困难。
+5. **编辑精度不足**：精确编辑图像特定部分时可能导致其他部分也发生变化。
+
+## 与专业工具的比较
+
+重要的是，尽管GPT-4o的图像生成功能令人印象深刻，但它**目前无法替代专业的图像生成流程**。专业设计师和艺术家使用的工具(如Photoshop、Illustrator或专门的AI工具如Midjourney、Stable Diffusion)提供了更精细的控制和更高质量的输出。
+
+对于需要精确控制细节、专业品质和特定风格一致性的商业项目，专业工具和工作流程仍然是不可替代的。GPT-4o的图像生成更适合快速原型设计、概念探索或非专业用途。
+
+## 实用价值
+
+GPT-4o的图像生成功能最大的价值在于其便捷性和多模态整合能力。它使普通用户能够在对话中轻松创建视觉内容，而不必切换到专门的图像生成工具。这对于日常交流、简单创意表达和教育用途特别有用。这是AI技术向前迈进的重要一步，但我们应该保持对其能力的客观认识，理解它是对专业图像创作工具的补充，而非替代。在可预见的未来，复杂的设计任务和专业视觉创作仍将需要专门的工具和人类专业知识。
+
+
 
 
 
@@ -1527,7 +1598,7 @@ $$
 
 3. **对大规模任务的扩展性**：
    - 在特别大的模型（如 GPT-4）或任务中，如何高效地应用 OFT 是一个研究方向。
-  
+
 
 <h2 id="5.Flow-Matching和DDPM之间有什么区别？">5.Flow Matching和DDPM之间有什么区别？</h2>
 

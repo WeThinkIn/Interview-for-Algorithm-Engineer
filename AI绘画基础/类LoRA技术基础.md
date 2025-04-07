@@ -6,7 +6,7 @@
 - [4.HyperDreamBooth是什么？](#4.HyperDreamBooth是什么？)
 - [5.DiffLoRA是什么？](#5.DiffLoRA是什么？)
 - [6.AutoLoRA是什么？](#6.AutoLoRA是什么？)
-- [7.LoRA of Change是什么？](#7.LoRA of Change是什么？)
+- [7.LoRA of Change是什么？](#7.LoRAofChange是什么？)
 
 
 <h2 id="1.使用lora微调Stable_Diffusion模型">1.使用lora微调Stable Diffusion模型</h2>
@@ -127,7 +127,7 @@ MIF结构图:
 
 这是一种利用扩散模型作为超网络来根据参考图像预测个性化低秩适应（LoRA）权重的方法。通过将这些 LoRA 权重集成到文本到图像模型中，DiffLoRA 无需进一步训练即可在推理过程中实现个性化。这是第一个利用扩散模型来生成面向身份的 LoRA 权重的模型。
 
-<h2 id="6.AutoLoRA是什么？">6.AutoLoRA是什么？</h2>
+
 
 <h2 id="6.AutoLoRA是什么？">6.AutoLoRA是什么？</h2>
 
@@ -162,7 +162,7 @@ AutoLoRA 结合了这两者的思路，通过让基础模型与 LoRA 微调模�
 
 ---
 
-<h2 id="7.LoRA of Change是什么？">7.LoRA of Change是什么？</h2>
+<h2 id="7.LoRAofChange是什么？">7.LoRA of Change是什么？</h2>
 
 论文链接：[arxiv.org/pdf/2411.19156](https://arxiv.org/pdf/2411.19156)
 
