@@ -822,7 +822,7 @@ FaceChain是一个功能上近似“秒鸭相机”的技术，我们只需要�
 
 
 
-<h2 id="33.BeYourself（Bounded-Attention-for-Multi-Subject-Text-to-Image-Generation）的框架和原理33.BeYourself（Bounded-Attention-for-Multi-Subject-Text-to-Image-Generation">33.Be Yourself（Bounded Attention for Multi-Subject Text-to-Image Generation）的框架和原理</h2>
+<h2 id="33.BeYourself（Bounded-Attention-for-Multi-Subject-Text-to-Image-Generation）的框架和原理33.BeYourself（Bounded-Attention-for-Multi-Subject-Text-to-Image-Generation）的框架和原理33.BeYourself（Bounded-Attention-for-Multi-Subject-Text-to-Image-Generation">33.Be Yourself（Bounded Attention for Multi-Subject Text-to-Image Generation）的框架和原理</h2>
 
 论文链接：[[2403.16990\] Be Yourself: Bounded Attention for Multi-Subject Text-to-Image Generation](https://arxiv.org/abs/2403.16990)
 
@@ -935,7 +935,7 @@ LAW-Diffusion还支持实例级别的重构能力，包括添加/移除/重新�
 
 LAW-Diffusion通过引入空间依赖关系解析、自适应引导调度和布局感知潜在嫁接等创新技术，显著提升了布局到图像生成的效果，特别是在保持复杂场景中对象之间合理和协调的关系方面。该方法为控制复杂场景生成提供了新的思路，具有重要的理论和应用价值。
 
-<h2 id="36.Check,Locate,Rectify（A-Training-Free-Layout-Calibration-System-for-Text-to-Image-Generation）的框架和原理36.Check,Locate,Rectify（A Training-Free Layout Calibration System for Text-to-Image Generation）的框架和原理">36.Check, Locate, Rectify（A Training-Free Layout Calibration System for Text-to-Image Generation）的框架和原理</h2>
+<h2 id="36.Check,Locate,Rectify（A-Training-Free-Layout-Calibration-System-for-Text-to-Image-Generation）的框架和原理">36.Check, Locate, Rectify（A Training-Free Layout Calibration System for Text-to-Image Generation）的框架和原理</h2>
 
 本研究论文介绍了SimM，这是一种新颖的系统，旨在解决文本到图像生成中的一个常见挑战：准确实现文本提示中的空间布局指令。
 
