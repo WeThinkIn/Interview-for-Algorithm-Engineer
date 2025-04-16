@@ -18,6 +18,7 @@
 - [17.在基于Python的AI服务中，如何规范API请求和数据交互的格式？](#17.在基于Python的AI服务中，如何规范API请求和数据交互的格式？)
 - [18.Python中处理GLB文件的操作大全](#18.Python中处理GLB文件的操作大全)
 - [19.Python中处理OBJ文件的操作大全](#19.Python中处理OBJ文件的操作大全)
+- [20.Python中日志模块loguru的使用](#20.Python中日志模块loguru的使用)
 
 <h2 id='1.多进程multiprocessing基本使用代码段'>1.多进程multiprocessing基本使用代码段</h2>
 
@@ -1232,7 +1233,6 @@ print(folder_paths.models_dir)
 #### **2.4. 可维护性**
 - **文档与注释：**
   - 为复杂的模块和函数提供清晰的注释和文档。
-  
 - **版本兼容性：**
   - 检查所使用的 PyTorch 版本及其依赖库是否兼容。
 
@@ -1270,6 +1270,7 @@ print(folder_paths.models_dir)
 - **形状差异：** PyTorch 使用 $(C, H, W)$ ，其他通常使用 $(H, W, C)$ 。
 - **归一化：** Tensor 格式通常使用归一化范围 $[0, 1]$ ，而 Numpy 和 OpenCV 通常为整数范围 $[0, 255]$ 。
 
+  
 ### **2. 转换方法**
 
 #### **2.1. PyTorch Tensor <-> Numpy**
@@ -2358,3 +2359,196 @@ ax.plot_trisurf(
 )
 plt.show()
 ```
+
+<h2 id="20.Python中日志模块loguru的使用">20.Python中日志模块loguru的使用</h2>
+
+在服务开发中，日志模块是**核心基础设施**之一，它解决了以下关键问题：
+
+---
+
+### **1. 问题定位与故障排查**
+- **场景**：服务崩溃、请求超时、数据异常。
+- **作用**：
+  - 记录关键步骤的执行路径（如请求参数、中间结果）。
+  - 自动捕获未处理的异常（如 `loguru.catch`）。
+  - 通过日志级别（DEBUG/INFO/WARNING/ERROR）快速过滤问题。
+- **示例**：
+  ```python
+  @logger.catch
+  def process_request(data):
+      logger.info(f"Processing request: {data}")
+      # ...业务逻辑...
+  ```
+
+---
+
+### **2. 系统监控与健康检查**
+- **场景**：服务运行时的性能、资源占用、错误率监控。
+- **作用**：
+  - 统计请求量、响应时间、错误频率（结合日志分析工具如 ELK）。
+  - 发现潜在风险（如高频错误日志触发告警）。
+- **示例**：
+  ```python
+  start_time = time.time()
+  # ...处理请求...
+  logger.info(f"Request processed in {time.time() - start_time:.2f}s")
+  ```
+
+---
+
+### **3. 行为审计与合规性**
+- **场景**：金融交易、用户隐私操作等敏感场景。
+- **作用**：
+  - 记录用户关键操作（如登录、支付、数据修改）。
+  - 满足法律法规（如 GDPR、HIPAA 的审计要求）。
+- **示例**：
+  ```python
+  logger.info(f"User {user_id} updated profile: {changes}")
+  ```
+
+---
+
+### **4. 性能分析与优化**
+- **场景**：接口响应慢、资源瓶颈。
+- **作用**：
+  - 通过日志统计耗时操作（如数据库查询、外部 API 调用）。
+  - 定位代码热点（结合 `logging` 的计时功能）。
+- **示例**：
+  ```python
+  with logger.catch(message="Database query"):
+      result = db.query("SELECT * FROM large_table")
+  ```
+
+---
+`loguru` 是一个 Python 日志库，设计简洁且功能强大，相比标准库的 `logging` 模块更易用。以下是 `loguru` 的核心用法：
+
+---
+
+### **1. 安装**
+```bash
+pip install loguru
+```
+
+---
+
+### **2. 基础用法**
+直接导入 `logger` 实例即可使用，无需复杂配置：
+```python
+from loguru import logger
+
+logger.debug("Debug message")
+logger.info("Info message")
+logger.warning("Warning message")
+logger.error("Error message")
+logger.critical("Critical message")
+```
+
+---
+
+### **3. 自动捕获异常**
+使用 `logger.catch()` 自动记录异常：
+```python
+@logger.catch
+def risky_function():
+    return 1 / 0
+
+risky_function()  # 异常会被自动记录
+```
+
+---
+
+### **4. 配置日志格式**
+通过 `add()` 方法自定义日志格式：
+```python
+logger.add(
+    "app.log",  # 输出到文件
+    format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {message}",
+    level="INFO",
+    rotation="10 MB",  # 文件达到 10MB 后轮转
+    compression="zip"   # 压缩旧日志
+)
+```
+
+---
+
+### **5. 日志级别控制**
+动态调整日志级别：
+```python
+logger.remove()  # 移除默认输出
+logger.add(sys.stderr, level="WARNING")  # 只输出 WARNING 及以上级别
+```
+
+---
+
+### **6. 高级功能**
+#### **文件轮转与压缩**
+```python
+logger.add(
+    "runtime_{time}.log",
+    rotation="00:00",  # 每天午夜轮转
+    retention="30 days",  # 保留30天日志
+    compression="zip"
+)
+```
+
+#### **自定义颜色**
+```python
+logger.add(sys.stderr, colorize=True, format="<green>{time}</green> <level>{message}</level>")
+```
+
+---
+
+### **7. 多模块使用**
+直接在入口文件配置一次，全局生效：
+```python
+# main.py
+from loguru import logger
+
+logger.add("app.log")
+import submodule  # 子模块直接使用同一 logger
+
+# submodule.py
+from loguru import logger
+logger.info("Message from submodule")
+```
+
+---
+
+### **8. 禁用默认输出**
+```python
+logger.remove(handler_id=None)  # 移除所有已添加的处理器
+```
+
+---
+
+### **示例：完整配置**
+```python
+from loguru import logger
+
+# 自定义日志格式和文件输出
+logger.add(
+    "app.log",
+    level="DEBUG",
+    format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {message}",
+    rotation="10 MB",
+    retention="10 days",
+    compression="zip"
+)
+
+# 控制台输出带颜色
+logger.add(
+    sys.stderr,
+    level="INFO",
+    format="<green>{time}</green> | <level>{level: <8}</level> | <cyan>{message}</cyan>",
+    colorize=True
+)
+
+logger.info("Loguru is ready!")
+```
+
+---
+
+### **注意事项**
+- 默认会输出到 `stderr`，通过 `logger.remove()` 可移除。
+- 支持结构化日志（JSON 格式）和异步日志。
+- 可通过 `enqueue=True` 参数保证多进程/线程安全。
